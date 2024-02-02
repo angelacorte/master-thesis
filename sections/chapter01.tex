@@ -20,6 +20,7 @@ However, this approach presents some primary challenges such as ensuring resilie
 
 \paragraph{Macroprogramming}
 %Macroprogramming: Concepts, State of the Art, and Opportunities of Macroscopic Behaviour Modelling
+%todo
 
 \paragraph{Self-Organisation}
 Coordination modes are based on the notion that interactions among multiple independent and autonomous software systems
@@ -37,6 +38,36 @@ The main problems that can be encountered in distributed systems are dealing wit
 The challenges necessitate a \emph{self-organising coordination} approach, wherein coordination abstractions solely
 manage logical interactions.
 This ensures the emergence of global and robust patterns of correct coordination behaviour.
+
+
+\subsection{Computational Fields}
+\label{subsec:computational-fields}
+
+\paragraph{Field-Based Coordination}
+To facilitate self-organisation patterns of agents in complex environments, the concept of \emph{coordination field}
+has been introduced.
+This abstraction serves as a navigational tool for agents over the actual environment.
+%todo cite tota
+In this context, the tuple-based middleware TOTA (Tuples On The Air) has been suggested to support field-based
+coordination for pervasive-computing applications.
+Initially, each field of the tuple in the system was assigned a name, along with a formula that supports the
+if-then-else construct and includes arithmetic and boolean operators to specify the field's behaviour over time.
+Secondly, it was introduced an operator in the tuple space responsible for applying formulas using contextual information.\\
+Somewhat independently of the challenge of identifying appropriate coordination models for distributed and situated systems,
+several studies have tackled analogous issues in the broader endeavour of constructing distributed intelligent systems.
+This involves promoting higher abstractions of spatial collective adaptive systems.
+
+\paragraph{Field Calculus}
+Among the studies such as for managing space-time computing models for the manipulation of distributed data structures,
+the notion of \emph{computational fields} were proposed.
+Consequently, the ~\ac{fc} has been proposed as a foundational model for the coordination of computational
+devices spread in physical environments, also known as \emph{aggregate computing}.
+%todo is it necessary to insert the abstract syntax of the field calculus?
+~\ac{fc} was introduced as minimal core calculus with the aim of capturing the fundaments that make use of computational
+fields: functions over and with fields, their evolution over time and the construction of field of values from neighbours.
+
+The %\ac{fc} is based on
+
 
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
@@ -72,9 +103,6 @@ This paradigm has three key traits that characterize it:
 The main goal of ~\ac{ac} is to evaluate a single program that runs on multiple devices of different nature,
 
 \paragraph{Alignment}
-
-\subsection{Field Calculus}
-\label{subsec:field-calculus}
 
 \subsection{XC}
 \label{subsec:xc}
