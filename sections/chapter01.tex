@@ -4,7 +4,7 @@
 
 %----------------------------------------------------------------------------------------
 \chapter{Introduction}
-\label{chap:introduction}
+\label{ch:introduction}
 %----------------------------------------------------------------------------------------
 \section{Context}
 \label{sec:context}
@@ -25,31 +25,39 @@ However, this approach presents some primary challenges such as ensuring resilie
 
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
-Aggregate Computing is a paradigm and engineering approach for compositional development of self-adaptive \ac{iot} services from a global perspective.
 
-A given environment can be seen as a whole programmable entity whose parts collaboratively produce and consume services
-across space and time.
+%TODO cite Modelling and simulation of Opportunistic IoT Services with Aggregate Computing and
+% From distributed coordination to field calculus and aggregate computing
 
-\ac{ac} is based on the manipulation of distributed data structures, called \textit{Computational Fields},
-with the aim of conceptually mapping each device to a value produced in a program.
-
-Therefore, its structure supports the specification, analysis, simulation and runtime execution of \textit{collective}
-or \textit{aggregate} services, independently of the specific~\ac{iot} architecture.
-
-It has been developed with the core idea of functionality composing collective behaviours to achieve effective and resilient
+~\ac{ac} is a paradigm and engineering approach for the compositional development of self-adaptive
+~\ac{iot} services from a global perspective.
+It has been developed with the core idea of functionality
+composing collective behaviours to achieve effective and resilient
 complex behaviours in dynamic networks.
+It views a given environment as a whole programmable entity whose parts collaboratively produce and consume services
+across space and time.
+~\ac{ac} is based on the principles of \empth{Field Calculus} that is a functional programming model used to specify
+and compose collective behaviours with formally equivalent local and aggregate semantics.
+The concept of \empth{Computational Fields} can be viewed as a distributed data structure,
+with the aim of conceptually mapping each device to a value produced in a program, considering both
+space and time.
+Therefore, its structure supports the specification, analysis, simulation and runtime execution of \empth{collective}
+or \empth{aggregate} services, independently of the specific~\ac{iot} architecture.
 
-This paradigm has three key traits that characterise it:
-    i) \textit{global stance with global-to-local mapping}, where the target of system design is the entire distributed
+This paradigm has three key traits that characterize it:
+    i)
+Global stance with global-to-local mapping}, where the target of system design is the entire distributed
         \ac{iot} ecosystem,
-    ii) \textit{behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
+    ii)
+Behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
         composition of simpler collective services, and
-    iii) \textit{abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
+    iii)
+Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
         issues and details.
 
 %These characteristics play an essential role from the design perspective, where %
 
-The main goal of \ac{ac} is to evaluate a single program that runs on multiple devices of different nature,
+The main goal of ~\ac{ac} is to evaluate a single program that runs on multiple devices of different nature,
 
 \paragraph{Alignment}
 
