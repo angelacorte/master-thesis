@@ -66,8 +66,17 @@ devices spread in physical environments, also known as \emph{aggregate computing
 ~\ac{fc} was introduced as minimal core calculus with the aim of capturing the fundaments that make use of computational
 fields: functions over and with fields, their evolution over time and the construction of field of values from neighbours.
 
-The %\ac{fc} is based on
-
+The main concept of \ac{fc} is to specify the aggregate system behaviour of a network of devices, where devices that can
+directly communicate with each other are indicated through a dynamic network relation.
+An example of its application is within a sensor network with a range of a broadcast communication.
+The behaviour is applied through a functional composition of operators that manipulate the computational fields,
+called specification, that can be interpreted locally or globally.
+A local specification can describe a computation on an individual device executed in asynchronous ``computation rounds'',
+including sending or receiving messages from neighbours, getting information from sensors and computing the local value of the field.
+In the global view, a field calculus expression specifies a mapping associating each computation round of each device to
+the value that it assumes at that space-time event.
+This dual nature inherently facilitates the alignment of individual device behaviour with the overarching global behaviour
+of the entire network of devices.
 
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
@@ -90,7 +99,7 @@ space and time.
 Therefore, its structure supports the specification, analysis, simulation and runtime execution of \empth{collective}
 or ~\empth{aggregate} services, independently of the specific~\ac{iot} architecture.
 
-This paradigm has three key traits that characterize it:
+This paradigm has three key traits that characterise it:
     i) \emph{Global stance with global-to-local mapping}, where the target of system design is the entire distributed
         \ac{iot} ecosystem,
     ii) \emph{Behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
