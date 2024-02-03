@@ -81,22 +81,45 @@ of the entire network of devices.
 
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
-
 %TODO cite Modelling and simulation of Opportunistic IoT Services with Aggregate Computing
 
+\paragraph{Aggregate Programming}
+Aggregate programming elaborates a layered architecture that aims to simplify the design, creation and maintenance of
+distributed systems.
+Through this methodology, the fundamental unit of computation shifts from an individual device to a collaborative
+ensemble of devices.
+It elaborates a layered architecture that aims to simplify the design, creation and maintenance of complex distributed
+systems.
+Moreover, aggregate programming provides mechanisms for robust and adaptive coordination through simple programming APIs
+that implicitly guarantee safety and resilience.
+This framework is useful in large-scale scenarios, where there is insufficient fixed network infrastructure, as seen in
+situations like crowd management during large public events.
+
+\begin{figure} %[!ht]
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/smart_network_objects}
+    \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment
+    and with many opportunities for local and even location-indipendent interactions on fixed network infrastructures.}
+    \label{fig:smart-network-objects}
+\end{figure}
+
+In various environments, interactions between wearable devices such as smartphones can support different kinds of services,
+including crowd detection, crowd-aware navigation or dispersal advice.
+
+\paragraph{Aggregate Computing}
 ~\ac{ac} is a paradigm and engineering approach for the compositional development of self-adaptive ~\ac{iot} services
 from a global perspective.
 It has been developed with the core idea of functionality composing collective behaviours to achieve effective and resilient
 complex behaviours in dynamic networks.
 It views a given environment as a whole programmable entity whose parts collaboratively produce and consume services
 across space and time.
-~\ac{ac} is based on the principles of \ac{fc} that is a functional programming model used to specify
+~\ac{ac} is based on the principles of~\ac{fc} that is a functional programming model used to specify
 and compose collective behaviours with formally equivalent local and aggregate semantics.
-The concept of ~\emph{Computational Fields} can be viewed as a distributed data structure,
+The concept of \emph{Computational Fields} can be viewed as a distributed data structure,
 with the aim of conceptually mapping each device to a value produced in a program, considering both
 space and time.
 Therefore, its structure supports the specification, analysis, simulation and runtime execution of \emph{collective}
-or ~\emph{aggregate} services, independently of the specific~\ac{iot} architecture.
+or \emph{aggregate} services, independently of the specific~\ac{iot} architecture.
 
 This paradigm has three key traits that characterise it:
     i) \emph{Global stance with global-to-local mapping}, where the target of system design is the entire distributed
