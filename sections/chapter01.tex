@@ -80,6 +80,20 @@ the value that it assumes at that space-time event.
 This dual nature inherently facilitates the alignment of individual device behaviour with the overarching global behaviour
 of the entire network of devices.
 
+%rep(e_1)\{(x)=>e_2\}
+%if(e_0)\{e_1\}\{e_2\}
+\paragraph{Syntax of field calculus}
+The \emph{field calculus} is based on a minimal set of operators.
+\begin{itemize}
+    \item \emph{Stateful field evolution}: the expression \texttt{TODO} describes a field evolving in time.
+        \texttt{TODO} represents the initial field value, the function \texttt{TODO} declares how the field changes
+        at each execution;
+    \item \emph{Neighbour interaction}: the expression \texttt{nbr\{e\}} builds a neighbouring field, a view of the field
+        values in the surroundings of each device where neighbours are mapped to their evaluations of \texttt{e};
+    \item \emph{Domain partitioning}: the expression \texttt{TODO} splits the computational field into
+        two non-communicating zones hosting isolated computations \texttt{TODO}
+\end{itemize}
+
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
 %TODO cite Modelling and simulation of Opportunistic IoT Services with Aggregate Computing
