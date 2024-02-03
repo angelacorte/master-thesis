@@ -84,7 +84,7 @@ of the entire network of devices.
 \label{subsec:aggregate-computing}
 %TODO cite Modelling and simulation of Opportunistic IoT Services with Aggregate Computing
 
-\paragraph{Aggregate Programming}
+\paragraph{Aggregate programming}
 Aggregate programming elaborates a layered architecture that aims to simplify the design, creation and maintenance of
 distributed systems.
 Through this methodology, the fundamental unit of computation shifts from an individual device to a collaborative
@@ -96,6 +96,7 @@ that implicitly guarantee safety and resilience.
 This framework is useful in large-scale scenarios, where there is insufficient fixed network infrastructure, as seen in
 situations like crowd management during large public events.
 
+%todo mention this figure somewhere
 \begin{figure} %[!ht]
     \centering
     \includegraphics[width=.8\linewidth]{figures/smart_network_objects}
@@ -107,7 +108,7 @@ situations like crowd management during large public events.
 In various environments, interactions between wearable devices such as smartphones can support different kinds of services,
 including crowd detection, crowd-aware navigation or dispersal advice.
 
-\paragraph{Aggregate Computing}
+\paragraph{Aggregate computing}
 ~\ac{ac} is a paradigm and engineering approach for the compositional development of self-adaptive ~\ac{iot} services
 from a global perspective.
 It has been developed with the core idea of functionality composing collective behaviours to achieve effective and resilient
@@ -116,7 +117,7 @@ It views a given environment as a whole programmable entity whose parts collabor
 across space and time.
 ~\ac{ac} is based on the principles of~\ac{fc} that is a functional programming model used to specify
 and compose collective behaviours with formally equivalent local and aggregate semantics.
-The concept of \emph{Computational Fields} can be viewed as a distributed data structure,
+The concept of \emph{computational fields} can be viewed as a distributed data structure,
 with the aim of conceptually mapping each device to a value produced in a program, considering both
 space and time.
 Therefore, its structure supports the specification, analysis, simulation and runtime execution of \emph{collective}
@@ -129,7 +130,9 @@ This paradigm has three key traits that characterise it:
         composition of simpler collective services, and
     iii) \emph{Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
         issues and details.
-Thanks to these characteristics,
+These attributes are crucial both in the design phase, where intricate solutions can frequently be articulated concisely
+and declaratively, and in the operational phase, where considerable flexibility is granted to the devops team and the
+platform regarding execution specifics and deployment strategies.
 
 \paragraph{Software platforms}
 ~\ac{ac} is designed to address many application scenarios, typically characterised by inherent distribution, heterogeneity,
@@ -146,8 +149,22 @@ spectrum for transitioning between cloud and distributed systems.
 This approach also embraces the emerging domains of edge and fog computing.
 %todo talk about edge e fog computing??
 
-\paragraph{Computational model}
+\paragraph{Aggregate computing in adaptive \ac{iot} Services}
+Thanks to its features, \emph{aggregate computing} is well suited for the development of \emph{Opportunistic \ac{iot}
+Services}, supporting the properties:
+\begin{itemize}
+    \item \emph{Dynamicity}: the direct support for opportunistic service activation and evolution is achieved through
+        code mobility and constructs that define dynamic domains of computations dependent on space and time;
+    \item \emph{Context-awareness}: aggregate programs utilize sensors, communication driven by neighborhood interactions,
+        and iterative execution to consistently evolve the set of local contexts.
+        This evolution forms the basis for the unfolding of computation and coordination logic;
+    \item \emph{Co-location}: as a natural method to define the concept of neighbourhood, relies on a physical space basis.
+        \ac{ac} inherently incorporates locality (both in space/time and purpose) to organise interactions and activities;
+    \item \emph{Transience}: \ac{ac} provides constructs that directly supports the execution of distributed services
+        based on time and context awareness.
+\end{itemize}
 
+\paragraph{Computational model}
 
 
 \subsection{XC}
