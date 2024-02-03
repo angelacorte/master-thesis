@@ -19,6 +19,7 @@ In actual fact, the coordination of macroscopic behavior in collective systems t
 However, this approach presents some primary challenges such as ensuring resilience, efficiency and privacy.
 
 \paragraph{Macroprogramming}
+?
 %Macroprogramming: Concepts, State of the Art, and Opportunities of Macroscopic Behaviour Modelling
 %todo
 
@@ -128,12 +129,26 @@ This paradigm has three key traits that characterise it:
         composition of simpler collective services, and
     iii) \emph{Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
         issues and details.
+Thanks to these characteristics,
 
-%These characteristics play an essential role from the design perspective, where %
+\paragraph{Software platforms}
+~\ac{ac} is designed to address many application scenarios, typically characterised by inherent distribution, heterogeneity,
+mobility and a lack of stable infrastructure.
+There are various strategies by which an~\ac{ac} system can run, contingent upon the selected and implemented
+communication methodologies.
+Programs can be executed within a fully distributed peer-to-peer environment, where end devices communicate directly
+with peer neighbours, and each independently runs its fragment of aggregate logic.
+On the opposite side, there are entirely centralised solutions, where end devices function solely as manager for sensors
+and actuators, forwarding perceptions upstream to one or more servers.
+These servers perform computations on behalf of the devices and subsequently transmit actuation data downstream.
+Thanks to this flexibility of its applications,~\ac{ac} has the potential to facilitate the creation of a more systematic
+spectrum for transitioning between cloud and distributed systems.
+This approach also embraces the emerging domains of edge and fog computing.
+%todo talk about edge e fog computing??
 
-The main goal of ~\ac{ac} is to evaluate a single program that runs on multiple devices of different nature,
+\paragraph{Computational model}
 
-\paragraph{Alignment}
+
 
 \subsection{XC}
 \label{subsec:xc}
@@ -141,6 +156,8 @@ The main goal of ~\ac{ac} is to evaluate a single program that runs on multiple 
 
 \section{Motivations}
 \label{sec:motivations}
+
+%vantaggi > benefits/utility
 
 \subsection{Heterogeneity limitations}
 \label{subsec:heterogeneity-limitations}
