@@ -165,7 +165,31 @@ Services}, supporting the properties:
 \end{itemize}
 
 \paragraph{Computational model}
+%todo I can see this as ubiquitous language
+There are some concepts and relationships included in the \emph{aggregate computing} context:
+\begin{itemize}
+    \item \emph{Aggregate program}: an executable representation of specific aggregate logic that defines a collective behaviour;
+    \item \emph{Aggregate system}: a set of interconnected nodes or devices that support the collective execution of aggregate programs;
+    \item \emph{Aggregate application}: a specific aggregate logic operating on a designated aggregate system, aimed at
+        solving particular problems in a specific context;
+    \item \emph{Node}: also referred to as \emph{device}, it represents an individual \ac{ac}-enabled entity, potentially
+        equipped with sensors and actuators;
+    \item \emph{Neighbourhood}: the logical or physical set of nodes that can be directly contacted by a given node;
+    \item \emph{Global or local sensor}: a source for global or local information;
+    \item \emph{Global or local actuator}: a global or local actionable device for environment-directed actions;
+    \item \emph{Global or local computational environment}: anything that is detectable and subject to action through the
+        use of global (or local) sensors and actuators
+        This also includes the shared functionalities offered by the platform.
+\end{itemize}
 
+The networked devices inside an aggregate system compute and communicate at asynchronous rounds of execution.
+Each round, each device executes the global aggregate program according to the local semantics; then it updates its internal
+state and lastly generates the data for the external communication.
+The round is performed by taking into account the computational context created by the previous state, sensor data and
+messages from neighbouring devices.
+After the execution of the round, result datas are made available to neighbours and eventually instructed actuations are
+locally executed.
+The system can continuously react to changes by repeatedly executing rounds, allowing for self-adaptation to contextual changes.
 
 \subsection{XC}
 \label{subsec:xc}
