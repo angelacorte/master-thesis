@@ -352,23 +352,62 @@ As a Turing-complete language, the capability to program non-resilient behaviour
 \section{State of Art}
 \label{sec:state-of-art}
 
-\subsection{Protelis}
-\label{subsec:protelis}
+In this section, will be presented the state of the art in the field of aggregate computing, focusing on the main existing
+frameworks and languages and their limitations.
 
 \subsection{ScaFi}
 \label{subsec:scafi}
 %todo cite scafi
+%todo cite scafi web
+%todo cite alchemist
 
 % components: core (it support a variant of field calculus called F ScaFi), simulator, gui, actor-based runtime
 % where it is used: swarm (macroswarm), crowd management, WSN/smart city (paper IEEE mio)
 % integrated with alchemist
 % why: pratical use, extensible, fast-use thanks to scafi web (gianlu sempre presente)
 
-ScaFi (Scala Field) is a Scala-based framework for aggregate programming.
+\emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming.
+It provides a \emph{domain-specific language (DSL)}, libraries, a simulation environment with a GUI, integrated with the
+Alchemist simulator, and an actor-based runtime for the development of aggregate computing-based systems.
+\emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi}, which peculiarity
+is to handle standard values to provide a simplified setting for DSL embedding.
 
+This is achieved by introducing a notion of ``computation against neighbours'', meaning that is a computation whose
+output depends on the most recent values received from neighbours.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/scafi_structure}
+    \caption{High-level architecture of the ScaFi toolkit.}
+    \label{fig:scafi-structure}
+\end{figure}
+%todo cite ref image
+
+The architecture of \emph{ScaFi} consists of various modules, as seen in Figure~\ref{fig:scafi-structure}.
+The DSL and standard library of reusable functions are implemented in the \texttt{scafi-
+core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-gui} provide a simulation
+environment of aggregate systems with a graphical user interface.
+
+%todo cite Addressing Collective Computations Efficiency: Towards a Platform-level Reinforcement Learning Approach
+%todo cite Programming (and Learning) Self-Adaptive & Self-Organising Behaviour with ScaFi: for Swarms, Edge-Cloud Ecosystems, and More
+The main applications of \emph{ScaFi} are in the development of swarm systems, crowd management, wireless sensor network (WSN)
+and smart city applications.
+
+\emph{ScaFi} is capable of running aggregate programs on the Java Virtual Machine (JVM) and also on web browser thanks
+to the \emph{ScaFi Web} tool, which allows the rapid prototyping of aggregate programs.
+On the other hand, it does not provide an aggregate standard library in the public version, neither supports to
+different advanced mechanisms.
+Furthermore, it is based on Scala 2, which means that it needs a review to be updated to Scala 3.
+
+Since \emph{ScaFi} only supports JVM and web-based applications, it is not well-suited for the development of complex distributed systems.
+devices and communication technologies, such as thin devices that do not support JVM, which limits the heterogeneity of
+devices that can be used in the system.
+%The main reasons for the adoption of \emph{ScaFi} are its practical use, extensibility, and the fast use of the \emph{ScaFi
+%Web} tool, which allows the rapid prototyping of aggregate programs.
 
 
 \subsection{FCPP}
 \label{subsec:fcpp}
 
-
+\subsection{Protelis}
+\label{subsec:protelis}
