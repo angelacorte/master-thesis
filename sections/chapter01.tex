@@ -172,6 +172,15 @@ These attributes are crucial both in the design phase, where intricate solutions
 and declaratively, and in the operational phase, where considerable flexibility is granted to the devops team and the
 platform regarding execution specifics and deployment strategies.
 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/AC-layers}
+    \caption{Aggregate programming abstraction layers}
+    \label{fig:ac-layers}
+\end{figure}
+%todo cite figure
+
 \paragraph{Software platforms}
 ~\ac{ac} is designed to address many application scenarios, typically characterised by inherent distribution, heterogeneity,
 mobility and a lack of stable infrastructure.
@@ -345,6 +354,10 @@ As a Turing-complete language, the capability to program non-resilient behaviour
 \subsection{Heterogeneity limitations}
 \label{subsec:heterogeneity-limitations}
 
+%Uno dei limiti degli attuali approcci di programmazione collettiva è la gestione dell’eterogeneità.
+%Di fatto, il sistema assume che vi sia una certa uniformità di capacità lungo il continuum, o che sia possibile
+%astrarla in qualche modo (si veda ad esempio l’approccio a “polverizzazione” [13]).
+
 \subsection{Goal}
 \label{subsec:goal}
 
@@ -352,8 +365,11 @@ As a Turing-complete language, the capability to program non-resilient behaviour
 \section{State of Art}
 \label{sec:state-of-art}
 
-In this section, will be presented the state of the art in the field of aggregate computing, focusing on the main existing
+In this section, it will be presented the state of the art in the field of aggregate computing, focusing on the main existing
 frameworks and languages and their limitations.
+
+Still, in terms of portability to heterogeneous systems, there are currently several software programs that implement the
+semantics of aggregate programming derived from field calculus [15], but they are not interoperable with each other.
 
 \subsection{ScaFi}
 \label{subsec:scafi}
