@@ -85,13 +85,14 @@ of the entire network of devices.
 \paragraph{Syntax of field calculus}
 The \emph{field calculus} is based on a minimal set of operators.
 \begin{itemize}
-    \item \emph{Stateful field evolution}: the expression \texttt{TODO} describes a field evolving in time.
-        \texttt{TODO} represents the initial field value, the function \texttt{TODO} declares how the field changes
+    \item \emph{Stateful field evolution}: the expression \lstinline|rep(e_1){(x)=>e_2}| describes a field evolving in time.
+        \lstinline{e_1} represents the initial field value, the function \lstinline|(x) => e_2| declares how the field changes
         at each execution;
-    \item \emph{Neighbour interaction}: the expression \texttt{nbr\{e\}} builds a neighbouring field, a view of the field
+    \item \emph{Neighbour interaction}: the expression \lstinline|nbr{e}| builds a neighbouring field, a view of the field
         values in the surroundings of each device where neighbours are mapped to their evaluations of \texttt{e};
-    \item \emph{Domain partitioning}: the expression \texttt{TODO} splits the computational field into
-        two non-communicating zones hosting isolated computations \texttt{TODO}
+    \item \emph{Domain partitioning}: the expression \lstinline|if(e_0){e_1}{e_2}| splits the computational field into
+        two non-communicating zones hosting isolated computations: \lstinline|e_1| where \lstinline|e_0| is \texttt{true} and
+        \lstinline{e_2} where \lstinline{e_0} is \texttt{false} %todo fix pedix
 \end{itemize}
 
 \subsection{Aggregate Computing}
@@ -201,7 +202,7 @@ Each round, each device executes the global aggregate program according to the l
 state and lastly generates the data for the external communication.
 The round is performed by taking into account the computational context created by the previous state, sensor data and
 messages from neighbouring devices.
-After the execution of the round, result datas are made available to neighbours and eventually instructed actuations are
+After the execution of the round, result data are made available to neighbours and eventually instructed actuations are
 locally executed.
 The system can continuously react to changes by repeatedly executing rounds, allowing for self-adaptation to contextual changes.
 
@@ -219,10 +220,46 @@ There are some main differences between the two metamodels:
         are abstracted away from the metamodel.
 \end{itemize}
 
-
 \subsection{XC}
 \label{subsec:xc}
+\textbf{XC} is an experimental programming language design to develop \emph{homogeneous} distributed systems.
+Those kinds of systems consist of similar devices that communicate to neighbours and execute the same program.
+The aim of this experimental language is to push the abstraction boundaries farther than actual existing approaches.
+Many issues can arise in distributed systems, like concurrency, remote communication, asynchronous execution, message
+loss, and device failures.
+These kinds of problems must be taken into account when designing a programming language for such systems.
+Some of the possible applications of this approach may be crowd management, gossip-based data aggreation, task allocation
+in robot swarms and coordination of enterprise servers. %todo add cites that are in the xc paper
+The homogeneity in large-scale systems also arises when each device executes a program from a predefined set, reflecting
+a homogeneous configuration featuring a single program with an initial branch.
 
+%This design eliminates the need to handle the aforementioned problems explicitly.
+%Additionally, distributed programs with independent devices retain composability through a mechanism called \emph{alignment}.
+
+\paragraph{System model}
+Devices that can send or receive messages are called \emph{neighbours}, and they can change dynamically to model network
+delays, failures or spatial movements.
+Based on existing homogeneous systems, the device behaviour has been abstracted through a notion of \emph{execution round},
+in which a device independently executes an \textbf{XC} program and sends the resulting messages to its neighbours.
+Referring to \emph{macroprogramming}, each device's behaviour in the network is developed as a single program, with no
+assumption of when an execution round will occur, meaning that they are entirely asynchronous.
+
+Messages are handled queueing up in a buffer; when a device executes its \textbf{XC} program, it processes the received
+messages producing others to send to neighbours, that in turn will process their messages.
+%todo insert graph of the system model
+
+It can occur that a device executes multiple rounds before a neighbour executes its own, in that case the neighbour will
+only see the last received message from the first device; newly received messages will overwrite the older ones.
+Messages can persist across rounds; they are not removed from the buffer after they have been read unless they expire.
+The devices for which a message is available in a certain round are considered the \emph{neighbours} for that round.
+
+\paragraph{Data types}
+
+
+
+\paragraph{Alignment}
+The \emph{alignment} is a mechanism that enables developers to abstract over asynchronous execution while still retaining
+composability.
 
 \section{Motivations}
 \label{sec:motivations}
