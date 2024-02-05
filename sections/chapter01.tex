@@ -254,8 +254,15 @@ Messages can persist across rounds; they are not removed from the buffer after t
 The devices for which a message is available in a certain round are considered the \emph{neighbours} for that round.
 
 \paragraph{Data types}
+\textbf{XC} features two kinds of values:
+    i) \emph{local values (l)}, that include traditional types, and
+    ii) \emph{neighbouring values (nvalues)}, a map from the device identifier to their local values, used to describe
+        the set of values received from and sent to neighbours.
+In highly decoupled networks, it can occur that not all devices will produce a value, for this reason it will be used
+a default value.
 
-
+Different types of operations can be applied to \emph{nvalues}.
+A \emph{local value} can be also converted to a \emph{nvalue} using the default value for every device.
 
 \paragraph{Alignment}
 The \emph{alignment} is a mechanism that enables developers to abstract over asynchronous execution while still retaining
