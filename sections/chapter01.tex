@@ -409,27 +409,57 @@ environment of aggregate systems with a graphical user interface.
 The main applications of \emph{ScaFi} are in the development of swarm systems, crowd management, wireless sensor network (WSN)
 and smart city applications.
 
-\emph{ScaFi} is capable of running aggregate programs on the Java Virtual Machine (JVM) and also on web browser thanks
+\emph{ScaFi} is capable of running aggregate programs on the \ac{jvm} and also on web browser thanks
 to the \emph{ScaFi Web} tool, which allows the rapid prototyping of aggregate programs.
 On the other hand, it does not provide an aggregate standard library in the public version, neither supports to
 different advanced mechanisms.
 Furthermore, it is based on Scala 2, which means that it needs a review to be updated to Scala 3.
 
-Since \emph{ScaFi} only supports JVM and web-based applications, it is not well-suited for the development of complex distributed systems.
-devices and communication technologies, such as thin devices that do not support JVM, which limits the heterogeneity of
+Since \emph{ScaFi} only supports \ac{jvm} and web-based applications, it is not well-suited for the development of complex distributed systems.
+devices and communication technologies, such as thin devices that do not support \ac{jvm}, which limits the heterogeneity of
 devices that can be used in the system.
-%The main reasons for the adoption of \emph{ScaFi} are its practical use, extensibility, and the fast use of the \emph{ScaFi
-%Web} tool, which allows the rapid prototyping of aggregate programs.
-
-
-\subsection{FCPP}
-\label{subsec:fcpp}
 
 \subsection{Protelis}
 \label{subsec:protelis}
-%todo cite protelis, Java
-\emph{Protelis} is a programming language that implements the \emph{field calculus}' semantics, exposed through a C-like
-syntax.
+%todo cite protelis, Java. xtext,
+\emph{Protelis} is a functional programming language that implements a higher-order version of the \emph{field calculus},
+exposed through a C-like syntax, enabling the construction of widely reusable components of aggregate systems.
 It also provides various domain-specific APIs that are interoperable with Java.
 \emph{Protelis} has been developed since no foundational API for resilient, situated and distributed systems can be found
 in the Java ecosystem.
+It offers an implementation for the interoperability with the \emph{Alchemist} simulator, where it can be seen its
+practical use in the development of aggregate systems.
+
+%todo insert protelis architecture image
+
+As seen in the \emph{Protelis} architecture, an interpreter executes a pre-parsed program at regular intervals,
+that communicates with other devices and draws contextual information from the environment.
+This is instantiated by specifying when the executions occur, how the devices communicate and how the environment is
+represented.
+
+A key reason for this choice is that Java is highly portable across systems and devices.
+Another important reason is that Java's reflection mechanisms make it easy to import a large number of useful libraries
+and APIs for use in Protelis.
+
+It is based on \emph{Xtext}, a framework for the development of domain-specific languages, which provides a set of tools
+and libraries for the development.
+For this reason necessary requires a \ac{jvm} to run, which limits the heterogeneity of devices
+that can be used in the system.
+
+\subsection{FCPP}
+\label{subsec:fcpp}
+\emph{FCPP} is an implementation of the \emph{Field Calculus} as a C++ library, with tools for simulations of distributed systems.
+This library is built as a component-based system, with the aim of being easily extensible and reusable in different contexts.
+
+It has a performance-oriented implementation based on compile-time optimisations, and it is designed to support
+simulated systems executed in parallel or self-organising cloud application.
+
+Being implemented in C++, allows \emph{FCPP} to be used in a wide range of devices, including embedded systems and
+microcontrollers, for which a C++ compiler is available.
+Although \emph{FCPP} is designed as a flexible and easily extensible platform, its currently supported range of features
+is more limited than \emph{Alchemist}'s.
+
+It allows running aggregate programs on low computational capacity devices, although it has a less ergonomic syntax
+compared to other languages, which means that is unlikely that it can reach a mainstream developer audience.
+
+\paragraph{Final considerations}
