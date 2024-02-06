@@ -132,15 +132,6 @@ that implicitly guarantee safety and resilience.
 This framework is useful in large-scale scenarios, where there is insufficient fixed network infrastructure, as seen in
 situations like crowd management during large public events.
 
-%todo mention this figure somewhere
-\begin{figure} %[!ht]
-    \centering
-    \includegraphics[width=.8\linewidth]{figures/smart_network_objects}
-    \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment
-    and with many opportunities for local and even location-indipendent interactions on fixed network infrastructures.}
-    \label{fig:smart-network-objects}
-\end{figure}
-
 In various environments, interactions between wearable devices such as smartphones can support different kinds of services,
 including crowd detection, crowd-aware navigation or dispersal advice.
 
@@ -175,7 +166,7 @@ platform regarding execution specifics and deployment strategies.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.8\linewidth]{figures/AC-layers}
+    \includegraphics[width=.5\linewidth]{figures/AC-layers}
     \caption{Aggregate programming abstraction layers}
     \label{fig:ac-layers}
 \end{figure}
@@ -348,19 +339,94 @@ As a Turing-complete language, the capability to program non-resilient behaviour
 
 \section{Motivations}
 \label{sec:motivations}
-
 %vantaggi > benefits/utility
+
+In this section, the motivations for developing a new programming language for aggregate computing will be illustrated,
+the objectives that are intended to be achieved and the benefits that are expected to be obtained.
+
+From an engineering perspective, the construction of \ac{iot} applications differs substantially from that of traditional
+software, especially when a particular service, to be realised, requires the coordination of devices of different nature.
+
+\paragraph{Challenges and innovations}
+Over the course of time, different approaches have been proposed to program these systems, such as TOTA, SAPERE, Aggregate
+Computing, Linda, MARS and others. %todo cite them
+
+The most successful solution at the moment involves the use of Cloud Computing (see Figure~\ref{fig:cloud-edge-continuum}),
+which provides virtualised resources on a large scale, but presents limitations in terms of latency (due to the physical
+distance between machines) and scalability (due to centralisation).
+
+For this reason, Edge Computing and Fog Computing have recently emerged, aiming to bring resources closer to the outer
+edge of the network, where interoperability problems between devices and complexity in managing distributed resources increase.
+
+The design of applications capable of operating indistinctly on the cloud, on the edge, or even on a mesh network
+(in fact, on a computational continuum that goes from the edge to the cloud) can benefit from unconventional approaches,
+such as Aggregate Computing.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\linewidth]{figures/edgecloud}
+    \caption{This figure shows the continuum of computing from the edge to the cloud, highliting the edge-cloud verticality
+    and the heterogeneity of devices.}
+    \label{fig:cloud-edge-continuum}
+\end{figure}
 
 \subsection{Heterogeneity limitations}
 \label{subsec:heterogeneity-limitations}
 
-%Uno dei limiti degli attuali approcci di programmazione collettiva è la gestione dell’eterogeneità.
-%Di fatto, il sistema assume che vi sia una certa uniformità di capacità lungo il continuum, o che sia possibile
-%astrarla in qualche modo (si veda ad esempio l’approccio a “polverizzazione” [13]).
+One of the limitations of current collective programming approaches is the management of heterogeneity.
+In fact, the system assumes that there is a certain uniformity of capabilities along the continuum, or that it is possible
+to abstract it in some way (see, for example, the ``pulverization'' approach).
+%todo cite pulverization
+
+However, when the system includes devices whose nature is profoundly different (imagine, for example, a system where both
+well-equipped servers and tiny wearable or implanted devices with very moderate computing capabilities participate, as
+shown in Figure~\ref{fig:smart-network-objects}), finer mechanisms are needed.
+A somewhat analogous problem appears in functional programming when modelling effects, and recent proposals aim to capture
+them in the form of capabilities.
+
+\begin{figure} %[!ht]
+    \centering
+    \includegraphics[width=.8\linewidth]{figures/smart_network_objects}
+    \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment
+    and with many opportunities for local and even location-indipendent interactions on fixed network infrastructures.}
+    \label{fig:smart-network-objects}
+\end{figure}
 
 \subsection{Goal}
 \label{subsec:goal}
 
+The aim of this thesis is to create a unified platform that enables the use of aggregate computing techniques on
+any device, from wearables with limited computing capabilities to servers.
+This will allow for the definition of collective behaviour in an ergonomic language, with the service executed in a distributed manner on all devices in the network.
+The result is the programming of the edge-cloud continuum as a single-distributed device.
+
+It is necessary to rely on technologies and languages that can run on any device.
+Kotlin Multiplatform will be used, which allows developers to write code that can be compiled for multiple targets,
+including JVM (ideal for server environments), Javascript (browser), Android, iOS (including watchOS and tvOS), and native versions
+(for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
+
+Once implemented, the system will enable the writing of pure Kotlin code using a dedicated domain-specific language.
+This will be followed by the production of deployment units in the formats described above.
+To run any of these units on a supported device, the device must be connected to the service.
+
+\paragraph{Impact}
+The availability of a distributed programming and execution infrastructure that supports heterogeneous devices is crucial
+for the realisation of Distributed Digital Twins.
+
+These represent a significant evolution in the way we conceive the digital representation of objects and complex systems.
+In a traditional context, a Digital Twin is a digital replica of a physical object or system used to monitor and analyse
+its operation in real-time.
+
+However, the distributed approach takes this concept to a new level.
+Instead of focusing solely on specific objects, the Distributed Digital Twin encompasses entire organisations of people
+or interconnected object systems.
+This allows for a unified view of objects and hierarchies (or holarchies) of objects.
+
+The interaction between these entities is presented in an integrated and unified manner, resulting in greater conceptual
+coherence, efficiency, and understanding of the digital environment.
+This, in turn, facilitates the engineering of complex systems.
+The objective of this project is to simplify the engineering process in order to innovate the landscape of digital infrastructures.
+This will open the doors to new services that would otherwise be challenging to conceive, design, and scale.
 
 \section{State of Art}
 \label{sec:state-of-art}
