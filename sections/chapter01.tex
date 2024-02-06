@@ -383,10 +383,10 @@ semantics of aggregate programming derived from field calculus [15], but they ar
 % why: pratical use, extensible, fast-use thanks to scafi web (gianlu sempre presente)
 
 \emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming.
-It provides a \emph{domain-specific language (DSL)}, libraries, a simulation environment with a GUI, integrated with the
+It provides a \emph{\ac{dsl}}, libraries, a simulation environment with a GUI, integrated with the
 Alchemist simulator, and an actor-based runtime for the development of aggregate computing-based systems.
 \emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi}, which peculiarity
-is to handle standard values to provide a simplified setting for DSL embedding.
+is to handle standard values to provide a simplified setting for \ac{dsl} embedding.
 
 This is achieved by introducing a notion of ``computation against neighbours'', meaning that is a computation whose
 output depends on the most recent values received from neighbours.
@@ -400,7 +400,7 @@ output depends on the most recent values received from neighbours.
 %todo cite ref image
 
 The architecture of \emph{ScaFi} consists of various modules, as seen in Figure~\ref{fig:scafi-structure}.
-The DSL and standard library of reusable functions are implemented in the \texttt{scafi-
+The \ac{dsl} and standard library of reusable functions are implemented in the \texttt{scafi-
 core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-gui} provide a simulation
 environment of aggregate systems with a graphical user interface.
 
@@ -463,3 +463,12 @@ It allows running aggregate programs on low computational capacity devices.
 However, its syntax is less ergonomic compared to other languages, making it unlikely to reach a mainstream developer audience.
 
 \paragraph{Final considerations}
+Those three illustrated frameworks have more or less the same expressive power, with few notable differences.
+The main differences among them are between \emph{ScaFi} and \emph{FCPP}, that are \emph{internal} \ac{dsl} implemented in Scala
+and C++, and \emph{Protelis} that is an \emph{external} \emph{dsl}, interpreted in the \ac{jvm}.
+
+Considering their syntax, \emph{ScaFi} and \emph{Protelis} partially imitate the abstraction level of the \emph{field calculus},
+being bound by the specific syntactic constraints of their host languages.
+Whereas, \emph{Protelis}' syntax is more neat and specifically designed for field computation.
+
+However, the more complex syntax of Scafi and FCPP may prove easier to learn for programmers already familiar with Scala and C++.
