@@ -22,8 +22,7 @@ In fact, the coordination of macroscopic behaviour in collective systems through
 However, this approach presents some primary challenges such as ensuring resilience, efficiency and privacy.
 
 \paragraph{Macroprogramming}
-%todo cite Macroprogramming: Concepts, State of the Art, and Opportunities of Macroscopic Behaviour Modelling
-The term \emph{macroprogramming} refers to the concept of expressing the macroscopic behaviour of a system through a single
+The term \emph{macroprogramming} ~\cite{10.1145/3579353} refers to the concept of expressing the macroscopic behaviour of a system through a single
 program, usually leveraging macro-level abstractions.
 This paradigm is driven by the need to capture \emph{system-level behaviour} while abstracting the behaviour and interaction
 of the individual components involved.
@@ -40,9 +39,8 @@ the context of \ac{cas}.
 Coordination modes are based on the notion that interactions among multiple independent and autonomous software systems
 can be designed as a space orthogonal to pure computation.
 This idea can be reified into a concept of shared data space, enabling so-called \emph{generative communication}.
-%Todo talk about Linda and Mars ???
 
-Over the course of time, different approaches have been created, such as \emph{Linda} and \emph{Mars},
+Over the course of time, different approaches have been created, such as \emph{Linda} ~\cite{10.1145/2363.2433} and \emph{Mars} ~\cite{865084},
 suggesting innovative techniques for programming systems with devices of different nature focusing on the coordination
 of centralised local components, but not on the distribution of the systems.
 The main problems that can be encountered in distributed systems are dealing with
@@ -58,15 +56,13 @@ This ensures the emergence of global and robust patterns of correct coordination
 
 \subsection{Computational Fields}
 \label{subsec:computational-fields}
-%todo cite From distributed coordination to field calculus and aggregate computing
 
 \paragraph{Field-Based Coordination}
 To facilitate self-organisation patterns of agents in complex environments, the concept of \emph{coordination field}
 has been introduced.
 This abstraction serves as a navigational tool for agents over the actual environment.
-%todo cite tota
 
-In this context, the tuple-based middleware TOTA (Tuples On The Air) has been suggested to support field-based
+In this context, the tuple-based middleware TOTA (Tuples On The Air) ~\cite{10.1145/1538942.1538945} has been suggested to support field-based
 coordination for pervasive-computing applications.
 Initially, each field of the tuple in the system was assigned a name, along with a formula that supports the
 if-then-else construct and includes arithmetic and boolean operators to specify the field's behaviour over time.
@@ -78,7 +74,7 @@ This involves promoting higher abstractions of spatial collective adaptive syste
 
 \paragraph{Field Calculus}
 Among the studies such as for managing space-time computing models for the manipulation of distributed data structures,
-the notion of \emph{computational fields} were proposed.
+the notion of \emph{computational fields} were proposed ~\cite{VIROLI2019100486}.
 Consequently, the ~\ac{fc} has been proposed as a foundational model for the coordination of computational
 devices spread in physical environments, also known as \emph{aggregate computing}.
 %todo is it necessary to insert the abstract syntax of the field calculus?
@@ -99,8 +95,6 @@ the value that it assumes at that space-time event.
 This dual nature inherently facilitates the alignment of individual device behaviour with the overarching global behaviour
 of the entire network of devices.
 
-%rep(e_1)\{(x)=>e_2\}
-%if(e_0)\{e_1\}\{e_2\}
 \paragraph{Syntax of field calculus}
 The \emph{field calculus} is based on a minimal set of operators.
 \begin{itemize}
@@ -137,7 +131,7 @@ including crowd detection, crowd-aware navigation or dispersal advice.
 
 \paragraph{Aggregate computing}
 ~\ac{ac} is a paradigm and engineering approach for the compositional development of self-adaptive ~\ac{iot} services
-from a global perspective.
+from a global perspective ~\cite{10.1145/3579353}.
 
 It has been developed with the core idea of functionality composing collective behaviours to achieve effective and resilient
 complex behaviours in dynamic networks.
@@ -186,8 +180,7 @@ and actuators, forwarding perceptions upstream to one or more servers.
 These servers perform computations on behalf of the devices and subsequently transmit actuation data downstream.
 Thanks to this flexibility of its applications,~\ac{ac} has the potential to facilitate the creation of a more systematic
 spectrum for transitioning between cloud and distributed systems.
-This approach also embraces the emerging domains of edge and fog computing.
-%todo talk about edge e fog computing??
+This approach also embraces the emerging domains of Edge ~\cite{8795355} and Fog Computing ~\cite{bdcc2020010}.
 
 \paragraph{Aggregate computing in adaptive \ac{iot} Services}
 Thanks to its features, \emph{aggregate computing} is well suited for the development of \emph{Opportunistic \ac{iot}
@@ -375,8 +368,7 @@ such as Aggregate Computing.
 
 One of the limitations of current collective programming approaches is the management of heterogeneity.
 In fact, the system assumes that there is a certain uniformity of capabilities along the continuum, or that it is possible
-to abstract it in some way (see, for example, the ``pulverization'' approach).
-%todo cite pulverization
+to abstract it in some way (see, for example, the ``pulverization'' approach ~\cite{fi12110203}).
 
 However, when the system includes devices whose nature is profoundly different (imagine, for example, a system where both
 well-equipped servers and tiny wearable or implanted devices with very moderate computing capabilities participate, as
@@ -439,20 +431,17 @@ semantics of aggregate programming derived from field calculus [15], but they ar
 
 \subsection{ScaFi}
 \label{subsec:scafi}
-%todo cite scafi
-%todo cite scafi web
-%todo cite alchemist
 
 % components: core (it support a variant of field calculus called F ScaFi), simulator, gui, actor-based runtime
 % where it is used: swarm (macroswarm), crowd management, WSN/smart city (paper IEEE mio)
 % integrated with alchemist
 % why: pratical use, extensible, fast-use thanks to scafi web (gianlu sempre presente)
 
-\emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming.
+\emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming ~\cite{CASADEI2022101248}.
 It provides a \emph{\ac{dsl}}, libraries, a simulation environment with a GUI, integrated with the
-Alchemist simulator, and an actor-based runtime for the development of aggregate computing-based systems.
-\emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi}, which peculiarity
-is to handle standard values to provide a simplified setting for \ac{dsl} embedding.
+Alchemist simulator ~\cite{10.1007/978-3-030-78198-9_10}, and an actor-based runtime for the development of aggregate computing-based systems.
+\emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi} ~\cite{10.1007/978-3-030-61470-6_21},
+which peculiarity is to handle standard values to provide a simplified setting for \ac{dsl} embedding.
 
 This is achieved by introducing a notion of ``computation against neighbours'', meaning that is a computation whose
 output depends on the most recent values received from neighbours.
@@ -463,20 +452,17 @@ output depends on the most recent values received from neighbours.
     \caption{High-level architecture of the ScaFi toolkit.}
     \label{fig:scafi-structure}
 \end{figure}
-%todo cite ref image
 
 The architecture of \emph{ScaFi} consists of various modules, as seen in Figure~\ref{fig:scafi-structure}.
 The \ac{dsl} and standard library of reusable functions are implemented in the \texttt{scafi-
 core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-gui} provide a simulation
 environment of aggregate systems with a graphical user interface.
 
-%todo cite Addressing Collective Computations Efficiency: Towards a Platform-level Reinforcement Learning Approach
-%todo cite Programming (and Learning) Self-Adaptive & Self-Organising Behaviour with ScaFi: for Swarms, Edge-Cloud Ecosystems, and More
-The main applications of \emph{ScaFi} are in the development of swarm systems, crowd management, wireless sensor network (WSN)
+The main applications of \emph{ScaFi} are in the development of swarm systems ~\cite{10336236}, crowd management, wireless sensor network (WSN) ~\cite{9935036}
 and smart city applications.
 
 \emph{ScaFi} is capable of running aggregate programs on the \ac{jvm} and also on web browser thanks
-to the \emph{ScaFi Web} tool, which allows the rapid prototyping of aggregate programs.
+to the \emph{ScaFi Web} tool ~\cite{10.1007/978-3-030-78142-2_18}, which allows the rapid prototyping of aggregate programs.
 On the other hand, it does not provide an aggregate standard library in the public version, neither supports to
 different advanced mechanisms.
 Furthermore, it is based on Scala 2, which means that it needs a review to be updated to Scala 3.
@@ -487,8 +473,8 @@ devices that can be used in the system.
 
 \subsection{Protelis}
 \label{subsec:protelis}
-%todo cite protelis, Java. xtext,
-\emph{Protelis} is a functional programming language that implements a higher-order version of the \emph{field calculus},
+%todo cite Java. xtext,
+\emph{Protelis} ~\cite{10.1145/2695664.2695913} is a functional programming language that implements a higher-order version of the \emph{field calculus},
 exposed through a C-like syntax, enabling the construction of widely reusable components of aggregate systems.
 It also provides various domain-specific APIs that are interoperable with Java.
 \emph{Protelis} has been developed since no foundational API for resilient, situated and distributed systems can be found
@@ -496,9 +482,14 @@ in the Java ecosystem.
 It offers an implementation for the interoperability with the \emph{Alchemist} simulator, where it can be seen its
 practical use in the development of aggregate systems.
 
-%todo insert protelis architecture image
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\linewidth]{figures/protelis-structure}
+    \caption{The abstract architecture of Protelis.}
+    \label{fig:protelis-structure}
+\end{figure}
 
-As seen in the \emph{Protelis} architecture, an interpreter executes a pre-parsed program at regular intervals,
+As seen in the \emph{Protelis} architecture (Figure ~\ref{fig:protelis-structure}), an interpreter executes a pre-parsed program at regular intervals,
 that communicates with other devices and draws contextual information from the environment.
 This is instantiated by specifying when the executions occur, how the devices communicate and how the environment is
 represented.
@@ -514,7 +505,7 @@ that can be used in the system.
 
 \subsection{FCPP}
 \label{subsec:fcpp}
-\emph{FCPP} is an implementation of the \emph{Field Calculus} as a C++ library, with tools for simulations of distributed systems.
+\emph{FCPP} ~\cite{9196401} is an implementation of the \emph{Field Calculus} as a C++ library, with tools for simulations of distributed systems.
 This library is built as a component-based system, with the aim of being easily extensible and reusable in different contexts.
 
 It has a performance-oriented implementation based on compile-time optimisations, and it is designed to support
