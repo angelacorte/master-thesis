@@ -62,8 +62,8 @@ To facilitate self-organisation patterns of agents in complex environments, the 
 has been introduced.
 This abstraction serves as a navigational tool for agents over the actual environment.
 
-In this context, the tuple-based middleware TOTA (Tuples On The Air) ~\cite{10.1145/1538942.1538945} has been suggested to support field-based
-coordination for pervasive-computing applications.
+In this context, the tuple-based middleware \emph{TOTA} (Tuples On The Air) ~\cite{10.1145/1538942.1538945}
+has been suggested to support field-based coordination for pervasive-computing applications.
 Initially, each field of the tuple in the system was assigned a name, along with a formula that supports the
 if-then-else construct and includes arithmetic and boolean operators to specify the field's behaviour over time.
 Secondly, it was introduced an operator in the tuple space responsible for applying formulas using contextual information.\\
@@ -443,7 +443,7 @@ semantics of aggregate programming derived from field calculus [15], but they ar
 % integrated with alchemist
 % why: pratical use, extensible, fast-use thanks to scafi web (gianlu sempre presente)
 
-\emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming ~\cite{CASADEI2022101248}.
+\emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming\\ ~\cite{CASADEI2022101248}.
 It provides a \emph{\ac{dsl}}, libraries, a simulation environment with a GUI, integrated with the
 Alchemist simulator ~\cite{10.1007/978-3-030-78198-9_10}, and an actor-based runtime for the development of aggregate computing-based systems.
 \emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi} ~\cite{10.1007/978-3-030-61470-6_21},
@@ -454,14 +454,15 @@ output depends on the most recent values received from neighbours.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.8\linewidth]{figures/scafi_structure}
+    \includegraphics[width=.5\linewidth]{figures/scafi_structure}
     \caption{High-level architecture of the ScaFi toolkit.}
     \label{fig:scafi-structure}
 \end{figure}
 
 The architecture of \emph{ScaFi} consists of various modules, as seen in ~\Cref{fig:scafi-structure}.
 The \ac{dsl} and standard library of reusable functions are implemented in the \texttt{scafi-
-core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-gui} provide a simulation
+core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-
+gui} provide a simulation
 environment of aggregate systems with a graphical user interface.
 
 The main applications of \emph{ScaFi} are in the development of swarm systems ~\cite{10336236}, crowd management, wireless sensor network (WSN) ~\cite{9935036}
