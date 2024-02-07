@@ -16,7 +16,7 @@ Computing devices are becoming cheaper and more \emph{ubiquitous}, increasing th
 It is now common for individuals to own multiple computing devices of varying types,
 resulting in technology becoming more integrated into daily activities.
 Hence, the need to engineer and coordinate the operations in such systems, one way is to program and operate in terms of
-    \emph{aggregates} devices, rather than manage each single device.
+    \emph{aggregates} of devices, rather than manage each single device.
 In fact, the coordination of macroscopic behaviour in collective systems through a single program is a form of
 ~\emph{macroprogramming}.
 However, this approach presents some primary challenges such as ensuring resilience, efficiency and privacy.
@@ -96,6 +96,8 @@ This dual nature inherently facilitates the alignment of individual device behav
 of the entire network of devices.
 
 \paragraph{Syntax of field calculus}
+\label{par:syntax-of-field-calculus}
+
 The \emph{field calculus} is based on a minimal set of operators.
 \begin{itemize}
     \item \emph{Stateful field evolution}: the expression \lstinline|rep(e_1){(x)=>e_2}| describes a field evolving in time.
@@ -289,6 +291,8 @@ neighbour's values in a field \texttt{\underline{w}}, excluding the self-value.
 A \emph{local value} can be also converted to a \emph{nvalue} using the default value for every device.
 
 \paragraph{Communication in XC}
+\label{par:communication-in-xc}
+
 \textbf{XC} is based on a key communication primitive: \lstinline|exchange(e_i, (n_) => return e_r send e_s)| which is evaluated
 as follows.
 i) the device computes the local value from the initial value~\lstinline{e_i}.
@@ -538,4 +542,4 @@ Considering their syntax, \emph{ScaFi} and \emph{Protelis} partially imitate the
 being bound by the specific syntactic constraints of their host languages.
 Whereas, \emph{Protelis}' syntax is more neat and specifically designed for field computation.
 
-However, the more complex syntax of Scafi and FCPP may prove easier to learn for programmers already familiar with Scala and C++.
+However, the more complex syntax of \emph{Scafi} and \emph{FCPP} may prove easier to learn for programmers already familiar with Scala and C++.
