@@ -197,30 +197,26 @@
 @INPROCEEDINGS{10336236,
 	author={Casadei, Roberto and Aguzzi, Gianluca and Pianini, Danilo and Viroli, Mirko},
 	booktitle={2023 IEEE International Conference on Autonomic Computing and Self-Organizing Systems Companion (ACSOS-C)},
-	title={Programming (and Learning) Self-Adaptive & Self-Organising Behaviour with ScaFi: for Swarms, Edge-Cloud Ecosystems, and More},
+	title={Programming (and Learning) Self-Adaptive e Self-Organising Behaviour with ScaFi: for Swarms, Edge-Cloud Ecosystems, and More},
 	year={2023},
 	volume={},
 	number={},
 	pages={33-34},
 	keywords={Adaptive systems;Aggregates;Ecosystems;Swarm robotics;Tutorials;Programming;Cyber-physical systems;self-organisation;macro-programming;aggregate computing;collective adaptive systems;swarm intelligence;edge-cloud ecosystems},
-	doi={10.1109/ACSOS-C58168.2023.00032}
+	doi={10.1109/ACSOS-C58168.2023.00032},
 }
 
-@inproceedings{10.1145/2695664.2695913,
+@inproceedings{protelis,
 	author = {Pianini, Danilo and Viroli, Mirko and Beal, Jacob},
 	title = {Protelis: practical aggregate programming},
 	year = {2015},
 	isbn = {9781450331968},
-	publisher = {Association for Computing Machinery},
-	address = {New York, NY, USA},
 	url = {https://doi.org/10.1145/2695664.2695913},
 	doi = {10.1145/2695664.2695913},
 	abstract = {The notion of a computational field has been proposed as a unifying abstraction for developing distributed systems, focusing on the computations and coordination of aggregates of devices instead of individual behavior. Prior field-based languages, however, have suffered from a number of practical limitations that have posed barriers to adoption and use. We address these limitations by introduction of Protelis, a functional language based on computational fields and embedded in Java, thereby enabling the construction of widely reusable components of aggregate systems. We demonstrate the simplicity of Protelis integration and programming through two examples: simulation of a pervasive computing scenario in the Alchemist simulator [24], and coordinated management of a network of services.},
 	booktitle = {Proceedings of the 30th Annual ACM Symposium on Applied Computing},
 	pages = {1846–1853},
-	numpages = {8},
 	keywords = {aggregate programming, alchemist, computational field, coordination, field calculus},
-	location = {Salamanca, Spain},
 	series = {SAC '15}
 }
 
@@ -237,7 +233,7 @@
 }
 
 
-@inproceedings{10.1007/978-3-319-92408-3_1,
+@inproceedings{fieldc,
 	abstract = {Recent work in the area of coordination models and collective adaptive systems promotes a view of distributed computations as functional blocks manipulating data structures spread over space and evolving over time. In this paper, we address expressiveness issues of such computations, and specifically focus on the field calculus, a prominent emerging language in this context. Based on the classical notion of event structure, we introduce the cone Turing machine as a ground for studying computability issues, and first use it to prove that field calculus is space-time universal. We then observe that, in the most general case, field calculus computations can be rather inefficient in the size of messages exchanged, but this can be remedied by an encoding to nearly similar computations with slower information speed. We capture this concept by a notion of delayed space-time universality, which we prove to hold for the set of message-efficient algorithms expressible by field calculus. As a corollary, it is derived that field calculus can implement with message-size efficiency all self-stabilising distributed algorithms.},
 	address = {Cham},
 	author = {Audrito, Giorgio and Beal, Jacob and Damiani, Ferruccio and Viroli, Mirko},
@@ -250,7 +246,7 @@
 	year = {2018}}
 
 
-@inproceedings{10.1007/978-3-030-22397-7_4,
+@inproceedings{share,
 	abstract = {Recent work in the area of coordination models and collective adaptive systems promotes a view of distributed computations as functions manipulating computational fields (data structures spread over space and evolving over time), and introduces the field calculus as a formal foundation for field computations. With the field calculus, evolution (time) and neighbor interaction (space) are handled by separate functional operators: however, this intrinsically limits the speed of information propagation that can be achieved by their combined use. In this paper, we propose a new field-based coordination operator called share, which captures the space-time nature of field computations in a single operator that declaratively achieves: (i) observation of neighbors' values; (ii) reduction to a single local value; and (iii) update and converse sharing to neighbors of a local variable. In addition to conceptual economy, use of the share operator also allows many prior field calculus algorithms to be greatly accelerated, which we validate empirically with simulations of a number of frequently used network propagation and collection algorithms.},
 	address = {Cham},
 	author = {Audrito, Giorgio and Beal, Jacob and Damiani, Ferruccio and Pianini, Danilo and Viroli, Mirko},
