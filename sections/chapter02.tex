@@ -22,10 +22,31 @@ an aggregate program, without the need for low-level coding.
 \label{sec:exchange-in-collektive}
 
 Thanks to the design of \textbf{XC}, it is possible to implement the methods proposed by \emph{field calculus}
-(~\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} ~\ref{par:communication-in-xc}.
-This allows for a more efficient and flexible communication system, as it is possible to decide to send messages only to
-specific nodes, without having to send them to all nodes in the system.
+(~\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (~\ref{par:communication-in-xc}).
 
+The syntax of \emph{XC} allows for sending messages to specific nodes, enabling the implementation of \emph{field calculus}
+operations through message exchange.
+
+The \emph{exchange} communication is based on \emph{anisotropic} communications, meaning that it has not the same properties
+or characteristics in all directions (\Cref{fig:anisotropic}); therefore, messages have custom values sent to different neighbours.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.2\textwidth]{figures/anisotropic}
+    \caption{Anisotropic communication.}
+    \label{fig:anisotropic}
+\end{figure}
+
+This concept can be extended to the \emph{share} function of field calculus, with the difference that the
+operation of \emph{share} is based on \emph{isotropic} communication, meaning that properties are uniform in all directions
+(\Cref{fig:isotropic}); therefore, messages have the same value sent to all neighbours.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.2\textwidth]{figures/isotropic}
+    \caption{Isotropic communication.}
+    \label{fig:isotropic}
+\end{figure}
 
 \section{DSL}
 \label{sec:dsl}
@@ -34,6 +55,8 @@ specific nodes, without having to send them to all nodes in the system.
 %sends the message) we do it in a different way
 
 \paragraph{Architecture}
+
+\paragraph{Messages}
 
 \paragraph{Syntax}
 %code
