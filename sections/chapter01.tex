@@ -110,6 +110,15 @@ The \emph{field calculus} is based on a minimal set of operators.
         \lstinline{e_2} where \lstinline{e_0} is \texttt{false} %todo fix pedix
 \end{itemize}
 
+It was soon proposed an apparently straight-forward combination of state evolution with \texttt{nbr} and sharing with \texttt{rep},
+but it turned out that it contained a hidden delay, identified and explained in ~\cite{10.1007/978-3-319-92408-3_1}.
+To overcome the problem in the interaction between the two constructs, it has been proposed a new one:
+\lstinline|share(e_1){(x) => e_2}| \cite{10.1007/978-3-030-22397-7_4}. %todo fix code
+This construct differs from \texttt{rep} in the way that the variable \texttt{x} is interpreted ad each round, that is
+identified as a \emph{neighbouring field} rather tha a value.
+In this case, \lstinline|e_2| is responsible for processing the neighbouring field into a local value shared with the
+neighbours at the end of the evaluation.
+
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
 %TODO cite Modelling and simulation of Opportunistic IoT Services with Aggregate Computing
