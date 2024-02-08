@@ -25,14 +25,40 @@ As for the feature solution of alignment for the correct functioning of aggregat
 it has been developed a compiler plugin with the purpose of annotating the functions that are aligned;
 those paths will be used for the actual alignment of the nodes.
 
+\paragraph{Project Structure}
+The project is subdivided into different submodules (as in \Cref{fig:pacakges}), each with a specific purpose:
+
+\begin{enumerate}
+    \item \textbf{alchemist-incarnation-collektive}: contains the pieces for the Alchemist integration,
+        in order to run the aggregate programs created with Collektive on the simulator.
+    \item \textbf{dsl}: is the core of the project, contains the actual implementation of the logic and the \ac{ac} operators
+        and relative tests.
+    \item \textbf{plugin}: subdivided into:
+        \begin{enumerate}
+            \item \emph{gradle-plugin}: used by gradle project in order to use the \emph{compiler-plugin}.
+            \item \emph{compiler-plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
+        \end{enumerate}
+    \item \textbf{buildSrc}: contains the main configuration for running the multiplatform project.
+\end{enumerate}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/packages}
+    \caption{Packages diagram of the Collektive project.}
+    \label{fig:pacakges}
+\end{figure}
+
+Regarding the examples, there is a specific repository called \textbf{collektive-examples} that contains some samples of
+aggregate programs to show how to use the \emph{Collektive} framework.
+
 \section{DSL}
 \label{sec:dsl}
 
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
 
-\subsection{Architecture}
-\label{subsec:architecture}
+\paragraph{Structure}
+%todo add class diagrams
 
 \subsection{XC in Collektive}
 \label{subsec:exchange-in-collektive}
@@ -53,8 +79,8 @@ or characteristics in all directions (\Cref{fig:anisotropic}); therefore, messag
     \label{fig:anisotropic}
 \end{figure}
 
-This concept can be extended to the \emph{share} function of field calculus, with the difference that the
-operation of \emph{share} is based on \emph{isotropic} communication, meaning that properties are uniform in all directions
+This concept can be extended to the \texttt{share} function of field calculus, with the difference that the
+operation of \texttt{share} is based on \emph{isotropic} communication, meaning that properties are uniform in all directions
 (\Cref{fig:isotropic}); therefore, messages have the same value sent to all neighbours.
 
 \begin{figure}[h!]
@@ -65,13 +91,18 @@ operation of \emph{share} is based on \emph{isotropic} communication, meaning th
 \end{figure}
 
 \paragraph{Syntax}
-%il dsl è stato modificato in maniera tale da sfruttare exchange per la costruzione degli altri costrutti quali share e neighbouring
-%solamente il costrutto rep non viene implementato in termini di exchange, in quanto essendo una funzione che permette di iterare su
-%se stessi, non vogliamo che i vicini ricevano messaggi di alcun genere, questo anche per questioni di sicurezza e privacy
 
-All the \ac{dsl} has been modified to use \emph{exchange} for the implementation of the other constructs such as \texttt{share}
-and \texttt{nbr}, which here is called \texttt{neighboring}.
-Only the \emph{rep} construct has not been implemented in terms of \emph{exchange}, as it is a function
+All the \ac{dsl} has been modified to use \texttt{exchange} for the implementation of the other constructs such as \texttt{share}
+and \texttt{nbr}, which is called \texttt{neighboring}.
+Only the \texttt{rep} construct has not been implemented in terms of \texttt{exchange}, as it is a function that allows iterating
+over oneself, it's better for neighbours not to receive messages of any kind, also for security and privacy reasons.
+
+As the original implementation, it supports the evaluation of \emph{fields}.
+
+As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
+can send a message and return a different result; both cases have been implemented.
+
+%todo add code snippet of exchange and exchanging
 
 \subsection{Messages}
 \label{subsec:messages}
