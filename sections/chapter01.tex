@@ -253,7 +253,7 @@ There are some main differences between the two metamodels:
 
 \subsection{XC}
 \label{subsec:xc}
-\textbf{XC} is an experimental programming language design to develop \emph{homogeneous} distributed systems.
+\xc{} is an experimental programming language design to develop \emph{homogeneous} distributed systems.
 Those kinds of systems consist of similar devices that communicate to neighbours and execute the same program.
 The aim of this experimental language is to push the abstraction boundaries farther than actual existing approaches.
 
@@ -274,11 +274,11 @@ Devices that can send or receive messages are called \emph{neighbours}, and they
 delays, failures or spatial movements.
 
 Based on existing homogeneous systems, the device behaviour has been abstracted through a notion of \emph{execution round},
-in which a device independently executes an \textbf{XC} program and sends the resulting messages to its neighbours.
+in which a device independently executes an \xc{} program and sends the resulting messages to its neighbours.
 Referring to \emph{macroprogramming}, each device's behaviour in the network is developed as a single program, with no
 assumption of when an execution round will occur, meaning that they are entirely asynchronous.
 
-Messages are handled queueing up in a buffer; when a device executes its \textbf{XC} program, it processes the received
+Messages are handled queueing up in a buffer; when a device executes its \xc{} program, it processes the received
 messages producing others to send to neighbours, that in turn will process their messages.
 %todo insert graph of the system model
 
@@ -288,7 +288,7 @@ Messages can persist across rounds; they are not removed from the buffer after t
 The devices for which a message is available in a certain round are considered the \emph{neighbours} for that round.
 
 \paragraph{Data types}
-\textbf{XC} features two kinds of values:
+\xc{} features two kinds of values:
     i) \emph{local values (l)}, that include traditional types, and
     ii) \emph{neighbouring values (nvalues)}, a map from the device identifier to their local values, used to describe
         the set of values received from and sent to neighbours.
@@ -302,7 +302,7 @@ A \emph{local value} can be also converted to a \emph{nvalue} using the default 
 \paragraph{Communication in XC}
 \label{par:communication-in-xc}
 
-\textbf{XC} is based on a key communication primitive: \lstinline|exchange(e_i, (n_) => return e_r send e_s)| which is evaluated
+\xc{} is based on a key communication primitive: \lstinline|exchange(e_i, (n_) => return e_r send e_s)| which is evaluated
 as follows.
 i) the device computes the local value from the initial value~\lstinline{e_i}.
 ii) the variable \texttt{\underline{n}} gets substituted with the computed nvalues \texttt{\underline{w}} of the received messages, eventually
@@ -318,27 +318,27 @@ Which means that the value of expression \lstinline{e_s} is sent to neighbours a
 Often the expressions \lstinline{e_1} and \lstinline{e_s} coincide, in this case the \texttt{exchange} function is
 \lstinline|exchange(e_i, (n_) => retsend e)|.
 
-The crucial aspect of the \textbf{XC} expressivity is that \texttt{exchange} can send a different value to each neighbour,
+The crucial aspect of the \xc{} expressivity is that \texttt{exchange} can send a different value to each neighbour,
 allowing custom interaction through them.
 
 \paragraph{Alignment}
 An aggregate program has the capability to execute multiple exchange-expressions.
 In order to guarantee the dispatching of messages to corresponding expressions throughout different rounds,
-    \textbf{XC} introduces the concept of \emph{alignment}.
+    \xc{} introduces the concept of \emph{alignment}.
 The \emph{alignment} is a mechanism that enables developers to abstract over asynchronous execution while still retaining
 composability.
-In this way, \textbf{XC} guarantees that the values produced by an exchange are processed by the corresponding function
+In this way, \xc{} guarantees that the values produced by an exchange are processed by the corresponding function
 in the next round.
 To accomplish this, it verifies whether it's in the same position of the Abstract Syntax Tree (AST) and of the stack frame.
 
 \paragraph{Conditionals}
-\textbf{XC} supports conditional expressions, like \lstinline|if(cond) {e1} else {e2}|.
+\xc{} supports conditional expressions, like \lstinline|if(cond) {e1} else {e2}|.
 An exchange aligns only across the devices that take the same branch; thus, it evaluates only aligned sub-expressions.
 This means that a network can be split by a conditional expression into two non-communicating subnetworks, each
 evaluating a different branch without cross-communication.
 
 \paragraph{Fault tolerance}
-\textbf{XC} programs are resilient to failures: in case a node gets disconnected or messages get lost, the failed node won't
+\xc{} programs are resilient to failures: in case a node gets disconnected or messages get lost, the failed node won't
 show up among the neighbours of a given node in the next alignment.
 The logic of \emph{exchange} is set to let neighbours' messages collectively operate, in order to make no assumptions
 on their number or identity.
