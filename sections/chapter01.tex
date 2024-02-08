@@ -315,6 +315,8 @@ A common pattern that can be used is to access neighbour's values through the us
 \lstinline|nbr(e_1, e_s) = exchange(e_i, (n_) => return n_ send e_s)|
 Which means that the value of expression \lstinline{e_s} is sent to neighbours and returns the received values gathered as
 \texttt{\underline{n}} with its default, thus providing a view on neighbours' values \lstinline{e_s}.
+Often the expressions \lstinline{e_1} and \lstinline{e_s} coincide, in this case the \texttt{exchange} function is
+\lstinline|exchange(e_i, (n_) => retsend e)|.
 
 The crucial aspect of the \textbf{XC} expressivity is that \texttt{exchange} can send a different value to each neighbour,
 allowing custom interaction through them.
