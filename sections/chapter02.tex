@@ -141,7 +141,7 @@ generating a custom value for each neighbour.
 
 In the early stages of the design of this function, potential problems that could arise during execution were evaluated,
 such as the management of initialisation, i.e.\ the first round of message exchange.
-Consider a network consisting of $n$ devices, in which all are considered as neighbors to each other.
+Consider a network consisting of $n$ devices, in which all are considered as neighbours to each other.
 The first device ($d_1$) to start within the network will certainly have a moment when it performs its first iteration ever.
 
 The problem arises when the device $d_1$ has not yet received any messages, so it will not have neighbour values to perform
@@ -152,24 +152,64 @@ In this way, the next devices to ``wake up'' in the network will know that $d_1$
 
 \begin{lstlisting}[language=kotlin,label={lst:exchange}, caption={The signature of the \texttt{exchange} function.}]
 fun <Initial> exchange(
-        initial: Initial,
-        body: (Field<ID, Initial>) -> Field<ID, Initial>,
-    ): Field<ID, Initial>
+    initial: Initial,
+    body: (Field<ID, Initial>) -> Field<ID, Initial>,
+): Field<ID, Initial>
 \end{lstlisting}
 
-
-
 \paragraph{Share}
+The \texttt{share} construct captures the space-time nature of field computation through observation of neighbours' values,
+starting from an \emph{initial} value, it reduces to a single local value given a \emph{transform} function and updating and sharing to
+neighbours of a local variable, then returns the punctual value evaluated from the transformation (\ref{lst:share}).
+
+\begin{lstlisting}[language=kotlin,label={lst:share}, caption={The signature of the \texttt{share} function.}]
+fun <ID : Any, Initial> Aggregate<ID>.share(
+    initial: Initial,
+    transform: (Field<ID, Initial>) -> Initial,
+): Initial
+\end{lstlisting}
+
+As previously introduced, this construct can be expressed in terms of \texttt{exchange}.
+What \texttt{share} differs from it is that \texttt{share} does not differentiate the result of the computation based on
+the neighbour that sent the message; it sends it indiscriminately to all neighbours.
 
 \paragraph{Neighboring}
 
-\paragraph{Repeating}
-%todo why is not implemented in terms of ecxhange
+The \emph{field calculus} construct \texttt{nbr} is implemented as \texttt{neighboring}, more precisely as \texttt{neighboringViaExchange}
+due to its effective implementation based on the \texttt{exchanging} function.
+The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
+It takes as parameter \emph{local} (\ref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same type.
+
+\begin{lstlisting}[language=kotlin,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
+fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
+    local: Scalar,
+): Field<ID, Scalar>
+\end{lstlisting}
+
+%todo add something else???
+
+\paragraph{Repeat}
+%todo why is not implemented in terms of exchange
+The \texttt{repeat} function is the equivalent of the \texttt{rep} construct in \emph{field calculus}.
+It models the state evolution over time, the value of \emph{initial} evolves at each execution depening on the \emph{transform} function,
+and it returns the final value of the computation (\ref{lst:repeat}).
+
+\begin{lstlisting}[language=kotlin,label={lst:repeat}, caption={The signature of the \texttt{repeat} function.}]
+fun <Initial> repeat(
+    initial: Initial,
+    transform: (Initial) -> Initial,
+): Initial
+\end{lstlisting}
+
+As previously mentioned, this function is not implemented in terms of \texttt{exchange}, because iterating over oneself
+it is better not to send messages to neighbours, also for security and privacy reasons.
 
 \subsection{Messages}
 \label{subsec:messages}
 %message modelling (in scafi there is an action that computes the messages and then creates a reaction that
 %sends the message) we do it in a different way
+
+
 
 \subsection{Syntax}
 \label{subsec:syntax}
@@ -207,3 +247,5 @@ fun <Initial, Return> exchanging(
         body: YieldingScope<Field<ID, Initial>, Field<ID, Return>>,
     ): Field<ID, Return>
 \end{lstlisting}
+
+%todo write the specific behaviour of the functions
