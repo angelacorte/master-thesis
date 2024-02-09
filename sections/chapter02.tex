@@ -209,10 +209,46 @@ it is better not to send messages to neighbours, also for security and privacy r
 %message modelling (in scafi there is an action that computes the messages and then creates a reaction that
 %sends the message) we do it in a different way
 
+The accurate modelling of message functionality is crucial for device communication.
+Due to the different nature of messages supported, that is \emph{anisotropic} and \emph{isotropic} communication,
+it has been necessary to create specific data classes for the handling of relative messages.
 
+Previously, messages were sent to the network without considering the recipient, and the network was responsible for
+delivering the message to all the neighbours that were interconnected.
+Since the main feature of \texttt{exchange} is to send messages to specific neighbours with custom values, it is important
+to ensure that unintended recipients do not receive the message.
+Therefore, the old model of messages has been modified.
 
-\subsection{Syntax}
-\label{subsec:syntax}
+\paragraph{OutboundMessage and SingleOutboundMessage}
+It has been introduced the concept of \emph{OutboundMessage}, which is a data class that keeps track of the sender of the
+message (its ID), and a map of messages, where the key is the \emph{Path} of the computation and the value is another data
+class: the \emph{SingleOutboundMessage}.
+In this way, a device sends to the network just one \emph{OutboundMessage} that contains all the messages to send to the neighbours,
+and also unburdens the payload of the network.
+
+%todo insert code??
+
+The main difference for the type of the communication lies in the \emph{SingleOutboundMessage} data class.
+For what it concerns the \emph{anisotropic} communication, it is necessary to keep track of the identifier of the recipient
+and the value associated with it, in order for the network to deliver the message to the correct neighbour.
+This has been implemented with a map of \emph{overrides}, which associates to the recipient's identifier a specific value.
+
+For the \emph{isotropic} communication, the \emph{SingleOutboundMessage} has a \emph{default} value, which is used
+when there are no overrides for the recipient that is reading the messages received.
+
+In summary, when a program is executed and a device has computed its function, it has to generate the messages to send to
+the neighbours (so it's done inside the \texttt{exchange} function), it populates a \emph{SingleOutboundMessage},
+that will be added to a list of \emph{OutboundMessage} and sent to the network.
+
+\paragraph{InboundMessage}
+The \emph{InboundMessage} is a data class modelled for the messages read from the network.
+When reading the \emph{OutboundMessage}, there are some fields that are not needed, such as the receiver of the message,
+which is the device itself, and is necessary to keep the default value or the override value.
+To handle this, the \emph{InboundMessage} has been modelled to keep only the identifier of the sender and
+a map of messages of \emph{Path} and the associated value.
+
+%\subsection{Syntax}
+%\label{subsec:syntax}
 %code
 %rep non serve farla con xc perche non vogliamo che gli altri nodi ricevano il messaggio, cose che non gli interessano
 
