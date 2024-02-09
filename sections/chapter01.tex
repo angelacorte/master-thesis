@@ -100,23 +100,23 @@ of the entire network of devices.
 
 The \emph{field calculus} is based on a minimal set of operators.
 \begin{itemize}
-    \item \emph{Stateful field evolution}: the expression $\q{rep}(\q{e_1})\{(\q{x}) \rightarrow \q{e_2}\}$ describes a field evolving in time.
-        $\q{e_1}$ represents the initial field value, the function $(\q{x}) \rightarrow \q{e_2}$ declares how the field changes
+    \item \emph{Stateful field evolution}: the expression $rep(e_1)\{(x) \rightarrow e_2\}$ describes a field evolving in time.
+        $e_1$ represents the initial field value, the function $(x) \rightarrow e_2$ declares how the field changes
         at each execution;
-    \item \emph{Neighbour interaction}: the expression $\q{nbr}\{e\}$ builds a neighbouring field, a view of the field
+    \item \emph{Neighbour interaction}: the expression $nbr\{e\}$ builds a neighbouring field, a view of the field
         values in the surroundings of each device where neighbours are mapped to their evaluations of \texttt{e};
-    \item \emph{Domain partitioning}: the expression $\q{if}(\q{e_0})\q{\{e_1\}}\q{\{e_2}\}$ splits the computational field into
-        two non-communicating zones hosting isolated computations: $\q{e_1}$ where  $\q{e_0}$ is \texttt{true} and
-        $\q{e_2}$ where  $\q{e_0}$ is \texttt{false}
+    \item \emph{Domain partitioning}: the expression $if(e_0)\ \{e_1\}\ \{e_2\}$ splits the computational field into
+        two non-communicating zones hosting isolated computations: $e_1$ where  $e_0$ is \texttt{true} and
+        $e_2$ where  $e_0$ is \texttt{false}
 \end{itemize}
 
 It was soon proposed an apparently straight-forward combination of state evolution with \texttt{nbr} and sharing with \texttt{rep},
 but it turned out that it contained a hidden delay, identified and explained in \cite{fieldc}.
 To overcome the problem in the interaction between the two constructs, it has been proposed a new one:
-$\q{share}(\q{e_1})\{(\q{x}) \rightarrow \q{e_2}\}$
+$share(e_1)\{(x) \rightarrow e_2\}$
 This construct differs from \texttt{rep} in the way that the variable \texttt{x} is interpreted ad each round, that is
 identified as a \emph{neighbouring field} rather than a value.
-In this case, $\q{e_2}$ is responsible for processing the neighbouring field into a local value shared with the
+In this case, $e_2$ is responsible for processing the neighbouring field into a local value shared with the
 neighbours at the end of the evaluation.
 
 \subsection{Aggregate Computing}
@@ -296,26 +296,26 @@ In highly decoupled networks, it can occur that not all devices will produce a v
 a default value.
 
 Different types of operations can be applied to \emph{nvalues}, where the function passed is repeatedly applied to
-neighbour's values in a field \texttt{\underline{w}}, excluding the self-value.
+neighbour's values in a field $\underline{w}$, excluding the self-value.
 A \emph{local value} can be also converted to a \emph{nvalue} using the default value for every device.
 
 \paragraph{Communication in XC}
 \label{par:communication-in-xc}
-$\q{}$
-\xc{} is based on a key communication primitive: $\q{exchange}(\q{e_i}, (\q{\underline{n}}) \rightarrow \q{return \ e_r} \ \q{send \ e_s})$
+
+\xc{} is based on a key communication primitive:\\ $exchange(e_i,\ (\underline{n}) \rightarrow \ \texttt{return} \ e_r \ \texttt{send} \ e_s)$
 which is evaluated as follows.
-i) the device computes the local value from the initial value $\q{e_i}$.
-ii) the variable \texttt{\underline{n}} gets substituted with the computed nvalues \texttt{\underline{w}} of the received messages, eventually
- using the local value as default, the exchange returns the computed value $\q{v_r}$ from $\q{e_r}$.
-iii) $\q{e_s}$ evaluates to a nvalue $\q{\underline{w}_s}$ consisting of local values to be sent to neighbours,
-    that will take their corresponding value from $\q{\underline{w}_s}$ and use it for the execution of their next round.
+    i) the device computes the local value from the initial value $e_i$.
+    ii) the variable $\underline{n}$ gets substituted with the computed nvalues $\underline{w}$ of the received messages, eventually
+        using the local value as default, the exchange returns the computed value $v_r$ from $e_r$.
+    iii) $e_s$ evaluates to a nvalue $\underline{w}_s$ consisting of local values to be sent to neighbours,
+        that will take their corresponding value from $\underline{w}_s$ and use it for the execution of their next round.
 
 A common pattern that can be used is to access neighbour's values through the use of the \texttt{exchange} function, as follows.\\
-$\q{nbr}(\q{e_i}, \q{e_s}) = \q{exchange}(\q{e_i}, (\q{\underline{n}}) \rightarrow \q{return \ e_r} \ \q{send \ e_s})$,
-which means that the value of expression $\q{e_s}$ is sent to neighbours and returns the received values gathered as
-\texttt{\underline{n}} with its default, thus providing a view on neighbours' values $\q{e_s}$.
-Often the expressions $\q{e_r}$ and $\q{e_s}$ coincide, in this case, the \texttt{exchange} function is
-$\q{exchange}(\q{e_i}, (\q{\underline{n}}) \rightarrow \q{retsend \ e})$.
+$nbr(e_i,\ e_s) = exchange(e_i, (\underline{n}) \rightarrow \texttt{return} \ e_r \ \texttt{send} \ e_s)$,
+which means that the value of expression $e_s$ is sent to neighbours and returns the received values gathered as
+$\underline{n}$ with its default, thus providing a view on neighbours' values $e_s$.
+Often the expressions $e_r$ and $e_s$ coincide, in this case, the \texttt{exchange} function is
+$exchange(e_i, (\underline{n}) \rightarrow \texttt{retsend} \ e)$.
 
 The crucial aspect of the \xc{} expressivity is that \texttt{exchange} can send a different value to each neighbour,
 allowing custom interaction through them.
@@ -331,7 +331,7 @@ in the next round.
 To accomplish this, it verifies whether it's in the same position of the Abstract Syntax Tree (AST) and of the stack frame.
 
 \paragraph{Conditionals}
-\xc{} supports conditional expressions, like $\q{if}(\q{cond})\q{\{e_1\}}\ else\ \q{\{e_2}\}$.
+\xc{} supports conditional expressions, like $if\ (cond)\ \{e_1\}\ else\ \{e_2\}$.
 An exchange aligns only across the devices that take the same branch; thus, it evaluates only aligned sub-expressions.
 This means that a network can be split by a conditional expression into two non-communicating subnetworks, each
 evaluating a different branch without cross-communication.
