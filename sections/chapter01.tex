@@ -44,9 +44,9 @@ Over the course of time, different approaches have been created, such as \emph{L
 suggesting innovative techniques for programming systems with devices of different nature focusing on the coordination
 of centralised local components, but not on the distribution of the systems.
 The main problems that can be encountered in distributed systems are dealing with
-    i) openness, as unexpected environment changes,
-    ii) large scale of agents and coordination abstractions to be managed,
-    iii) intrinsic adaptiveness, such as the ability to intercept relevant events and react to them, guaranteeing
+    \emph{(i)} openness, as unexpected environment changes,
+    \emph{(ii)} large scale of agents and coordination abstractions to be managed,
+    \emph{(iii)} intrinsic adaptiveness, such as the ability to intercept relevant events and react to them, guaranteeing
         the resilience of the system.
 
 The challenges necessitate a \emph{self-organising coordination} approach, wherein coordination abstractions solely
@@ -158,11 +158,11 @@ Therefore, its structure supports the specification, analysis, simulation and ru
 or \emph{aggregate} services, independently of the specific~\ac{iot} architecture.
 
 This paradigm has three key traits that characterise it:
-    i) \emph{Global stance with global-to-local mapping}, where the target of system design is the entire distributed
+    \emph{(i)} \emph{Global stance with global-to-local mapping}, where the target of system design is the entire distributed
         \ac{iot} ecosystem,
-    ii) \emph{Behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
+    \emph{(ii)} \emph{Behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
         composition of simpler collective services, and
-    iii) \emph{Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
+    \emph{(iii)} \emph{Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
         issues and details.
 These attributes are crucial both in the design phase, where intricate solutions can frequently be articulated concisely
 and declaratively, and in the operational phase, where considerable flexibility is granted to the devops team and the
@@ -289,8 +289,8 @@ The devices for which a message is available in a certain round are considered t
 
 \paragraph{Data types}
 \xc{} features two kinds of values:
-    i) \emph{local values (l)}, that include traditional types, and
-    ii) \emph{neighbouring values (nvalues)}, a map from the device identifier to their local values, used to describe
+    \emph{(i)} \emph{local values (l)}, that include traditional types, and
+    \emph{(ii)} \emph{neighbouring values (nvalues)}, a map from the device identifier to their local values, used to describe
         the set of values received from and sent to neighbours.
 In highly decoupled networks, it can occur that not all devices will produce a value, for this reason it will be used
 a default value.
@@ -304,10 +304,10 @@ A \emph{local value} can be also converted to a \emph{nvalue} using the default 
 
 \xc{} is based on a key communication primitive:\\ $exchange(e_i,\ (\underline{n}) \rightarrow \ \texttt{return} \ e_r \ \texttt{send} \ e_s)$
 which is evaluated as follows.
-    i) the device computes the local value from the initial value $e_i$.
-    ii) the variable $\underline{n}$ gets substituted with the computed nvalues $\underline{w}$ of the received messages, eventually
+    \emph{(i)} the device computes the local value from the initial value $e_i$.
+    \emph{(ii)} the variable $\underline{n}$ gets substituted with the computed nvalues $\underline{w}$ of the received messages, eventually
         using the local value as default, the exchange returns the computed value $v_r$ from $e_r$.
-    iii) $e_s$ evaluates to a nvalue $\underline{w}_s$ consisting of local values to be sent to neighbours,
+    \emph{(iii)} $e_s$ evaluates to a nvalue $\underline{w}_s$ consisting of local values to be sent to neighbours,
         that will take their corresponding value from $\underline{w}_s$ and use it for the execution of their next round.
 
 A common pattern that can be used is to access neighbour's values through the use of the \texttt{exchange} function, as follows.\\
