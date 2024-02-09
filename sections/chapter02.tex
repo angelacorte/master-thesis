@@ -17,7 +17,6 @@ This allows for interoperability and communication between these systems, despit
 
 To achieve this, \emph{Collektive} uses the \ac{fc} model to provide a straightforward and intuitive method for defining
 an aggregate program, without the need for low-level coding.
-
 In addition, \emph{Collektive} has been developed to be multiplatform, so it can be executed on different systems thanks
 to the use of \emph{Kotlin Multiplatform}.
 
@@ -57,15 +56,42 @@ aggregate programs to show how to use the \emph{Collektive} framework.
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
 
+%todo what is a dsl
+
 \paragraph{Structure}
 %todo add class diagrams
+%For what it concerns the structure of the core of the project,
+The \ac{dsl} is composed of the following components:
+\begin{itemize}
+    \item \textbf{Path}: represents a specific point in the \ac{ast} of an aggregate program;
+    \item \textbf{State}: is an association between a path and a value, it is used by the compiler plugin to
+        keep track of the computational state of the device in order to provide the correct alignment of the nodes;
+    \item \textbf{Field}: represents the \emph{computational field} used by aggregate constructs.
+        It is a map of messages where the key is the identifier (ID) of the node, and the value is the associated message;
+    \item \textbf{Message}: is an interface that represents the message exchanged between nodes, its concept will be explained in \ref{subsec:messages};
+    \item \textbf{Network}: is the interface that represents the network used to manage the communication between devices;
+    \item \textbf{Aggregate}: the actual core of the \ac{dsl}.
+        It is also used to handle all the data needed for the computation; for example, the \emph{localId} and the \emph{state} of the device.
+        It contains the primary functions on which the language is extended, such as \texttt{exchange}, \texttt{exchanging}, \texttt{repeat} and \texttt{repeating};
+        To create an aggregate program, a function must extend this interface, in this way it will be possible to use the aggregate functions.
+        It is also implemented the mechanism to handle the alignment of the functions used within the compiler plugin;
+    \item \textbf{AggregateOperators}: contains the implementation of the functions created using the \texttt{exchange-exchanging} functions,
+        such as \texttt{share}, \texttt{sharing} and \texttt{neighboringViaExchange}.
+        Moreover, it contains the mechanism to manage the alignment of the fields used within the compiler plugin;
+    \item \textbf{YieldSupport}: contains the \emph{Yielding Context} and the \emph{Yielding Result} for the ``yielding''
+        operations, which means that the function operates on an initial value but possibly returns a different value;
+    \item \textbf{Collektive}: is the entrypoint for creating a ``Collektive'' device, it must have a specific \emph{ID} and a
+        \emph{network} to manage the communication between devices.
+        The effective aggregate program is identified by the \emph{compute function}, which will be executed
+    \item \textbf{AggregateResult}: is the result of one evaluation of the aggregate program, it contains the \emph{localId}
+        of the node, the effective \emph{result} of the computation, the \emph{messages to send} to other devices and the \emph{new state} of the device;
+\end{itemize}
 
 \subsection{XC in Collektive}
 \label{subsec:exchange-in-collektive}
 
 Thanks to the design of \xc{}, it is possible to implement the methods proposed by \emph{field calculus}
 (~\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (~\ref{par:communication-in-xc}).
-
 The syntax of \emph{XC} allows for sending messages to specific nodes, enabling the implementation of \emph{field calculus}
 operations through message exchange.
 
@@ -90,7 +116,7 @@ operation of \texttt{share} is based on \emph{isotropic} communication, meaning 
     \label{fig:isotropic}
 \end{figure}
 
-\paragraph{Syntax}
+\paragraph{Exchange}
 
 All the \ac{dsl} has been modified to use \texttt{exchange} for the implementation of the other constructs such as \texttt{share}
 and \texttt{nbr}, which is called \texttt{neighboring}.
@@ -102,7 +128,33 @@ As the original implementation, it supports the evaluation of \emph{fields}.
 As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
 
+%parlare dei problemi sorti in fase di design, la gestione dell'inizializzazione (primo round)
+%diagrams
+
 %todo add code snippet of exchange and exchanging
+
+\begin{lstlisting}[language=kotlin,label={lst:exchange}]
+fun <Initial> exchange(
+        initial: Initial,
+        body: (Field<ID, Initial>) -> Field<ID, Initial>,
+    ): Field<ID, Initial>
+\end{lstlisting}
+
+\begin{lstlisting}[language=kotlin,label={lst:exchanging}]
+fun <Initial, Return> exchanging(
+        initial: Initial,
+        body: YieldingScope<Field<ID, Initial>, Field<ID, Return>>,
+    ): Field<ID, Return>
+\end{lstlisting}
+
+%todo explain the yielding thing
+
+\paragraph{Share}
+
+\paragraph{Neighboring}
+
+\paragraph{Repeating}
+%todo why is not implemented in terms of ecxhange
 
 \subsection{Messages}
 \label{subsec:messages}
@@ -133,6 +185,8 @@ can send a message and return a different result; both cases have been implement
 \section{Implementation}
 \label{sec:implementation}
 %diagrams
+
+%dati i problemi e le scelte fatte, gli step di come è stata implementata l'exc sono i seguuenti e spiegare il codice
 
 
 
