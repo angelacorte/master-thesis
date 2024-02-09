@@ -122,14 +122,29 @@ All the \ac{dsl} has been modified to use \texttt{exchange} for the implementati
 and \texttt{nbr}, which is called \texttt{neighboring}.
 Only the \texttt{rep} construct has not been implemented in terms of \texttt{exchange}, as it is a function that allows iterating
 over oneself, it's better for neighbours not to receive messages of any kind, also for security and privacy reasons.
-
 As the original implementation, it supports the evaluation of \emph{fields}.
 
 As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
 
-%parlare dei problemi sorti in fase di design, la gestione dell'inizializzazione (primo round)
-%diagrams
+%todo diagrams?
+
+In the early stages of the design of this function, potential problems that could arise during execution were evaluated,
+such as the management of initialisation, i.e.\ the first round of message exchange.
+Consider a network consisting of $n$ devices, in which all are considered as neighbors to each other.
+The first device ($d_1$) to start within the network will certainly have a moment when it performs its first iteration ever.
+
+As it has been developed, \texttt{exchange} takes an \emph{initial} value to use as a default, and a body that defines an aggregate
+function to be computed.
+When executing the aggregate program, it checks which messages have been received from the neighbours and applies the function,
+generating a custom value for each neighbour.
+
+The problem arises when the device $d_1$ has not yet received any messages, so it will not have neighbour values to perform
+the calculation, thus creating a deadlock situation where it does not know the neighbourhood and does not know who to actually send a message to.
+For this reason, it was necessary to implement a mechanism such that the device performs a first iteration on its initial value,
+and send the message to the network without a specific recipient, so that the future ``neighbourhood'' can receive it and start a communication with $d_1$.
+In this way, the next devices to ``wake up'' in the network will know that $d_1$ is present and will be able to communicate with it.
+
 
 %todo add code snippet of exchange and exchanging
 
