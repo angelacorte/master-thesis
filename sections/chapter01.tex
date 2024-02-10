@@ -421,10 +421,18 @@ them in the form of capabilities.
 \subsection{Goal}
 \label{subsec:goal}
 
-The aim of this thesis is to create a unified platform that enables the use of aggregate computing techniques on
-any device, from wearables with limited computing capabilities to servers.
-This will allow for the definition of collective behaviour in an ergonomic language, with the service executed in a distributed manner on all devices in the network.
-The result is the programming of the edge-cloud continuum as a single-distributed device.
+%lo scopo di questa tesi è quello di estendere il DSL gia esistente 'Collektive', applicando i concetti di XC
+%ai costrutti di programmazione aggregata, cercando così di migliorarne le performance in modo tale da
+%rendere questo dsl competitivo nei confronti degli approcci gia esistenti
+
+%inoltre si vuole creare un incarnazione di questo DSL in maniera tale da poter eseguire simulazioni attraverso
+%il simulatore Alchemist.
+
+The goal of this thesis is to extend the existing \ac{dsl} \emph{Collektive} by applying the concepts of \xc{} to
+aggregate programming constructs, thus seeking to improve its performance in order to make this \ac{dsl} competitive
+against existing approaches.
+Furthermore, the aim is to create an incarnation of this \ac{dsl} in such a way that it can execute simulations through
+the Alchemist simulator.
 
 It is necessary to rely on technologies and languages that can run on any device.
 Kotlin Multiplatform will be used, which allows developers to write code that can be compiled for multiple targets,
@@ -433,28 +441,13 @@ including JVM (ideal for server environments), Javascript (browser), Android, iO
 
 %todo cite those things up there
 
-Once implemented, the system will enable the writing of pure Kotlin code using a dedicated domain-specific language.
-This will be followed by the production of deployment units in the formats described above.
-To run any of these units on a supported device, the device must be connected to the service.
-
 \paragraph{Impact}
-The availability of a distributed programming and execution infrastructure that supports heterogeneous devices is crucial
-for the realisation of Distributed Digital Twins.
+The development of a new programming language for aggregate computing will have a significant impact on the development
+of distributed systems, especially in the \ac{iot} and \ac{cps} domains.
+The new language will allow developers to write programs that can be executed on any device, regardless of its nature,
+and will be able to communicate with other devices in the network, thus simplifying the development of complex systems.
 
-These represent a significant evolution in the way we conceive the digital representation of objects and complex systems.
-In a traditional context, a Digital Twin is a digital replica of a physical object or system used to monitor and analyse
-its operation in real-time.
-
-However, the distributed approach takes this concept to a new level.
-Instead of focusing solely on specific objects, the Distributed Digital Twin encompasses entire organisations of people
-or interconnected object systems.
-This allows for a unified view of objects and hierarchies (or holarchies) of objects.
-
-The interaction between these entities is presented in an integrated and unified manner, resulting in greater conceptual
-coherence, efficiency, and understanding of the digital environment.
-This, in turn, facilitates the engineering of complex systems.
-The objective of this project is to simplify the engineering process in order to innovate the landscape of digital infrastructures.
-This will open the doors to new services that would otherwise be challenging to conceive, design, and scale.
+%todo add more??
 
 \section{State of Art}
 \label{sec:state-of-art}
@@ -467,11 +460,6 @@ semantics of aggregate programming derived from field calculus, but they are not
 
 \subsection{ScaFi}
 \label{subsec:scafi}
-
-% components: core (it support a variant of field calculus called F ScaFi), simulator, gui, actor-based runtime
-% where it is used: swarm (macroswarm), crowd management, WSN/smart city (paper IEEE mio)
-% integrated with alchemist
-% why: pratical use, extensible, fast-use thanks to scafi web (gianlu sempre presente)
 
 \emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming\\ ~\cite{CASADEI2022101248}.
 It provides a \emph{\ac{dsl}}, libraries, a simulation environment with a GUI, integrated with the
