@@ -1,6 +1,21 @@
 %! Author = angela
 %! Date = 24/01/24
 % !TeX root = ../thesis-main.tex
+\definecolor{ddarkgreen}{rgb}{0,0.5,0}
+\lstdefinelanguage{kt}{
+    frame=single,
+    basewidth=0.5em,
+    language={kotlin},
+    keywordstyle=\color{blue}\textbf,
+    commentstyle=\color{ddarkgreen},
+    keywordstyle=[2]\color{cyan},
+    keywords=[2]{Aggregate, Field, InboundMessage, OutboundMessage, SingleOutboundMessage, Message},
+    keywordstyle=[3]\color{orange},
+    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange},
+    keywordstyle=[4]\color{teal}\textbf,
+    keywords=[4]{ID,Scalar,Initial,Return,Payload,Path,YieldingScope,Any,*},
+}
+
 
 \chapter{Contributions}
 \label{ch:contributions}
@@ -150,7 +165,7 @@ For this reason, it was necessary to implement a mechanism such that the device 
 and send the message to the network without a specific recipient, so that the future ``neighbourhood'' can receive it and start a communication with $d_1$.
 In this way, the next devices to ``wake up'' in the network will know that $d_1$ is present and will be able to communicate with it.
 
-\begin{lstlisting}[language=kotlin,label={lst:exchange}, caption={The signature of the \texttt{exchange} function.}]
+\begin{lstlisting}[language=kt,label={lst:exchange}, caption={The signature of the \texttt{exchange} function.}]
 fun <Initial> exchange(
     initial: Initial,
     body: (Field<ID, Initial>) -> Field<ID, Initial>,
@@ -162,7 +177,7 @@ The \texttt{share} construct captures the space-time nature of field computation
 starting from an \emph{initial} value, it reduces to a single local value given a \emph{transform} function and updating and sharing to
 neighbours of a local variable, then returns the punctual value evaluated from the transformation (\ref{lst:share}).
 
-\begin{lstlisting}[language=kotlin,label={lst:share}, caption={The signature of the \texttt{share} function.}]
+\begin{lstlisting}[language=kt,label={lst:share}, caption={The signature of the \texttt{share} function.}]
 fun <ID : Any, Initial> Aggregate<ID>.share(
     initial: Initial,
     transform: (Field<ID, Initial>) -> Initial,
@@ -180,7 +195,7 @@ due to its effective implementation based on the \texttt{exchanging} function.
 The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
 It takes as parameter \emph{local} (\ref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same type.
 
-\begin{lstlisting}[language=kotlin,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
+\begin{lstlisting}[language=kt,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
 fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
     local: Scalar,
 ): Field<ID, Scalar>
@@ -193,7 +208,7 @@ The \texttt{repeat} function is the equivalent of the \texttt{rep} construct in 
 It models the state evolution over time, the value of \emph{initial} evolves at each execution depending on the \emph{transform} function,
 and it returns the final value of the computation (\ref{lst:repeat}).
 
-\begin{lstlisting}[language=kotlin,label={lst:repeat}, caption={The signature of the \texttt{repeat} function.}]
+\begin{lstlisting}[language=kt,label={lst:repeat}, caption={The signature of the \texttt{repeat} function.}]
 fun <Initial> repeat(
     initial: Initial,
     transform: (Initial) -> Initial,
@@ -225,14 +240,14 @@ class: the \emph{SingleOutboundMessage} (\Cref{lst:single}).
 In this way, a device sends to the network just one \emph{OutboundMessage} that contains all the messages to send to the neighbours,
 and also unburdens the payload of the network.
 
-\begin{lstlisting}[language=kotlin,label={lst:outbound}, caption={Outbound message data class.}]
+\begin{lstlisting}[language=kt,label={lst:outbound}, caption={Outbound message data class.}]
 data class OutboundMessage<ID : Any>(
     val senderId: ID,
     val messages: Map<Path, SingleOutboundMessage<ID, *>>,
 ) : Message
 \end{lstlisting}
 
-\begin{lstlisting}[language=kotlin,label={lst:single}, caption={Single outbound message data class.}]
+\begin{lstlisting}[language=kt,label={lst:single}, caption={Single outbound message data class.}]
 data class SingleOutboundMessage<ID : Any, Payload>(
     val default: Payload,
     val overrides: Map<ID, Payload>,
@@ -258,7 +273,7 @@ which is the device itself, and is necessary to keep the default value or the ov
 To handle this, the \emph{InboundMessage} has been modelled to keep only the identifier of the sender and
 a map of messages of \emph{Path} and the associated value.
 
-\begin{lstlisting}[language=kotlin,label={lst:inbound}, caption={Inbound message data class.}]
+\begin{lstlisting}[language=kt,label={lst:inbound}, caption={Inbound message data class.}]
 data class InboundMessage<ID : Any>(
     val senderId: ID,
     val messages: Map<Path, *>,
@@ -279,7 +294,6 @@ data class InboundMessage<ID : Any>(
 \section{Incarnation}
 \label{sec:incarnation}
 %how, why
-
 %gradle task
 
 \section{Technologies}
@@ -295,7 +309,7 @@ data class InboundMessage<ID : Any>(
 
 %todo explain the yielding thing
 
-\begin{lstlisting}[language=kotlin,label={lst:exchanging}]
+\begin{lstlisting}[language=kt,label={lst:exchanging}]
 fun <Initial, Return> exchanging(
         initial: Initial,
         body: YieldingScope<Field<ID, Initial>, Field<ID, Return>>,
