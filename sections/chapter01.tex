@@ -98,7 +98,27 @@ of the entire network of devices.
 \paragraph{Syntax of field calculus}
 \label{par:syntax-of-field-calculus}
 
-The \emph{field calculus} is based on a minimal set of operators.
+\begin{figure}
+    \begin{align*}
+        \boxed{
+            \begin{aligned}
+                \q{P} &::= \q{F}\ \q{e} && \text{program} \\
+                \q{F} &::= \q{def} \, \q{f(}\bar{\q{x}}\q{)} \{\q{e}\} && \text{function declaration} \\
+                \q{e} &::= \q{x} \ | \ \q{v} \ | \ \q{f(}\bar{\q{e}}\q{)} \ | \ \q{if}(\q{e})\{\q{e}\}\{\q{e}\} \ | \ \q{nbr}\{\q{e}\} \ | \ \q{rep}(\q{e})\{(\q{x}) \rightarrow \q{e}\} && \text{expression} \\
+                \q{f} &::= \q{d} \ | \ \q{b} && \text{function name} \\
+                \q{v} &::= \q{l} \ | \ \phi && \text{value} \\
+                \q{l} &::= \q{c(}\bar{\q{l}}\q{)} && \text{local value} \\
+                \phi &::= \bar{\delta} \mapsto \bar{\q{l}} && \text{neighbouring field value}
+            \end{aligned}
+        }
+    \end{align*}
+    \caption{Field Calculus abstract syntax extracted from~\cite{10.1145/3177774}.}
+    \label{fig:field-calculus-abstract-syntax}
+\end{figure}
+\label{sec:field-based-programming-model}
+
+The \emph{field calculus} is based on a minimal set of operators, in \Cref{fig:field-calculus-abstract-syntax} its
+abstract syntax is described.
 \begin{itemize}
     \item \emph{Stateful field evolution}: the expression $rep(e_1)\{(x) \rightarrow e_2\}$ describes a field evolving in time.
         $e_1$ represents the initial field value, the function $(x) \rightarrow e_2$ declares how the field changes
