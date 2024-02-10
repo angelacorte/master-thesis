@@ -189,9 +189,8 @@ fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
 %todo add something else???
 
 \paragraph{Repeat}
-%todo why is not implemented in terms of exchange
 The \texttt{repeat} function is the equivalent of the \texttt{rep} construct in \emph{field calculus}.
-It models the state evolution over time, the value of \emph{initial} evolves at each execution depening on the \emph{transform} function,
+It models the state evolution over time, the value of \emph{initial} evolves at each execution depending on the \emph{transform} function,
 and it returns the final value of the computation (\ref{lst:repeat}).
 
 \begin{lstlisting}[language=kotlin,label={lst:repeat}, caption={The signature of the \texttt{repeat} function.}]
@@ -220,13 +219,25 @@ to ensure that unintended recipients do not receive the message.
 Therefore, the old model of messages has been modified.
 
 \paragraph{OutboundMessage and SingleOutboundMessage}
-It has been introduced the concept of \emph{OutboundMessage}, which is a data class that keeps track of the sender of the
+It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}), which is a data class that keeps track of the sender of the
 message (its ID), and a map of messages, where the key is the \emph{Path} of the computation and the value is another data
-class: the \emph{SingleOutboundMessage}.
+class: the \emph{SingleOutboundMessage} (\Cref{lst:single}).
 In this way, a device sends to the network just one \emph{OutboundMessage} that contains all the messages to send to the neighbours,
 and also unburdens the payload of the network.
 
-%todo insert code??
+\begin{lstlisting}[language=kotlin,label={lst:outbound}, caption={Outbound message data class.}]
+data class OutboundMessage<ID : Any>(
+    val senderId: ID,
+    val messages: Map<Path, SingleOutboundMessage<ID, *>>,
+) : Message
+\end{lstlisting}
+
+\begin{lstlisting}[language=kotlin,label={lst:single}, caption={Single outbound message data class.}]
+data class SingleOutboundMessage<ID : Any, Payload>(
+    val default: Payload,
+    val overrides: Map<ID, Payload>,
+)
+\end{lstlisting}
 
 The main difference for the type of the communication lies in the \emph{SingleOutboundMessage} data class.
 For what it concerns the \emph{anisotropic} communication, it is necessary to keep track of the identifier of the recipient
@@ -241,11 +252,18 @@ the neighbours (so it's done inside the \texttt{exchange} function), it populate
 that will be added to a list of \emph{OutboundMessage} and sent to the network.
 
 \paragraph{InboundMessage}
-The \emph{InboundMessage} is a data class modelled for the messages read from the network.
+The \emph{InboundMessage} is a data class (\Cref{lst:inbound}) modelled for the messages read from the network.
 When reading the \emph{OutboundMessage}, there are some fields that are not needed, such as the receiver of the message,
 which is the device itself, and is necessary to keep the default value or the override value.
 To handle this, the \emph{InboundMessage} has been modelled to keep only the identifier of the sender and
 a map of messages of \emph{Path} and the associated value.
+
+\begin{lstlisting}[language=kotlin,label={lst:inbound}, caption={Inbound message data class.}]
+data class InboundMessage<ID : Any>(
+    val senderId: ID,
+    val messages: Map<Path, *>,
+) : Message
+\end{lstlisting}
 
 %\subsection{Syntax}
 %\label{subsec:syntax}
