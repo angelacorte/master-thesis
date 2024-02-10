@@ -9,11 +9,12 @@
     keywordstyle=\color{blue}\textbf,
     commentstyle=\color{ddarkgreen},
     keywordstyle=[2]\color{cyan},
-    keywords=[2]{Aggregate, Field, InboundMessage, OutboundMessage, SingleOutboundMessage, Message},
+    keywords=[2]{Aggregate, Field,InboundMessage, OutboundMessage, SingleOutboundMessage,Message,Path,YieldingScope,Network,State,
+        AggregateContext,AggregateResult},
     keywordstyle=[3]\color{orange},
-    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange},
+    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate},
     keywordstyle=[4]\color{teal}\textbf,
-    keywords=[4]{ID,Scalar,Initial,Return,Payload,Path,YieldingScope,Any,*},
+    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R},
 }
 
 
@@ -71,12 +72,17 @@ aggregate programs to show how to use the \emph{Collektive} framework.
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
 
-%todo what is a dsl
+A \ac{dsl} is a specialised programming language or language framework tailored to address the
+requirements of a specific domain or problem area.
+In contrast to general-purpose programming languages, which aim for versatility across various domains and problem categories,
+DSLs are crafted to cater precisely to the demands of a particular application or system.
+Consequently, general-purpose languages like Java typically exhibit greater complexity compared to \acp{dsl}.
+
 
 \paragraph{Structure}
 %todo add class diagrams
 %For what it concerns the structure of the core of the project,
-The \ac{dsl} is composed of the following components:
+The \emph{Collektive}'s \ac{dsl} is composed of the following components:
 \begin{itemize}
     \item \textbf{Path}: represents a specific point in the \ac{ast} of an aggregate program;
     \item \textbf{State}: is an association between a path and a value, it is used by the compiler plugin to
@@ -220,7 +226,7 @@ it is better not to send messages to neighbours, also for security and privacy r
 
 \subsection{Messages}
 \label{subsec:messages}
-%message modelling (in scafi there is an action that computes the messages and then creates a reaction that
+%todo message modelling (in scafi there is an action that computes the messages and then creates a reaction that
 %sends the message) we do it in a different way
 
 The accurate modelling of message functionality is crucial for device communication.
@@ -286,9 +292,6 @@ The \emph{Network} has the task of managing only the reading and writing of mess
 The actual implementation of the network is not managed by \emph{Collektive}, but it is the user's responsibility to manage
 the network according to their needs.
 
-\subsection{Collektive entrypoint}
-\label{subsec:collektive-entrypoint}
-
 %\subsectio%n{Syntax}
 %\label{subsec:syntax}
 %code
@@ -296,27 +299,93 @@ the network according to their needs.
 
 \section{Plugin Extensions}
 \label{sec:plugin-extensions}
+In Kotlin, a plugin compiler extension refers to a mechanism that allows developers to extend or customise the behaviour
+of the Kotlin compiler.
+These extensions provide a way to hook into the compilation process and modify or enhance the way Kotlin code is compiled.
+
+Developers can create their own compiler extensions by implementing the necessary interfaces or annotations defined by
+the Kotlin compiler API.
+These extensions can then be applied to Kotlin projects either globally or selectively, depending on the specific
+requirements of the project.
 
 \paragraph{Alignment}
 %how
-
-\section{Incarnation}
-\label{sec:incarnation}
-%how, why
-%gradle task
+%todo
 
 \section{Technologies}
 \label{sec:technologies}
 %multiplatform
+%todo
 
 \section{Implementation}
 \label{sec:implementation}
 %diagrams
-
+%todo write something here
 %dati i problemi e le scelte fatte, gli step di come è stata implementata l'exc sono i seguuenti e spiegare il codice
 
 
+\subsection{Collektive entrypoint}
+\label{subsec:collektive-entrypoint}
+The public entrypoint of the \ac{dsl} is the \emph{Collektive} class, which can be interpreted as a device that can
+execute an aggregate program.
+
+As seen in the code snippet \ref{lst:collektive}, the \emph{Collektive} class takes as parameters the \emph{localId} of the device,
+the \emph{network} used to manage the communication between devices, and the \emph{computeFunction} that will be executed
+when the device is ready to compute the aggregate program.
+
+\begin{lstlisting}[language=kt,label={lst:collektive}, caption={The signature of the \texttt{Collektive} class.}]
+class Collektive<ID : Any, R>(
+    val localId: ID,
+    private val network: Network<ID>,
+    private val computeFunction: Aggregate<ID>.() -> R,
+)
+\end{lstlisting}
+
+The aim of this class is to manage the logic and the effective execution of the rounds of the aggregate program passed as a parameter.
+
+It provides two main functions that will be called in the incarnation to execute the program:
+\begin{itemize}
+    \item \texttt{cycle}: applies once the \emph{computeFunction} and returns the result of the computation;
+    \item \texttt{cycleWhile}: applies the \emph{computeFunction} while the condition passed as parameter is satisfied,
+        and returns the result of the computation.
+\end{itemize}
+
+Both functions are implemented through a private function \texttt{executeRound}, which effectively calls the aggregate program,
+managing the result obtained and updating the internal state of the device.
+
+There are two types of aggregate programs: one that uses the \emph{Network} and one that does not, but directly takes
+a set of \emph{InboundMessage}.
+
+\begin{lstlisting}[language=kt,label={lst:aggregate}, caption={The signature of the \texttt{aggregate program}.}]
+fun <ID : Any, R> aggregate(
+        localId: ID,
+        network: Network<ID>,
+        previousState: State = emptyMap(),
+        compute: Aggregate<ID>.() -> R,
+    ): AggregateResult<ID, R> = with(AggregateContext(localId, network.read(), previousState)) {
+        AggregateResult(localId, compute(), messagesToSend(), newState()).also {
+            network.write(it.toSend)
+        }
+    }
+\end{lstlisting}
+
+The code seen in \ref{lst:aggregate} is the implementation of the \texttt{aggregate} function that uses the \emph{Network}.
+Taking the \emph{AggregateContext} as context with the messages read from the network and the previous state of the
+device, it applies the \emph{compute} function.
+The result of the computation is then returned as an \emph{AggregateResult}, which contains the \emph{localId} of the device,
+the effective \emph{result} of the computation, the \emph{messages to send} to other devices and the \emph{new state} of the device.
+Finally, the messages to send are written to the network.
+This is the function called from the \texttt{executeRound} function.
+
+\subsection{Yielding Support}
+\label{subsec:yielding-support}
+
+
 %todo explain the yielding thing
+
+
+\subsection{Aggregate Context}
+\label{subsec:aggregate-context}
 
 \begin{lstlisting}[language=kt,label={lst:exchanging}]
 fun <Initial, Return> exchanging(
@@ -325,4 +394,21 @@ fun <Initial, Return> exchanging(
     ): Field<ID, Return>
 \end{lstlisting}
 
+\subsection{Aggregate Operators}
+\label{subsec:aggregate-operators}
+
+\subsection{Using reflection}
+\label{subsec:using-reflection}
+
 %todo write the specific behaviour of the functions
+
+
+\section{Alchemist Incarnation}
+\label{sec:incarnation}
+%how, why
+%gradle task
+%explain what is the alchemist incarnation
+An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simulator} to comprehend and accurately execute a language.
+Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and dictates
+the methodology for each iteration of the aggregate program.
+
