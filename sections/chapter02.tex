@@ -280,7 +280,16 @@ data class InboundMessage<ID : Any>(
 ) : Message
 \end{lstlisting}
 
-%\subsection{Syntax}
+\subsection{Network}
+\label{subsec:network}
+The \emph{Network} has the task of managing only the reading and writing of messages in the network for a single device.
+The actual implementation of the network is not managed by \emph{Collektive}, but it is the user's responsibility to manage
+the network according to their needs.
+
+\subsection{Collektive entrypoint}
+\label{subsec:collektive-entrypoint}
+
+%\subsectio%n{Syntax}
 %\label{subsec:syntax}
 %code
 %rep non serve farla con xc perche non vogliamo che gli altri nodi ricevano il messaggio, cose che non gli interessano
