@@ -14,7 +14,7 @@
     keywordstyle=[3]\color{orange},
     keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
     keywordstyle=[4]\color{teal}\textbf,
-    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R},
+    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X},
 }
 
 \chapter{Contributions}
@@ -415,14 +415,19 @@ Internally, it keeps track of the {stack}, the state, and the messages that need
 \paragraph{Exchange}
 There are two versions of this construct: one that has the same type of value of the field in output as the one in input (\Cref{lst:exchangeImpl}),
 and one in which they differ (\Cref{lst:exchanging}).
+The \texttt{exchange} construct is the one that represents the communication in which $e_r$ (the value to return)
+and $e_s$ (the value to send) coincide, as illustrated in \ref{par:communication-in-xc}.
 
 \begin{lstlisting}[language=kt,label={lst:exchangeImpl},caption={The implementation of the \texttt{exchange} function.}]
 fun <X> exchange(initial: X, body: (Field<ID, X>) -> Field<ID, X>): Field<ID, X> =
         exchanging(initial) { field -> body(field).run { yielding { this } } }
 \end{lstlisting}
 
-%la prima versione chiama semplicemente la seconda, ma come contesto dello yielding gli passa il field su cui è stata
-%eseguita la computazione
+The \texttt{exchange} therefore simply calls the \texttt{exchanging}, but as the context of the yielding it passes the
+field on which the computation has been executed.
+
+The real functioning of \xc{} relies in the \texttt{exchanging} implementation, which is the one that effectively manages
+the actual logic of the computation and the messages to send to the neighbours.
 
 \begin{lstlisting}[language=kt,label={lst:exchanging},caption={The signature of the \texttt{exchanging} function.}]
 fun <Initial, Return> exchanging(
