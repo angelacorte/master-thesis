@@ -10,13 +10,12 @@
     commentstyle=\color{ddarkgreen},
     keywordstyle=[2]\color{cyan},
     keywords=[2]{Aggregate, Field,InboundMessage, OutboundMessage, SingleOutboundMessage,Message,Path,YieldingScope,Network,State,
-        AggregateContext,AggregateResult},
+        AggregateContext,AggregateResult,YieldingContext,YieldingResult},
     keywordstyle=[3]\color{orange},
-    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate},
+    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
     keywordstyle=[4]\color{teal}\textbf,
     keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R},
 }
-
 
 \chapter{Contributions}
 \label{ch:contributions}
@@ -153,6 +152,7 @@ The construct \texttt{exchange} provides
 As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
 
+%todo check that I say that the return is a field
 %todo diagrams?
 
 The \texttt{exchange} takes an \emph{initial} value to use as a default, and a \emph{body} that defines an aggregate
@@ -369,17 +369,39 @@ fun <ID : Any, R> aggregate(
     }
 \end{lstlisting}
 
-The code seen in \ref{lst:aggregate} is the implementation of the \texttt{aggregate} function that uses the \emph{Network}.
+The code seen in \ref{lst:aggregate} is the implementation of the \texttt{aggregate} function that relies on the \emph{Network}.
 Taking the \emph{AggregateContext} as context with the messages read from the network and the previous state of the
 device, it applies the \emph{compute} function.
-The result of the computation is then returned as an \emph{AggregateResult}, which contains the \emph{localId} of the device,
+The result of the computation is then returned as an \emph{AggregateResult} (\Cref{lst:aggregateresult}), which contains the \emph{localId} of the device,
 the effective \emph{result} of the computation, the \emph{messages to send} to other devices and the \emph{new state} of the device.
 Finally, the messages to send are written to the network.
 This is the function called from the \texttt{executeRound} function.
 
+\begin{lstlisting}[language=kt,label={lst:aggregateresult}, caption={The signature of the \texttt{aggregate result}.}]
+data class AggregateResult<ID : Any, R>(
+    val localId: ID,
+    val result: R,
+    val toSend: OutboundMessage<ID>,
+    val newState: State,
+)
+\end{lstlisting}
+
 \subsection{Yielding Support}
 \label{subsec:yielding-support}
+In order to make possible to operate on an initial value but possibly return a different value, it has been introduced
+the concept of \emph{yielding}.
+The operations of yielding are used to operate on an initial value, which is usually exchanged with the neighbours,
+but possibly return a different value to the caller.
+This operation is executable on the \texttt{exchanging}, \texttt{sharing} and \texttt{repeating} methods, or it can be omitted
+in case the value obtained from the operation is to be returned. Those construct will be explained in detail in the
+sections \ref{subsec:aggregate-context} and \ref{subsec:aggregate-operators}.
 
+\begin{lstlisting}[language=kt,label={lst:yieldingcontext}, caption={The signature of the \texttt{yielding context} class.}]
+class YieldingContext<Initial, Return> {
+    fun Initial.yielding(toReturn: () -> Return): YieldingResult<Initial, Return> =
+        YieldingResult(this, toReturn())
+}
+\end{lstlisting}
 
 %todo explain the yielding thing
 
@@ -387,7 +409,22 @@ This is the function called from the \texttt{executeRound} function.
 \subsection{Aggregate Context}
 \label{subsec:aggregate-context}
 
-\begin{lstlisting}[language=kt,label={lst:exchanging}]
+The \emph{AggregateContext} class is the class that effectively has the implementation of the basic constructs inside the \ac{dsl}.
+Internally, it keeps track of the {stack}, the state, and the messages that need to be sent by that device.
+
+\paragraph{Exchange}
+There are two versions of this construct: one that has the same type of value of the field in output as the one in input (\Cref{lst:exchangeImpl}),
+and one in which they differ (\Cref{lst:exchanging}).
+
+\begin{lstlisting}[language=kt,label={lst:exchangeImpl},caption={The implementation of the \texttt{exchange} function.}]
+fun <X> exchange(initial: X, body: (Field<ID, X>) -> Field<ID, X>): Field<ID, X> =
+        exchanging(initial) { field -> body(field).run { yielding { this } } }
+\end{lstlisting}
+
+%la prima versione chiama semplicemente la seconda, ma come contesto dello yielding gli passa il field su cui è stata
+%eseguita la computazione
+
+\begin{lstlisting}[language=kt,label={lst:exchanging},caption={The signature of the \texttt{exchanging} function.}]
 fun <Initial, Return> exchanging(
         initial: Initial,
         body: YieldingScope<Field<ID, Initial>, Field<ID, Return>>,
@@ -396,6 +433,7 @@ fun <Initial, Return> exchanging(
 
 \subsection{Aggregate Operators}
 \label{subsec:aggregate-operators}
+
 
 \subsection{Using reflection}
 \label{subsec:using-reflection}
