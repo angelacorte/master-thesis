@@ -14,7 +14,7 @@
     keywordstyle=[3]\color{orange},
     keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
     keywordstyle=[4]\color{teal}\textbf,
-    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X},
+    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X,Init,Ret},
 }
 
 \chapter{Contributions}
@@ -308,6 +308,14 @@ the Kotlin compiler API.
 These extensions can then be applied to Kotlin projects either globally or selectively, depending on the specific
 requirements of the project.
 
+
+%todo why in scafi alignment is problematic (catching exception thrown)
+%our strategy for alignment
+%cerco le fuznc cheh hanno come dfispatcher o extension o argomenti tipo aggregate e le allineo
+%piu esempietti
+%snippet di come funziona e come il plugin allinea le funzioni
+%
+
 \paragraph{Alignment}
 %how
 %todo
@@ -323,6 +331,9 @@ requirements of the project.
 %todo write something here
 %dati i problemi e le scelte fatte, gli step di come è stata implementata l'exc sono i seguuenti e spiegare il codice
 
+\subsection{Fields}
+\label{subsec:fields}
+%todo explain the thing of constant fields and why is better for performances
 
 \subsection{Collektive entrypoint}
 \label{subsec:collektive-entrypoint}
@@ -419,7 +430,7 @@ The \texttt{exchange} construct is the one that represents the communication in 
 and $e_s$ (the value to send) coincide, as illustrated in \ref{par:communication-in-xc}.
 
 \begin{lstlisting}[language=kt,label={lst:exchangeImpl},caption={The implementation of the \texttt{exchange} function.}]
-fun <X> exchange(initial: X, body: (Field<ID, X>) -> Field<ID, X>): Field<ID, X> =
+override fun <X> exchange(initial: X, body: (Field<ID, X>) -> Field<ID, X>): Field<ID, X> =
         exchanging(initial) { field -> body(field).run { yielding { this } } }
 \end{lstlisting}
 
@@ -429,11 +440,50 @@ field on which the computation has been executed.
 The real functioning of \xc{} relies in the \texttt{exchanging} implementation, which is the one that effectively manages
 the actual logic of the computation and the messages to send to the neighbours.
 
-\begin{lstlisting}[language=kt,label={lst:exchanging},caption={The signature of the \texttt{exchanging} function.}]
-fun <Initial, Return> exchanging(
-        initial: Initial,
-        body: YieldingScope<Field<ID, Initial>, Field<ID, Return>>,
-    ): Field<ID, Return>
+In the \Cref{lst:exchanging} snippet is shown how the \texttt{exchanging} function is implemented.
+First, it takes the current path and the messages received whose path is the same, so that it is possible to evaluate only aligned messages.
+Then it takes the state of the device at the current path, using the initial value passed as a parameter in case there is no previous state.
+A new field is then created on which to perform the computation, starting from the value of the state and the messages received at the current path.
+The new field is then passed to the body passed in input, along with a new \emph{yielding context}, on which the computation is effectively executed.
+The result obtained from the computation is then returned and, depending on what has been passed as a yielding context in the body,
+the value is sent to the neighbours, which can be either the result of the computation (in the \texttt{retsend} case) or a value of a different type.
+
+A message of type \emph{SingleOutboundMessage} is created, populated with the value obtained from the application to the field
+of the aggregate function put as the default value, while as an override it is evaluated what type of field has been
+obtained from the computation, and based on this the value is sent to the neighbours.
+If the field is of a constant type, the map of overrides will be empty, otherwise the value obtained from the computation
+is sent, excluding the value of the device itself.
+A check is made to verify that there are no messages aligned with the same path, as this could cause an alignment conflict.
+Finally, the message is added to the map of messages to be sent, and the state of the device is updated with the value obtained from the computation.
+
+\begin{lstlisting}[language=kt,label={lst:exchanging},caption={The implementation of the \texttt{exchanging} function.}]
+override fun <Init, Ret> exchanging(
+    initial: Init,
+    body: YieldingScope<Field<ID, Init>, Field<ID, Ret>>,
+): Field<ID, Ret> {
+    val path = stack.currentPath()
+    val messages = messagesAt<Init>(path)
+    val previous = stateAt(path, initial)
+    val subject = newField(previous, messages)
+    val context = YieldingContext<Field<ID, Init>, Field<ID, Ret>>()
+    return body(context, subject).also {
+        val message = SingleOutboundMessage(
+            it.toSend.localValue,
+            when (it.toSend) {
+                is ConstantField<ID, Init> -> emptyMap()
+                else -> it.toSend.excludeSelf()
+            },
+        )
+        check(!toBeSent.messages.containsKey(path)) {
+            """
+                Aggregate alignment clash by multiple aligned calls with the same path: $path.
+                The most likely cause is an aggregate function call within a loop
+            """.trimIndent()
+        }
+        toBeSent = toBeSent.copy(messages = toBeSent.messages + (path to message))
+        state += path to it.toSend.localValue
+    }.toReturn
+}
 \end{lstlisting}
 
 \subsection{Aggregate Operators}
