@@ -331,7 +331,7 @@ which is evaluated as follows.
         that will take their corresponding value from $\underline{w}_s$ and use it for the execution of their next round.
 
 A common pattern that can be used is to access neighbour's values through the use of the \texttt{exchange} function, as follows.\\
-$nbr(e_i,\ e_s) = exchange(e_i, (\underline{n}) \rightarrow \texttt{return} \ e_r \ \texttt{send} \ e_s)$,
+$nbr(e_i,\ e_s) = exchange(e_i, (\underline{n}) \rightarrow \texttt{return} \ \underline{n} \ \texttt{send} \ e_s)$,
 which means that the value of expression $e_s$ is sent to neighbours and returns the received values gathered as
 $\underline{n}$ with its default, thus providing a view on neighbours' values $e_s$.
 Often the expressions $e_r$ and $e_s$ coincide, in this case, the \texttt{exchange} function is
