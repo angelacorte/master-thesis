@@ -319,6 +319,8 @@ requirements of the project.
 \paragraph{Alignment}
 %how
 %todo
+%todo alignment dei field?
+
 
 \section{Technologies}
 \label{sec:technologies}
@@ -404,8 +406,8 @@ the concept of \emph{yielding}.
 The operations of yielding are used to operate on an initial value, which is usually exchanged with the neighbours,
 but possibly return a different value to the caller.
 This operation is executable on the \texttt{exchanging}, \texttt{sharing} and \texttt{repeating} methods, or it can be omitted
-in case the value obtained from the operation is to be returned. Those construct will be explained in detail in the
-sections \ref{subsec:aggregate-context} and \ref{subsec:aggregate-operators}.
+in case the value obtained from the operation is to be returned.
+Those constructs will be explained in detail in the sections \ref{subsec:aggregate-context} and \ref{subsec:aggregate-operators}.
 
 \begin{lstlisting}[language=kt,label={lst:yieldingcontext}, caption={The signature of the \texttt{yielding context} class.}]
 class YieldingContext<Initial, Return> {
@@ -486,12 +488,51 @@ override fun <Init, Ret> exchanging(
 }
 \end{lstlisting}
 
+%todo explain that is a bit different from how it has been implementated in scafi, for the thing that there it loose a round of communication
+
+\paragraph{Repeat}
+The \texttt{repeat} construct is the one that models the state evolution over time.
+It is not implemented in terms of \texttt{exchange}, as it is a function that allows iterating over oneself,
+it can directly update its internal state without sending messages to neighbours.
+
+The \texttt{repeat} construct takes as parameters the \emph{initial} value and the \emph{transform} function, and returns the
+final value of the computation of the same type as the initial.
+To return a different type, it has been implemented the \texttt{repeating} function, as for the \texttt{exchange} construct,
+using the \emph{yielding support} (\Cref{lst:repeating}).
+
+\begin{lstlisting}[language=kt,label={lst:repeating},caption={The implementation of the \texttt{repeating} function.}]
+ override fun <Initial, Return> repeating(
+    initial: Initial,
+    transform: YieldingScope<Initial, Return>,
+): Return =
+     transform(YieldingContext(), stateAt(stack.currentPath(), initial))
+        .also { state += stack.currentPath() to it.toReturn }
+        .toReturn
+\end{lstlisting}
+
+The \texttt{transform} function is applied to the state of the device, checking whether there are already values to use
+on the stack, or using the initial value passed as a parameter.
+After the computation, the stack is updated with the new value obtained from the computation, and the result is returned,
+depending on the yielding context passed in the body of the function.
+
+\paragraph{Alignment functions}
+In the \emph{AggregateContext} class, there are also the functions that are used to align the functions of the aggregate program.
+Those functions are used within the compiler plugin to keep track of the stack at runtime.
+
+The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
+Executes a body and returns the result of the computation, then resets the stack to the previous state.
+
+%todo project function
+
 \subsection{Aggregate Operators}
 \label{subsec:aggregate-operators}
+The functions implemented using the \texttt{exchange} mechanism are situated in a separate class called \emph{AggregateOperators}.
 
+\paragraph{Share}
+The \texttt{share} is also implemented with the \emph{yielding support} mechanism.
+%The concept is the same as the \texttt{exchange} and
 
-\subsection{Using reflection}
-\label{subsec:using-reflection}
+\paragraph{NeighboringViaExchange}
 
 %todo write the specific behaviour of the functions
 
@@ -505,3 +546,6 @@ An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simula
 Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and dictates
 the methodology for each iteration of the aggregate program.
 
+
+\subsection{Using reflection}
+\label{subsec:using-reflection}
