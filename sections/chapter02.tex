@@ -529,13 +529,46 @@ Executes a body and returns the result of the computation, then resets the stack
 The functions implemented using the \texttt{exchange} mechanism are situated in a separate class called \emph{AggregateOperators}.
 
 \paragraph{Share}
-The \texttt{share} is also implemented with the \emph{yielding support} mechanism.
-%The concept is the same as the \texttt{exchange} and
+The \texttt{share} is also implemented with the \emph{yielding support} mechanism, using the same base concept as in the
+\texttt{exchange} and \texttt{repeat} functions.
+This means that it is possible to operate on an initial value, but possibly return a different value, as seen in the code snippet \ref{lst:sharing}.
+
+\begin{lstlisting}[language=kt,label={lst:sharing},caption={The implementation of the \texttt{sharing} function.}]
+fun <ID : Any, Initial, Return> Aggregate<ID>.sharing(
+    initial: Initial,
+    transform: YieldingContext<Initial, Return>.(Field<ID, Initial>) -> YieldingResult<Initial, Return>,
+): Return = exchanging(initial) { field: Field<ID, Initial> ->
+    with(YieldingContext<Initial, Return>()) {
+        val result: YieldingResult<Initial, Return> = transform(field)
+        field.map { result.toSend }.yielding {
+            field.map { result.toReturn }
+        }
+    }
+}.localValue
+\end{lstlisting}
+
+Given the \emph{isotropic} nature of communication through \texttt{share}, the implementation via \texttt{exchange} is done
+in such a way as to send the same value to all neighbours, so there is no need to keep track of who sent the message,
+but only to send it to all neighbours.
+The value sent to the neighbours can be the value expressed thanks to the \texttt{yielding} function, or the value obtained
+from the computation, if the \texttt{share} function is used.
 
 \paragraph{NeighboringViaExchange}
+The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
+It takes as parameter \emph{local}, which can be an expression or a value, and returns a \emph{field} of the same type (\ref{lst:neighboringViaExchange}).
 
-%todo write the specific behaviour of the functions
+\begin{lstlisting}[language=kt,label={lst:neighboringViaExchange},caption={The implementation of the \texttt{neighboringViaExchange} function.}]
+fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(local: Scalar): Field<ID, Scalar> =
+    exchanging(local) { toYield ->
+        toYield.mapToConstantField(local).yielding { toYield }
+    }
+\end{lstlisting}
 
+As said in \Cref{par:communication-in-xc}, the \texttt{nbr} construct is a peculiar case of \texttt{exchange}, in which
+the value of the expression evaluated is sent to neighbours and the values received from them are returned as a field.
+In this way, it provides a view of the values computed by the neighbours.
+Thus, its implementation consists of a call to the \texttt{exchanging} function, made in such a way as to send the value
+evaluated to the neighbours and return the values received from them as a field.
 
 \section{Alchemist Incarnation}
 \label{sec:incarnation}
