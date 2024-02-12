@@ -336,6 +336,11 @@ requirements of the project.
 \subsection{Fields}
 \label{subsec:fields}
 %todo explain the thing of constant fields and why is better for performances
+About the manipulation of the \emph{neighbouring values} introduced in \Cref{par:data-types}, it has been implemented
+the concept of \emph{field} to handle the data structure to send between neighbours.
+
+The \emph{Field} keeps track of the identifier of the device (\texttt{localId}) and the values associated with it (\texttt{localValues}).
+
 
 \subsection{Collektive entrypoint}
 \label{subsec:collektive-entrypoint}
@@ -522,7 +527,7 @@ Those functions are used within the compiler plugin to keep track of the stack a
 The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
 Executes a body and returns the result of the computation, then resets the stack to the previous state.
 
-%todo project function
+%todo project function???
 
 \subsection{Aggregate Operators}
 \label{subsec:aggregate-operators}
