@@ -199,7 +199,7 @@ the neighbour that sent the message; it sends it indiscriminately to all neighbo
 The \emph{field calculus} construct \texttt{nbr} is implemented as \texttt{neighboring}, more precisely as \texttt{neighboringViaExchange}
 due to its effective implementation based on the \texttt{exchanging} function.
 The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
-It takes as parameter \emph{local} (\ref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same type.
+It takes as parameter \emph{local} (\ref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same input type.
 
 \begin{lstlisting}[language=kt,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
 fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
@@ -222,7 +222,7 @@ fun <Initial> repeat(
 \end{lstlisting}
 
 As previously mentioned, this function is not implemented in terms of \texttt{exchange}, because iterating over oneself
-it is better not to send messages to neighbours, also for security and privacy reasons.
+it is better not to send messages to neighbours, also for security and privacy reasons, its implementation will be explained in \ref{par:repeating}.
 
 \subsection{Messages}
 \label{subsec:messages}
@@ -292,10 +292,10 @@ The \emph{Network} has the task of managing only the reading and writing of mess
 The actual implementation of the network is not managed by \emph{Collektive}, but it is the user's responsibility to manage
 the network according to their needs.
 
-%\subsectio%n{Syntax}
-%\label{subsec:syntax}
-%code
-%rep non serve farla con xc perche non vogliamo che gli altri nodi ricevano il messaggio, cose che non gli interessano
+In the \ac{dsl}, it is used at the beginning of an iteration of the aggregate program to read the messages received from
+other devices present in the network, and at the end of the iteration to write the messages to send to the other devices.
+The network actually supports only the specific types of messages introduced in \Cref{subsec:messages}, due to the
+concepts introduced by the study of \xc{} and field calculus.
 
 \section{Plugin Extensions}
 \label{sec:plugin-extensions}
@@ -308,30 +308,88 @@ the Kotlin compiler API.
 These extensions can then be applied to Kotlin projects either globally or selectively, depending on the specific
 requirements of the project.
 
+In Kotlin multiplatform project development, the compiler undertakes a covert translation of Kotlin code into platform-specific code.
+Prior to this translation, the Kotlin code undergoes conversion into an \ac{ir}.
+This IR serves as a transitional format, facilitating the seamless creation of multiplatform compiler plugins.
+Notably, this approach eliminates the necessity to develop separate plugins for each platform, thus optimising the
+development process and fostering code reuse across varied environments.
+
+Since the source code is fully accessible at compile time, it becomes feasible to analyse it to determine when alignment
+is necessary for the plugin to comprehend; consequently, new code can be generated to ensure proper alignment.
+Furthermore, because the generation process is based on the intermediate representation, it enables interoperability across
+different project targets and devices running on the same platform.
+Modifications to the plugin are applied during compile time, minimising any notable impact on execution time.
+Lastly, users are shielded from the intricacies of alignment concerns, as the code generation process remains transparent to them.
 
 %todo why in scafi alignment is problematic (catching exception thrown)
-%our strategy for alignment
-%cerco le fuznc cheh hanno come dfispatcher o extension o argomenti tipo aggregate e le allineo
-%piu esempietti
-%snippet di come funziona e come il plugin allinea le funzioni
-%
 
 \paragraph{Alignment}
-%how
-%todo
-%todo alignment dei field?
+
+%In ScaFi (\Cref{subsec:scafi}), the alignment of an aggregate program is made by catching the exception thrown by
+
+In \emph{Collektive}, the alignment of the functions is made by the compiler plugin, which keeps track of the sequence of
+functions called during the computation, using a custom stack.
+The function name is pushed into the stack when the function is called, with a value appended that represents the occurrence of the
+function in the sequence of the computation; then it is popped when the control flow exits that function.
+A function to be aligned must have as extension receiver or as argument's type the \emph{aggregate context}.
+
+The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
+Executes a body and returns the result of the computation, then resets the stack to the previous state.
+The compiler plugin uses the \ac{ir} to retrieve the \texttt{alignedOn} function declaration and the \emph{aggregate context}.
+After that, it visits through the visitor pattern all the functions call looking for the \texttt{Aggregate} super type.
+
+%todo alignment dei field
+%piu esempietti
+%snippet di come funziona e come il plugin allinea le funzioni
 
 
 \section{Technologies}
 \label{sec:technologies}
 %multiplatform
 %todo
+%todo write something somewhere about the readability of the code
+
+\paragraph{Kotlin Multiplatform}
+\label{par:kotlin-multiplatform}
+
+\emph{Kotlin Multiplatform} is a technology that allows developers to write code that can be shared across multiple platforms,
+such as Android, iOS, web, desktop, and backend.
+It enables developers to write common business logic, data models, and utility functions once and then use them across
+different platforms, reducing code duplication and improving code maintainability.
+
+\emph{Kotlin Multiplatform} enables significant code reuse across multiple platforms, leading to faster development cycles,
+reduced maintenance efforts, and improved code consistency.
+\emph{Kotlin Multiplatform} supports compilation targets for various platforms, including Kotlin/JVM for backend and desktop applications,
+Kotlin/JS for web applications, and Kotlin/Native for Android, iOS, and other native platforms.
+Developers specify the compilation targets in the Gradle configuration to generate platform-specific binaries.
+
+\paragraph{Kotest}
+\emph{Kotest} is a powerful testing framework for Kotlin that provides a flexible and expressive way to write tests for Kotlin projects.
+It offers a rich set of features and utilities to make testing easier, more concise, and more effective.
+
+\emph{Kotest} provides a wide range of built-in matchers and assertion functions for common test scenarios, such as equality
+checks, collection assertions, exception handling, and more.
+These utilities make it easy to write expressive and accurate assertions without boilerplate code.
+Some tests example will be shown in \Cref{ch:validation}.
+
+\paragraph{Gradle}
+Gradle is a powerful build automation tool and dependency management system used primarily for Java, Kotlin, and Groovy projects.
+It is designed to be highly flexible, scalable, and efficient, making it a popular choice among developers and
+organisations for building and managing software projects.
+
+Gradle uses a declarative \ac{dsl} based on Groovy or Kotlin to define build scripts.
+This DSL allows developers to express build configurations, tasks, dependencies, and plugins in a concise and readable format.
+Gradle build scripts are typically named build.gradle and are written in Groovy or Kotlin.
+
+Gradle organises the build process around tasks, which are units of work that perform specific actions, such as compiling
+source code, running tests, or generating documentation.
+Developers can define custom tasks and dependencies between tasks in the build script, allowing for fine-grained control over the build process.
+Gradle executes tasks in parallel when possible, leveraging multi-threading to improve build performance.
 
 \section{Implementation}
 \label{sec:implementation}
-%diagrams
-%todo write something here
-%dati i problemi e le scelte fatte, gli step di come è stata implementata l'exc sono i seguuenti e spiegare il codice
+In this section, the actual implementation of the \ac{dsl} will be examined, with code examples and explanations
+regarding the implementation choices and the problems encountered during development.
 
 \subsection{Fields}
 \label{subsec:fields}
@@ -339,8 +397,9 @@ requirements of the project.
 About the manipulation of the \emph{neighbouring values} introduced in \Cref{par:data-types}, it has been implemented
 the concept of \emph{field} to handle the data structure to send between neighbours.
 
-The \emph{Field} keeps track of the identifier of the device (\texttt{localId}) and the values associated with it (\texttt{localValues}).
-
+The \emph{Field} keeps track of the identifier of the device (\texttt{localId}) and the value associated with it
+(\texttt{localValues}) and eventually a map that associates the identifiers of the neighbours to their exchanged local values.
+%todo altro
 
 \subsection{Collektive entrypoint}
 \label{subsec:collektive-entrypoint}
@@ -451,6 +510,7 @@ In the \Cref{lst:exchanging} snippet is shown how the \texttt{exchanging} functi
 First, it takes the current path and the messages received whose path is the same, so that it is possible to evaluate only aligned messages.
 Then it takes the state of the device at the current path, using the initial value passed as a parameter in case there is no previous state.
 A new field is then created on which to perform the computation, starting from the value of the state and the messages received at the current path.
+If there are no messages received at the current path, simply there will be an empty map of messages.
 The new field is then passed to the body passed in input, along with a new \emph{yielding context}, on which the computation is effectively executed.
 The result obtained from the computation is then returned and, depending on what has been passed as a yielding context in the body,
 the value is sent to the neighbours, which can be either the result of the computation (in the \texttt{retsend} case) or a value of a different type.
@@ -493,9 +553,12 @@ override fun <Init, Ret> exchanging(
 }
 \end{lstlisting}
 
+%todo spiega come si comporta se non ci sono messaggi allineati
+
 %todo explain that is a bit different from how it has been implementated in scafi, for the thing that there it loose a round of communication
 
 \paragraph{Repeat}
+\label{par:repeating}
 The \texttt{repeat} construct is the one that models the state evolution over time.
 It is not implemented in terms of \texttt{exchange}, as it is a function that allows iterating over oneself,
 it can directly update its internal state without sending messages to neighbours.
@@ -519,13 +582,6 @@ The \texttt{transform} function is applied to the state of the device, checking 
 on the stack, or using the initial value passed as a parameter.
 After the computation, the stack is updated with the new value obtained from the computation, and the result is returned,
 depending on the yielding context passed in the body of the function.
-
-\paragraph{Alignment functions}
-In the \emph{AggregateContext} class, there are also the functions that are used to align the functions of the aggregate program.
-Those functions are used within the compiler plugin to keep track of the stack at runtime.
-
-The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
-Executes a body and returns the result of the computation, then resets the stack to the previous state.
 
 %todo project function???
 
