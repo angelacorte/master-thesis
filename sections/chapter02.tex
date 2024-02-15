@@ -15,6 +15,10 @@
     keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
     keywordstyle=[4]\color{teal}\textbf,
     keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X,Init,Ret},
+    keywordstyle=[5]\color{olive},
+    keywords=[5]{read,mapTo,stateAt,messagesAt,newField,excludeSelf,currentPath,mapToConstantField,getPosition,map,distanceTo},
+    keywordstyle=[6]\color{blue},
+    keywords=[6]{also,it,run,let}
 }
 
 \chapter{Contributions}
@@ -388,14 +392,14 @@ Gradle executes tasks in parallel when possible, leveraging multi-threading to i
 
 \section{Implementation}
 \label{sec:implementation}
-In this section, the actual implementation of the \ac{dsl} will be examined, with code examples and explanations
+In this section, the actual implementation of the \ac{dsl}'s functionalities will be examined, with code examples and explanations
 regarding the implementation choices and the problems encountered during development.
 
 \subsection{Fields}
 \label{subsec:fields}
 %todo explain the thing of constant fields and why is better for performances
 About the manipulation of the \emph{neighbouring values} introduced in \Cref{par:data-types}, it has been implemented
-the concept of \emph{field} to handle the data structure to send between neighbours.
+the concept of \emph{Field} to handle the data structure to send between neighbours.
 
 The \emph{Field} keeps track of the identifier of the device (\texttt{localId}) and the value associated with it
 (\texttt{localValues}) and eventually a map that associates the identifiers of the neighbours to their exchanged local values.
@@ -507,7 +511,8 @@ The real functioning of \xc{} relies in the \texttt{exchanging} implementation, 
 the actual logic of the computation and the messages to send to the neighbours.
 
 In the \Cref{lst:exchanging} snippet is shown how the \texttt{exchanging} function is implemented.
-First, it takes the current path and the messages received whose path is the same, so that it is possible to evaluate only aligned messages.
+First, it takes the current path from the stack kept inside the context and the messages received whose path is the same,
+so that it is possible to evaluate only aligned messages.
 Then it takes the state of the device at the current path, using the initial value passed as a parameter in case there is no previous state.
 A new field is then created on which to perform the computation, starting from the value of the state and the messages received at the current path.
 If there are no messages received at the current path, simply there will be an empty map of messages.
@@ -640,6 +645,68 @@ An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simula
 Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and dictates
 the methodology for each iteration of the aggregate program.
 
+As others Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \\ \texttt{alchemist-incarnation-protelis},
+it has been implemented in order to launch the simulations through gradle tasks.
+
+%todo add structure image of the incarnation
+
+\paragraph{CollektiveDevice}
+The \emph{CollektiveDevice} is a representation of the device in the \emph{Alchemist Simulator}.
+It has the purpose of managing specific sensors and actuators, and has the effective implementation of the network from the
+device's perspective, in order to manage its messages to send and the messages received from the neighbours.
+
+A device must have the \emph{environment} in which it is located, the \emph{node} property to be represented in the environment,
+a specific \emph{ID} that is the same of the node, a \emph{retention time} for messages which can be null if is necessary
+to keep all messages.
+It must extend the eventual sensors and the network to manage the communication with the neighbours.
+
+To keep track of the time when the messages arrived and thus to be able to discard them after a certain time,
+a private data class \texttt{TimedMessage} has been created that associates the time when each message arrived with the message itself.
+In this way, in the effective implementation of the \texttt{read} function of the network, it is possible
+to discard the messages that arrived before a certain time, and thus are no longer valid.
+
+\begin{lstlisting}[language=kt,label={lst:read},caption={The implementation of the \texttt{read} function of the \texttt{Network}.}]
+override fun read(): Set<InboundMessage<Int>> =
+    when (retainMessagesFor) {
+        null -> validMessages.mapTo(mutableSetOf()) { it.payload }.also { validMessages.clear() }
+        else -> {
+            validMessages.retainAll { it.receivedAt + retainMessagesFor >= currentTime }
+            validMessages.mapTo(mutableSetOf()) { it.payload }
+        }
+    }
+\end{lstlisting}
+
+In the \Cref{lst:read} snippet is shown how the \texttt{read} function of the network is implemented.
+It checks if the \emph{retainMessagesFor} property is null, meaning that it is necessary to keep all the messages,
+and in this case it returns the valid messages and clears the set, otherwise it retains only the messages that arrived
+after a certain time and returns them converted to a set of \emph{InboundMessage}.
+
+The \texttt{write} function is a bit more complex, having to manage the messages taken as input from the \emph{aggregate context}.
+It gets the neighbours of the device, and for each of them it creates an \texttt{InboundMessage} that the neighbour will read.
+Due to the structure of the messages, the complicated part has been the managing ot the overrides from the \emph{OutboundMessage}:
+not all messages may have an override with messages for specific recipients, so it first checks if the \texttt{ovverrides} are empty,
+if so the new message will be populated with the default value, otherwise it will be populated with the value associated with the recipient.
+
+If present, the sensors and actuators are implemented inside the \emph{CollektiveDevice} class.
+For example, in this implementation, the \emph{CollektiveDevice} has a \emph{DistanceSensor} that is used to measure the distance
+between the device and the neighbours.
+The \emph{DistanceSensor}'s method is implemented as an aggregate extension function, and it is used to measure the distance
+between the device and the neighbours using the \texttt{neighboringViaExchange} construct, obtaining other devices' positions
+and calculating the distance between them, as seen in the code snippet \ref{lst:distance}.
+This function can be used in others aggregate programs by simply using the interface \texttt{DistanceSensor} as context receiver.
+
+\begin{lstlisting}[language=kt,label={lst:distance},caption={The implementation of the \texttt{distance} function.}]
+override fun <ID : Any> Aggregate<ID>.distances(): Field<ID, Double> =
+    environment.getPosition(node).let { nodePosition ->
+        neighboringViaExchange(nodePosition).map { position -> nodePosition.distanceTo(position) }
+    }
+\end{lstlisting}
+
+\paragraph{RunCollektiveProgram}
+
+\paragraph{CollektiveIncarnation}
+The \emph{Collektive Incarnation} is the interpreter that enables the \emph{Alchemist Simulator} to understand and execute
+the aggregate program written in the \ac{dsl}.
 
 \subsection{Using reflection}
 \label{subsec:using-reflection}
