@@ -486,9 +486,6 @@ class YieldingContext<Initial, Return> {
 }
 \end{lstlisting}
 
-%todo explain the yielding thing
-
-
 \subsection{Aggregate Context}
 \label{subsec:aggregate-context}
 
@@ -559,9 +556,6 @@ override fun <Init, Ret> exchanging(
     }.toReturn
 }
 \end{lstlisting}
-
-%todo spiega come si comporta se non ci sono messaggi allineati
-
 %todo explain that is a bit different from how it has been implementated in scafi, for the thing that there it loose a round of communication
 
 \paragraph{Repeat}
@@ -589,8 +583,6 @@ The \texttt{transform} function is applied to the state of the device, checking 
 on the stack, or using the initial value passed as a parameter.
 After the computation, the stack is updated with the new value obtained from the computation, and the result is returned,
 depending on the yielding context passed in the body of the function.
-
-%todo project function???
 
 \subsection{Aggregate Operators}
 \label{subsec:aggregate-operators}
@@ -695,7 +687,7 @@ between the device and the neighbours.
 The \emph{DistanceSensor}'s method is implemented as an aggregate extension function, and it is used to measure the distance
 between the device and the neighbours using the \texttt{neighboringViaExchange} construct, obtaining other devices' positions
 and calculating the distance between them, as seen in the code snippet \ref{lst:distance}.
-This function can be used in others aggregate programs by simply using the interface \texttt{DistanceSensor} as context receiver.
+This function can be used in other aggregate programs by simply using the interface \texttt{DistanceSensor} as context receiver.
 
 \begin{lstlisting}[language=kt,label={lst:distance},caption={The implementation of the \texttt{distance} function.}]
 override fun <ID : Any> Aggregate<ID>.distances(): Field<ID, Double> =
@@ -722,6 +714,8 @@ or the \texttt{cycleWhile} function.
 \paragraph{CollektiveIncarnation}
 The \emph{Collektive Incarnation} is the interpreter that enables the \emph{Alchemist Simulator} to understand and execute
 the aggregate program written in the \ac{dsl}.
-
-\subsection{Using reflection}
-\label{subsec:using-reflection}
+Its functionalities are to manage actions and reactions used within the simulation.
+The main action is the \emph{RunCollektiveProgram}, which is used to execute the aggregate program on the device.
+It has been implemented in such a way as to evaluate runtime properties that can also be lambda functions, but this led to
+performance problems, so a cache system has been implemented to avoid evaluating the properties every time, but only in case
+of an update of the system.
