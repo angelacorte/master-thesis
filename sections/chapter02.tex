@@ -397,13 +397,15 @@ regarding the implementation choices and the problems encountered during develop
 
 \subsection{Fields}
 \label{subsec:fields}
-%todo explain the thing of constant fields and why is better for performances
 About the manipulation of the \emph{neighbouring values} introduced in \Cref{par:data-types}, it has been implemented
-the concept of \emph{Field} to handle the data structure to send between neighbours.
+the concept of \emph{Field} to handle the data structure to send between neighbours, and relatives functions to manipulate it.
 
 The \emph{Field} keeps track of the identifier of the device (\texttt{localId}) and the value associated with it
 (\texttt{localValues}) and eventually a map that associates the identifiers of the neighbours to their exchanged local values.
-%todo altro
+In order to improve the performance of the system, a version of the \emph{Field} has been implemented, called \emph{ConstantField}.
+This is used to implement the mechanism of isotropic message, which is often used in the communications.
+The \emph{ConstantField} keeps track of the identifiers of the neighbours with which to communicate in a list and the value to send only once,
+whilst the \emph{Field} keeps track of the value to send for each neighbour as a map, which is more expensive in terms of performance.
 
 \subsection{Collektive entrypoint}
 \label{subsec:collektive-entrypoint}
