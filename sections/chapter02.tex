@@ -27,7 +27,7 @@ In this chapter, will be presented the main contributions of this thesis.
 
 \section{Collektive}
 \label{sec:collektive}
-
+%todo add alchemist citation somewhere
 \emph{Collektive} is a framework designed to simplify the definition of \ac{ac} systems.
 
 The main objective of this technology is to facilitate the development of aggregate programs that can be executed on a
@@ -681,13 +681,13 @@ Due to the structure of the messages, the complicated part has been the managing
 not all messages may have an override with messages for specific recipients, so it first checks if the \texttt{ovverrides} are empty,
 if so the new message will be populated with the default value, otherwise it will be populated with the value associated with the recipient.
 
-If present, the sensors and actuators are implemented inside the \emph{CollektiveDevice} class.
-For example, in this implementation, the \emph{CollektiveDevice} has a \emph{DistanceSensor} that is used to measure the distance
-between the device and the neighbours.
-The \emph{DistanceSensor}'s method is implemented as an aggregate extension function, and it is used to measure the distance
-between the device and the neighbours using the \texttt{neighboringViaExchange} construct, obtaining other devices' positions
-and calculating the distance between them, as seen in the code snippet \ref{lst:distance}.
-This function can be used in other aggregate programs by simply using the interface \texttt{DistanceSensor} as context receiver.
+If present, sensors and actuators are implemented within the \emph{CollektiveDevice} class.
+For instance, in this particular implementation, the \emph{CollektiveDevice} incorporates a \emph{DistanceSensor} responsible for
+measuring the distance between the device and its neighbouring entities.
+The method of the \emph{DistanceSensor} is realised as an aggregate extension function, utilised for gauging the spatial
+separation between the device and its neighbours via the \texttt{neighboringViaExchange} construct.
+This method acquires the positions of neighbouring devices and computes the distances between them, as exemplified in code snippet \ref{lst:distance}.
+The utility of this function extends to other aggregate programs by virtue of employing the \texttt{DistanceSensor} interface as a contextual receiver.
 
 \begin{lstlisting}[language=kt,label={lst:distance},caption={The implementation of the \texttt{distance} function.}]
 override fun <ID : Any> Aggregate<ID>.distances(): Field<ID, Double> =
@@ -702,20 +702,36 @@ It takes the \emph{node} on which executes the action, the time distribution of 
 which is the path where the aggregate program to execute is located.
 
 To create an instance of the aggregate program, it has been necessary to use a mechanism called \emph{reflection}.
-Reflection is a powerful feature of Kotlin that allows developers to inspect and manipulate the structure of a program at runtime.
-It provides a way to access and modify the properties, methods, and types of a program, and to invoke functions and constructors dynamically.
-The reflection mechanism allows to obtain the contexts passed to the aggregate program.
-It has been necessary also to implement a private cache to store the associated parameters of the aggregate program, in order to
-avoid the reflection mechanism every time the program is executed, which is very expensive in terms of performance.
+Reflection stands as a potent feature within Kotlin, facilitating developers in the examination and manipulation of a program's structure during runtime.
+This capability enables access and modification of properties, methods, and types within a program, alongside dynamic invocation of functions and constructors.
+The reflection mechanism facilitates the retrieval of contexts passed to the aggregate program.
+Additionally, the implementation of a private cache has been essential for storing associated parameters of the aggregate program.
+This measure aims to circumvent the recurrent utilisation of the reflection mechanism during program execution, a practice known to substantially impact performance.
 
 Once it has been created the \emph{Collektive} instance, it is possible to execute the aggregate program running the \texttt{cycle}
 or the \texttt{cycleWhile} function.
 
 \paragraph{CollektiveIncarnation}
-The \emph{Collektive Incarnation} is the interpreter that enables the \emph{Alchemist Simulator} to understand and execute
+The \emph{Collektive Incarnation} is an interpreter that enables the \emph{Alchemist Simulator} to understand and execute
 the aggregate program written in the \ac{dsl}.
-Its functionalities are to manage actions and reactions used within the simulation.
-The main action is the \emph{RunCollektiveProgram}, which is used to execute the aggregate program on the device.
-It has been implemented in such a way as to evaluate runtime properties that can also be lambda functions, but this led to
-performance problems, so a cache system has been implemented to avoid evaluating the properties every time, but only in case
-of an update of the system.
+Its main function is to manage actions and reactions used within the simulation.
+The primary action is the \emph{RunCollektiveProgram}, which executes the aggregate program on the device.
+It evaluates runtime properties, which are lambda functions.
+However, a cache system has been implemented to avoid evaluating the properties every time, but only in case of a system update.
+This was necessary due to performance issues.
+
+\paragraph{Running the simulations}
+To execute the simulations outlined in the subsequent chapter (\Cref{sec:alchemist-simulations}), the creation of a
+configuration file in YAML format, adhering to \emph{Alchemist}'s YAML specifications, becomes imperative. %todo cite https://alchemistsimulator.github.io/reference/yaml/index.html
+Within the YAML configuration file, parameters defining the simulation are delineated, encompassing variables such as
+the node count, environmental characteristics, network model, and the pathway of the aggregate program slated for execution.
+Following the creation of the configuration file, simulation execution becomes feasible through Gradle tasks.
+
+In the yaml configuration file, it is possible to specify the parameters of the simulation, such as the number of nodes,
+the type of environment, the network model, and the path of the aggregate program to run.
+Once the configuration file has been created, it is possible to run the simulation through Gradle tasks.
+
+There are two types of Gradle tasks for each simulation: one is for testing purposes (\texttt{runTaskNameBatch}), and the other
+one is to run the simulation with the \emph{Alchemist} GUI (\texttt{runTaskNameGraphic}).
+Tasks are configured in the \texttt{build.gradle} file, and the parameters in which the two types of tasks differ are
+passed as arguments to the task.
