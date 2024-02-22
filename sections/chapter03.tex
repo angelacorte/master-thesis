@@ -4,20 +4,70 @@
 
 \chapter{Validation}
 \label{ch:validation}
+Validating the hypotheses is a fundamental step for the correct evaluation of the work done.
+By comparing the performance of the new implementation with the original one, it is possible to understand if the
+introduction of the new features has led to an improvement in the performance of the system.
 
 \section{Tests}
+\label{sec:tests}
+The testing phase is instrumental in affirming the integrity and functionality of the \ac{dsl} codebase developed for this thesis.
+Tests serve as a critical mechanism for verifying the behaviour of the DSL across various scenarios, detecting potential bugs,
+and validating adherence to specifications.
+
+Since the \ac{dsl} is designed to be multiplatform, tests are written to ensure that the codebase is compatible with
+different platforms, and the results are compared to ensure that the behaviour is consistent across platforms.
+
 
 \section{Alchemist Simulations}
 \label{sec:alchemist-simulations}
+
+
 %examples
 \section{Performance / Comparison}
 \label{sec:performance-/-comparison}
+To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the other
+\emph{ScaFi} and \emph{Protelis}' incarnations.
+The comparison is made by running the same simulations on each incarnation and comparing the results.
+The simulations are run on the same machine to ensure that the comparison is fair and that the differences are due to the
+implementation and not to the hardware.
 
+The performance of the new language has been evaluated through the implementation of 5 types of tests:
+\begin{enumerate}
+    \item Simple \textbf{state change} of the device, to represent the variation over time of the field;
+    \item A \textbf{counter of the neighbours}, to represent the variation of the space;
+    \item A \textbf{gradient}, which is a particular case of space-time variation, in which the value of a node is a
+        function of the distance from a node considered as a source;
+    \item A \textbf{channel with obstacles}, to represent the presence of obstacles in space that influence the communication between nodes;
+    \item Simple \textbf{branching} operations, as it has been noticed that branching could be one of the most expensive operations in terms of execution time.
+\end{enumerate}
 
+Each test has been run with the same parameters in the three different incarnations with three different simulated times
+inside the \emph{Alchemist} simulator, and the results have been analysed and will be further discussed in this section.
 
-%You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
-%
-%\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
-%
-%\section{Fancy formulas here}
+\paragraph{Machine Specifications}
+The tests have been run on a machine with the following specifications:
+%todo
+
+\paragraph{Foreword}
+During the evolution of this thesis, it has been noticed that the current implementation of the alignment in \emph{Collektive} may not be the optimal,
+and therefore the results could be influenced by this.
+A faster way to implement the alignment has been found, and it will be implemented in the future to have a more accurate comparison.
+
+\paragraph{Field Evolution}
+The first test has been implemented using the \texttt{repeat} construct.
+It doesn't need any particular setup, as it is a simple state change of the device.
+
+From the results, it is possible to see that the \emph{Protelis} implementation is faster than the \emph{Collektive} one,
+which in turn is faster than the \emph{ScaFi} implementation.
+%todo
+
+\paragraph{Neighbour Counter}
+
+\paragraph{Gradient}
+
+\paragraph{Channel with Obstacles}
+
+\paragraph{Branching}
+
+\section{Discussion}
 
