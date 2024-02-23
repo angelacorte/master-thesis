@@ -318,8 +318,8 @@ This IR serves as a transitional format, facilitating the seamless creation of m
 Notably, this approach eliminates the necessity to develop separate plugins for each platform, thus optimising the
 development process and fostering code reuse across varied environments.
 
-Since the source code is fully accessible at compile time, it becomes feasible to analyse it to determine when alignment
-is necessary for the plugin to comprehend; consequently, new code can be generated to ensure proper alignment.
+Since the source code is fully accessible at compile time, it becomes feasible to analyse it to determine when the \emph{alignment}
+of the functions is necessary; consequently, new code can be generated to ensure proper alignment.
 Furthermore, because the generation process is based on the intermediate representation, it enables interoperability across
 different project targets and devices running on the same platform.
 Modifications to the plugin are applied during compile time, minimising any notable impact on execution time.
@@ -328,24 +328,51 @@ Lastly, users are shielded from the intricacies of alignment concerns, as the co
 %todo why in scafi alignment is problematic (catching exception thrown)
 
 \paragraph{Alignment}
+\label{par:alignment}
 
 %In ScaFi (\Cref{subsec:scafi}), the alignment of an aggregate program is made by catching the exception thrown by
+The alignment in \emph{Collektive} was initially implemented inspecting and annotating the body of the (ex)\texttt{aggregate} functions;
+none of the other functions were aligned.
 
 In \emph{Collektive}, the alignment of the functions is made by the compiler plugin, which keeps track of the sequence of
 functions called during the computation, using a custom stack.
-The function name is pushed into the stack when the function is called, with a value appended that represents the occurrence of the
-function in the sequence of the computation; then it is popped when the control flow exits that function.
-A function to be aligned must have as extension receiver or as argument's type the \emph{aggregate context}.
+Since initially the entrypoint of the \ac{dsl} was the \texttt{aggregate} function, the alignment was made by assuring
+that a reference to the \emph{AggregateContext} was present, meaning that everything not related to the \ac{dsl} did not
+require alignment.
 
-The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
-Executes a body and returns the result of the computation, then resets the stack to the previous state.
-The compiler plugin uses the \ac{ir} to retrieve the \texttt{alignedOn} function declaration and the \emph{aggregate context}.
-After that, it visits through the visitor pattern all the functions call looking for the \texttt{Aggregate} super type.
+By changing the main architecture of the \ac{dsl} to use \xc{}, it has been necessary to review the way the alignment was managed.
 
-%todo alignment dei field
-%piu esempietti
-%snippet di come funziona e come il plugin allinea le funzioni
+The alignment has been implemented in such a way that it also takes into account the functions from which an aggregate program is called.
+For example, we could have two different functions called \texttt{foo()} and \texttt{bar()} that both call the same aggregate program,
+but in fact they are two different functions and therefore must be aligned differently.
 
+The alignment process follows a specific strategy.
+Firstly, all function definitions are visited, and those involving aggregate computation are subject to alignment processing.
+Next, for each candidate function, the plugin visits all call sites in the function's body and checks if the call has an
+aggregate reference or is involved in an aggregate computation; meaning that it must have the \emph{Aggregate} type as
+\texttt{extensionReceiver}, or \texttt{dispatchReceiver}, or one or more of the function's parameters.
+If so, the plugin aligns the expression call.
+While visiting the function definition, the plugin only aligns branch conditions that involve aggregate computation.
+If a branch body does not involve aggregate computation, it will not be aligned.
+This default alignment ensures that all branches follow the branch semantics of \ac{ac}.
+
+All the functions visited are so pushed into a stack.
+For each call to \emph{Aggregate} also push the name of the function in the stack, appending a value that represents the
+occurrence of the function in the sequence of the computation.
+When the control flow exits that function, the function name is popped from the stack.
+The \emph{Path} generated is a string that represents the sequence of the functions called during the computation,
+with the prepended calls of the non-Aggregate functions.
+
+Since during the execution the control on the effective alignment of two functions is made simply by comparing the two resulting strings,
+the control of the entire \emph{Path} turns out to be less efficient than the initial one on the aggregate functions only.
+However, this can be optimised by applying hashing to the paths, in order to reduce the comparison of strings with no deterministic length
+to the comparison of fixed-length Longs.
+Furthermore, the hashing approach would also be better from a privacy point of view.
+
+%The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
+%Executes a body and returns the result of the computation, then resets the stack to the previous state.
+%The compiler plugin uses the \ac{ir} to retrieve the \texttt{alignedOn} function declaration and the \emph{aggregate context}.
+%After that, it visits through the visitor pattern all the functions call looking for the \texttt{Aggregate} super type.
 
 \section{Technologies}
 \label{sec:technologies}
@@ -374,9 +401,10 @@ It offers a rich set of features and utilities to make testing easier, more conc
 \emph{Kotest} provides a wide range of built-in matchers and assertion functions for common test scenarios, such as equality
 checks, collection assertions, exception handling, and more.
 These utilities make it easy to write expressive and accurate assertions without boilerplate code.
-Some tests example will be shown in \Cref{ch:validation}.
+Some test examples will be shown in \Cref{sec:tests}.
 
 \paragraph{Gradle}
+%todo cite gradle
 Gradle is a powerful build automation tool and dependency management system used primarily for Java, Kotlin, and Groovy projects.
 It is designed to be highly flexible, scalable, and efficient, making it a popular choice among developers and
 organisations for building and managing software projects.
