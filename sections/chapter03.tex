@@ -7,7 +7,6 @@
 Validating the hypotheses is a fundamental step for the correct evaluation of the work done.
 By comparing the performance of the new implementation with the original one, it is possible to understand if the
 introduction of the new features has led to an improvement in the performance of the system.
-
 \section{Tests}
 \label{sec:tests}
 The testing phase is instrumental in affirming the integrity and functionality of the \ac{dsl} codebase developed for this thesis.
@@ -15,8 +14,41 @@ Tests serve as a critical mechanism for verifying the behaviour of the DSL acros
 and validating adherence to specifications.
 
 Since the \ac{dsl} is designed to be multiplatform, tests are written to ensure that the codebase is compatible with
-different platforms, and the results are compared to ensure that the behaviour is consistent across platforms.
+different platforms, and the results across platforms must be consistent.
 
+To achieve this, Kotlin offers \emph{Multiplatform Extensions}, which allows the testing of the same codebase across
+different platforms, such as \emph{JVM}, \emph{JS}, and \emph{Native}, just by adding needed extensions in the \texttt{build.gradle} file.
+%sono i seguenti
+The targets chosen for the testing are the following:
+\begin{itemize}
+    \item Linux x64 and ARM64;
+    \item Windows x64(MinGW);
+    \item MacOS x64 and ARM64;
+    \item IOS x64 and (simulator) ARM64;
+    \item WatchOS x64 and (simulator) ARM64;
+    \item TvOS x64 and (simulator) ARM64;
+\end{itemize}
+
+Those were chosen to cover the most common platforms and to ensure that the \ac{dsl} is compatible with the most common
+devices, such as smartphones, tablets, and wearables.
+
+The tests are divided into two categories:
+\begin{itemize}
+    \item \textbf{Unit Tests}: these tests are written to verify the correctness of the codebase at the smallest level.
+        They are written to test the behaviour of the functions and classes in isolation.
+    \item \textbf{Integration Tests}: these tests are written to verify the correctness of the codebase at the highest level.
+        They are written to test the behaviour of the codebase as a whole, and to verify that the different parts of the
+        codebase work together as expected.
+\end{itemize}
+%i test sono stati eseguiti anche tramite l'uso delle github actions quindi su macchine virutali diverse quali
+%windows 2022, linux ubuntu 22.04 e macos 12
+The tests were run through the use of \emph{GitHub Actions}, which allowed the execution of the tests on different virtual
+machines, such as Windows 2022, Linux Ubuntu 22.04, and MacOS 12, and locally on a machine with the following specifications:
+\begin{itemize}
+    \item \textbf{Processor}: Apple M1;
+    \item \textbf{RAM}: 16GB of unified memory;
+    \item \textbf{OS}: MacOS Ventura 13.6;
+\end{itemize}
 
 \section{Alchemist Simulations}
 \label{sec:alchemist-simulations}
@@ -45,13 +77,20 @@ Each test has been run with the same parameters in the three different incarnati
 inside the \emph{Alchemist} simulator, and the results have been analysed and will be further discussed in this section.
 
 \paragraph{Machine Specifications}
-The tests have been run on a machine with the following specifications:
-%todo
+The results that will be presented have been obtained by running the simulations on a machine with the following specifications:
+\begin{itemize}
+    \item \textbf{Processor}: Intel(R) Core(TM) i9-14900KF;
+    \item \textbf{RAM}: 64GB 4800mhz;
+    \item \textbf{OS}: Linux Manjaro;
+\end{itemize}
+
+Other runs have been made on a different machine to ensure that the results are consistent across different hardware,
+the machine used is the same as the tests one.
 
 \paragraph{Foreword}
-During the evolution of this thesis, it has been noticed that the current implementation of the alignment in \emph{Collektive} may not be the optimal,
-and therefore the results could be influenced by this.
-A faster way to implement the alignment has been found, and it will be implemented in the future to have a more accurate comparison.
+During the evolution of this thesis, it has been noticed that the current implementation of the alignment in \emph{Collektive}
+may not be the optimal, as explained in \ref{sec:alignment}, and therefore the results could be influenced by this.
+A way to implement a faster check on the alignment has been found, and it will be implemented in the future to have a more accurate comparison.
 
 \paragraph{Field Evolution}
 The first test has been implemented using the \texttt{repeat} construct.
