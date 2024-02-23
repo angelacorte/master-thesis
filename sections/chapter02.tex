@@ -343,8 +343,15 @@ require alignment.
 By changing the main architecture of the \ac{dsl} to use \xc{}, it has been necessary to review the way the alignment was managed.
 
 The alignment has been implemented in such a way that it also takes into account the functions from which an aggregate program is called.
-For example, we could have two different functions called \texttt{foo()} and \texttt{bar()} that both call the same aggregate program,
+For example (\Cref{lst:not-aligned}), we could have two different functions called \texttt{foo()} and \texttt{bar()} that both call the same aggregate program,
 but in fact they are two different functions and therefore must be aligned differently.
+
+\begin{lstlisting}[language=kt,label={lst:not-aligned}, caption={Example of two unaligned functions.}]
+val x = 0
+fun foo(aggregate: Aggregate<Int>) = aggregate.neighboringViaExchange(x)
+fun bar(aggregate: Aggregate<Int>) = aggregate.neighboringViaExchange(x)
+acProgram { foo(this) } shouldNot alignWith { bar(this) }
+\end{lstlisting}
 
 The alignment process follows a specific strategy.
 Firstly, all function definitions are visited, and those involving aggregate computation are subject to alignment processing.
@@ -363,11 +370,13 @@ When the control flow exits that function, the function name is popped from the 
 The \emph{Path} generated is a string that represents the sequence of the functions called during the computation,
 with the prepended calls of the non-Aggregate functions.
 
-Since during the execution the control on the effective alignment of two functions is made simply by comparing the two resulting strings,
-the control of the entire \emph{Path} turns out to be less efficient than the initial one on the aggregate functions only.
+Since, during execution, the control of the effective alignment of two functions is done simply by comparing the two resulting strings,
+the control of the whole path turns out to be less efficient than the initial one on the aggregate functions only.
 However, this can be optimised by applying hashing to the paths, in order to reduce the comparison of strings with no deterministic length
 to the comparison of fixed-length Longs.
 Furthermore, the hashing approach would also be better from a privacy point of view.
+Note that the paths' hashing should be implemented at plugin-level, this is because during the experiments it has been noticed
+its implementation in the \ac{dsl} could lead to a significant increase in the execution time of the aggregate programs.
 
 %The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
 %Executes a body and returns the result of the computation, then resets the stack to the previous state.
