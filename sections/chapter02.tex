@@ -37,7 +37,7 @@ This allows for interoperability and communication between these systems, despit
 To achieve this, \emph{Collektive} uses the \ac{fc} model to provide a straightforward and intuitive method for defining
 an aggregate program, without the need for low-level coding.
 In addition, \emph{Collektive} has been developed to be multiplatform, so it can be executed on different systems thanks
-to the use of \emph{Kotlin Multiplatform}.
+to the use of \ac{kmp}.
 
 As for the feature solution of alignment for the correct functioning of aggregate programming,
 it has been developed a compiler plugin with the purpose of annotating the functions that are aligned;
@@ -312,7 +312,7 @@ the Kotlin compiler API.
 These extensions can then be applied to Kotlin projects either globally or selectively, depending on the specific
 requirements of the project.
 
-In Kotlin multiplatform project development, the compiler undertakes a covert translation of Kotlin code into platform-specific code.
+In \ac{kmp} project development, the compiler undertakes a covert translation of Kotlin code into platform-specific code.
 Prior to this translation, the Kotlin code undergoes conversion into an \ac{ir}.
 This IR serves as a transitional format, facilitating the seamless creation of multiplatform compiler plugins.
 Notably, this approach eliminates the necessity to develop separate plugins for each platform, thus optimising the
@@ -392,14 +392,16 @@ its implementation in the \ac{dsl} could lead to a significant increase in the e
 \paragraph{Kotlin Multiplatform}
 \label{par:kotlin-multiplatform}
 
-\emph{Kotlin Multiplatform} is a technology that allows developers to write code that can be shared across multiple platforms,
-such as Android, iOS, web, desktop, and backend.
-It enables developers to write common business logic, data models, and utility functions once and then use them across
-different platforms, reducing code duplication and improving code maintainability.
+\emph{Kotlin} is a cross-platform, statically typed, general-purpose programming language with type inference.
+It is designed to interoperate fully with Java, and the JVM version of its standard library depends on the Java Class Library.
+However, \emph{Kotlin} is also used to target JavaScript, and native code (via LLVM).
+The purpose of \ac{kmp} is to streamline the development process of cross-platform projects by minimizing
+the effort required to write and upkeep identical code for various platforms, such as Android, iOS, full-stack web applications,
+multiplatform libraries and its platform-specific implementations for \ac{jvm}, \ac{js}, and native code.
 
-\emph{Kotlin Multiplatform} enables significant code reuse across multiple platforms, leading to faster development cycles,
+\ac{kmp} enables significant code reuse across multiple platforms, leading to faster development cycles,
 reduced maintenance efforts, and improved code consistency.
-\emph{Kotlin Multiplatform} supports compilation targets for various platforms, including Kotlin/JVM for backend and desktop applications,
+\ac{kmp} supports compilation targets for various platforms, including Kotlin/JVM for backend and desktop applications,
 Kotlin/JS for web applications, and Kotlin/Native for Android, iOS, and other native platforms.
 Developers specify the compilation targets in the Gradle configuration to generate platform-specific binaries.
 
