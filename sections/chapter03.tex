@@ -4,9 +4,12 @@
 
 \chapter{Validation}
 \label{ch:validation}
+This chapter describes the validation process of the new \ac{dsl} implementation and incarnation.
 Validating the hypotheses is a fundamental step for the correct evaluation of the work done.
+It is divided into testing and performance comparison, which are the two main aspects of this validation process.
 By comparing the performance of the new implementation with the original one, it is possible to understand if the
 introduction of the new features has led to an improvement in the performance of the system.
+
 \section{Tests}
 \label{sec:tests}
 The testing phase is instrumental in affirming the integrity and functionality of the \ac{dsl} codebase developed for this thesis.
@@ -14,7 +17,7 @@ Tests serve as a critical mechanism for verifying the behaviour of the DSL acros
 and validating adherence to specifications.
 
 Since the \ac{dsl} is designed to be multiplatform, tests are written to ensure that the codebase is compatible with
-different platforms, and the results across platforms must be consistent.
+different platforms and the results across platforms must be consistent.
 
 To achieve this, Kotlin offers \emph{Multiplatform Extensions}, which allows the testing of the same codebase across
 different platforms, such as \emph{JVM}, \emph{JS}, and \emph{Native}, just by adding needed extensions in the \texttt{build.gradle} file.
@@ -31,24 +34,47 @@ The targets chosen for the testing are the following:
 
 Those were chosen to cover the most common platforms and to ensure that the \ac{dsl} is compatible with the most common
 devices, such as smartphones, tablets, and wearables.
+Test have been implemented using the \emph{Kotest} framework, which is a flexible and comprehensive testing framework for Kotlin
+with multiplatform support.
 
-The tests are divided into two categories:
-\begin{itemize}
-    \item \textbf{Unit Tests}: these tests are written to verify the correctness of the codebase at the smallest level.
-        They are written to test the behaviour of the functions and classes in isolation.
-    \item \textbf{Integration Tests}: these tests are written to verify the correctness of the codebase at the highest level.
-        They are written to test the behaviour of the codebase as a whole, and to verify that the different parts of the
-        codebase work together as expected.
-\end{itemize}
-%i test sono stati eseguiti anche tramite l'uso delle github actions quindi su macchine virutali diverse quali
-%windows 2022, linux ubuntu 22.04 e macos 12
-The tests were run through the use of \emph{GitHub Actions}, which allowed the execution of the tests on different virtual
-machines, such as Windows 2022, Linux Ubuntu 22.04, and MacOS 12, and locally on a machine with the following specifications:
-\begin{itemize}
-    \item \textbf{Processor}: Apple M1;
-    \item \textbf{RAM}: 16GB of unified memory;
-    \item \textbf{OS}: MacOS Ventura 13.6;
-\end{itemize}
+\paragraph{Unit Tests}
+Focused on individual units or components within a software system, unit testing serves to validate their functionality
+according to requirements.
+Typically conducted by developers as the initial testing phase, it involves automation and occurs each time modifications
+are made to the source code to prevent disruption of existing features.
+These tests are engineered to verify the smallest units of code, such as individual functions or methods, in isolation
+from the broader system context.
+
+\paragraph{Integration Tests}
+Integration testing is a software testing methodology used to evaluate the functionality of combined units of code.
+It serves to expose faults in the interaction between integrated units, ensuring that they function as expected.
+This type of testing is particularly useful in the context of the \ac{dsl} as it allows the verification of the correct
+interactions of the different parts of the system.
+
+\subsection{Continuous Integration and Deployment}
+\label{subsec:continuous-integration-and-deployment}
+\ac{cicd} are software development practices that aim to automate and streamline the process of delivering high-quality software.
+\ac{ci} is a development practice where developers frequently integrate their code changes into a shared repository.
+Each integration triggers an automated build process, during which the code is compiled, tested, and verified against a
+set of predefined criteria.
+
+The primary goals of \ac{ci} are to detect integration errors early, ensure that the codebase remains functional,
+and promote collaboration among team members.
+\ac{ci} key features include:
+    i) automated builds, automatically triggered by committed code changes;
+    ii) automated testing, run automatically during the build process;
+    iii) immediate feedback, provided to developers regarding the status of their code changes, allowing to address issues promptly;
+    iv) version control integration, enabling seamless integration with code repositories.
+
+\ac{cd} extends the principles of \ac{ci} by automating the deployment process after successful integration and testing.
+It involves automatically deploying validated code changes to production or staging environments, eliminating manual
+intervention and reducing the time between code changes and their availability to users.
+\ac{cd} helps streamline the release process, reduce deployment errors, and enable rapid and reliable software delivery.
+\ac{cd} key features include:
+    i) automated deployment, Deployments to production or staging environments are automated, ensuring consistency and reliability;
+    ii) continuous monitoring, integrated into CD pipelines to track application performance and detect issues in real-time;
+    iii) rollback mechanisms, in case of deployment failures;
+    iv) environment provisioning, pipelines often include steps for provisioning and configuring target environments as part of the deployment process.
 
 \section{Alchemist Simulations}
 \label{sec:alchemist-simulations}
