@@ -1,26 +1,6 @@
 %! Author = angela
 %! Date = 24/01/24
 % !TeX root = ../thesis-main.tex
-\definecolor{ddarkgreen}{rgb}{0,0.5,0}
-\lstdefinelanguage{kt}{
-    frame=single,
-    basewidth=0.5em,
-    language={kotlin},
-    keywordstyle=\color{blue}\textbf,
-    commentstyle=\color{ddarkgreen},
-    keywordstyle=[2]\color{cyan},
-    keywords=[2]{Aggregate, Field,InboundMessage, OutboundMessage, SingleOutboundMessage,Message,Path,YieldingScope,Network,State,
-        AggregateContext,AggregateResult,YieldingContext,YieldingResult},
-    keywordstyle=[3]\color{orange},
-    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
-    keywordstyle=[4]\color{teal}\textbf,
-    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X,Init,Ret},
-    keywordstyle=[5]\color{olive},
-    keywords=[5]{read,mapTo,stateAt,messagesAt,newField,excludeSelf,currentPath,mapToConstantField,getPosition,map,distanceTo},
-    keywordstyle=[6]\color{blue},
-    keywords=[6]{also,it,run,let}
-}
-
 \chapter{Contributions}
 \label{ch:contributions}
 In this chapter, will be presented the main contributions of this thesis.
@@ -671,22 +651,32 @@ evaluated to the neighbours and return the values received from them as a field.
 
 \section{Alchemist Incarnation}
 \label{sec:incarnation}
-%how, why
-%gradle task
-%explain what is the alchemist incarnation
 An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simulator} to comprehend and accurately execute a language.
-Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and dictates
-the methodology for each iteration of the aggregate program.
+Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and
+dictates the methodology for each iteration of the aggregate program.
+Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-\\incarnation-protelis},
+it has been implemented to launch simulations through Gradle tasks.
 
-As others Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \\ \texttt{alchemist-incarnation-protelis},
-it has been implemented in order to launch the simulations through gradle tasks.
+The goal is to ensure that the new implementation is still compatible with the simulator and that it can be used to run simulations without any issues.
 
+To achieve this, it was necessary to modify the \emph{Collektive Device} previously implemented, to make it compatible
+with the new implementation of the network and the related message exchange.
+Furthermore, the functioning of the \emph{Distance Sensor} has been updated, and a new sensor has been added to detect
+the properties of the molecule of interest (\emph{Local Sensing}).
+To run simulations starting from a YAML file with the appropriate \emph{Alchemist} configuration, it was necessary to
+create a class that reads the configuration and sets up the simulation.
+
+The \emph{Alchemist} simulator is based on a system of actions and reactions, so to run an incarnation, it is necessary
+to define an action that represents the behaviour of the nodes.
+In this case, it is \texttt{RunCollektiveProgram} (\Cref{par:run-collektive-program}).
+
+The incarnation is therefore provided to manage the behavior of the molecules or nodes, so overriding the methods provided by the \texttt{Alchemist} library.
 %todo add structure image of the incarnation
 
 \paragraph{CollektiveDevice}
 The \emph{CollektiveDevice} is a representation of the device in the \emph{Alchemist Simulator}.
-It has the purpose of managing specific sensors and actuators, and has the effective implementation of the network from the
-device's perspective, in order to manage its messages to send and the messages received from the neighbours.
+Its purpose is to manage specific sensors and actuators and implement the network from the device's perspective to
+manage messages sent and received from neighbours.
 
 A device must have the \emph{environment} in which it is located, the \emph{node} property to be represented in the environment,
 a specific \emph{ID} that is the same of the node, a \emph{retention time} for messages which can be null if is necessary
@@ -722,7 +712,8 @@ if so the new message will be populated with the default value, otherwise it wil
 
 If present, sensors and actuators are implemented within the \emph{CollektiveDevice} class.
 For instance, in this particular implementation, the \emph{CollektiveDevice} incorporates a \emph{DistanceSensor} responsible for
-measuring the distance between the device and its neighbouring entities.
+measuring the distance between the device and its neighbouring entities and a \emph{LocalSensing} sensor for detecting the
+value of the molecule of interest.
 The method of the \emph{DistanceSensor} is realised as an aggregate extension function, utilised for gauging the spatial
 separation between the device and its neighbours via the \texttt{neighboringViaExchange} construct.
 This method acquires the positions of neighbouring devices and computes the distances between them, as exemplified in code snippet \ref{lst:distance}.
@@ -736,27 +727,31 @@ override fun <ID : Any> Aggregate<ID>.distances(): Field<ID, Double> =
 \end{lstlisting}
 
 \paragraph{RunCollektiveProgram}
+\label{par:run-collektive-program}
 The \emph{RunCollektiveProgram} is an action for the \emph{Alchemist Simulator} that runs a \emph{Collektive} program.
 It takes the \emph{node} on which executes the action, the time distribution of the events and the \emph{additional parameters}
 which is the path where the aggregate program to execute is located.
 
-To create an instance of the aggregate program, it has been necessary to use a mechanism called \emph{reflection}.
+This action is designed to accept the program to be executed as a parameter of the YAML and instantiate it via reflection.
 Reflection stands as a potent feature within Kotlin, facilitating developers in the examination and manipulation of a program's structure during runtime.
 This capability enables access and modification of properties, methods, and types within a program, alongside dynamic invocation of functions and constructors.
 The reflection mechanism facilitates the retrieval of contexts passed to the aggregate program.
+
+To instantiate the program, it is necessary to obtain any contexts passed through the context receivers or as parameters,
+instantiate them, and pass them to the program, along with the aggregated context required for its execution.
+This is where the behavior of the node is effectively defined when the action is executed, which calls the \texttt{cycle} method of \texttt{Collektive}.
+
 Additionally, the implementation of a private cache has been essential for storing associated parameters of the aggregate program.
 This measure aims to circumvent the recurrent utilisation of the reflection mechanism during program execution, a practice known to substantially impact performance.
-
-Once it has been created the \emph{Collektive} instance, it is possible to execute the aggregate program running the \texttt{cycle}
-or the \texttt{cycleWhile} function.
 
 \paragraph{CollektiveIncarnation}
 The \emph{Collektive Incarnation} is an interpreter that enables the \emph{Alchemist Simulator} to understand and execute
 the aggregate program written in the \ac{dsl}.
-Its main function is to manage actions and reactions used within the simulation.
-The primary action is the \emph{RunCollektiveProgram}, which executes the aggregate program on the device.
-It evaluates runtime properties, which are lambda functions.
-However, a cache system has been implemented to avoid evaluating the properties every time, but only in case of a system update.
+The incarnation is therefore provided to manage the behaviour of the molecules or nodes, so overriding the methods
+provided by the \texttt{Alchemist} library.
+It can evaluate runtime properties passed through the simulator, which are lambda functions.
+A cache system has been put in place to prevent the need for re-evaluating molecule's properties and concentration each time,
+activating only during system updates.
 This was necessary due to performance issues.
 
 \paragraph{Running the simulations}
