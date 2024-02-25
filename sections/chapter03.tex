@@ -78,9 +78,120 @@ intervention and reducing the time between code changes and their availability t
 
 \section{Alchemist Simulations}
 \label{sec:alchemist-simulations}
+Another validation process regards the effective functioning of \emph{Collektive Incarnation} for the \emph{Alchemist} simulator.
+To see if the new incarnation is working as expected, examples of simulations have been implemented and run.
 
+\paragraph{Neighbour Counter}
+The first example is a simple aggregate program in which the devices count the number of neighbours they have (\Cref{lst:neighbour-counter-example}).
+The result is a map of the space in which each node has a value that represents the number of neighbours it has.
 
-%examples
+\begin{lstlisting}[language=kt, caption={Neighbour counter code example}, label={lst:neighbour-counter-example}]
+fun Aggregate<Int>.neighborCounter(): Int = neighboringViaExchange(1)
+    .hood(0) { acc, _ -> acc + 1 }
+\end{lstlisting}
+
+The resultant simulation appears at first empty, because the nodes are coloured with a gradient that goes from white to
+blue based on the number of neighbours they have.
+Once the simulation starts and the nodes communicate with each other, the space is filled with colours, and the number of
+neighbours and connections is visible, as shown in \Cref{fig:neighbour-counter}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/neighborCounter}
+    \caption{Neighbour Counter Simulation.}
+    \label{fig:neighbour-counter}
+\end{figure}
+
+The simulator also gives the opportunity to move the nodes around the environment, and the number of neighbours is updated
+in real-time, as shown in \Cref{fig:neighbor-counter-moved}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/neighborCounterMoved}
+    \caption{Neighbour Counter Simulation after movement.}
+    \label{fig:neighbor-counter-moved}
+\end{figure}
+
+\paragraph{Gradient}
+The second example is a simple gradient program in which the devices calculate the distance from a source node and
+communicate it to the other nodes (\Cref{lst:gradient-example}).
+The result is a map of the space in which each node has a value that represents the distance from the source node,
+changing the colour of the nodes based on the distance from the source (seen as a rectangle as in \Cref{fig:gradient}).
+
+\begin{lstlisting}[language=kt, caption={Gradient code example}, label={lst:gradient-example}]
+context(LocalSensing,DistanceSensor)
+fun Aggregate<Int>.gradientEntrypoint(): Double = gradient(sense("source"))
+
+context(DistanceSensor)
+fun Aggregate<Int>.gradient(source: Boolean): Double =
+    share(POSITIVE_INFINITY) {
+        val dist = distances()
+        when {
+            source -> 0.0
+            else -> (it + dist).min(POSITIVE_INFINITY)
+        }
+    }
+\end{lstlisting}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/gradient}
+    \caption{Gradient Simulation.}
+    \label{fig:gradient}
+\end{figure}
+
+Also in this case, the simulator gives the opportunity to move the nodes around the environment, and the distance from
+the source is updated in real-time, as shown in \Cref{fig:gradient-moved}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/gradient-moved}
+    \caption{Gradient Simulation after movement.}
+    \label{fig:gradient-moved}
+\end{figure}
+
+\paragraph{Channel with Obstacles}
+The third example is a program a bit more complex, in which devices communicating with each other should create a channel
+from a source node to a target node, and the communication should be influenced by obstacles in the space (\Cref{lst:channel-with-obstacles-example}).
+
+\begin{lstlisting}[language=kt, caption={Channel with Obstacles code example}, label={lst:channel-with-obstacles-example}]
+context(LocalSensing, DistanceSensor)
+fun Aggregate<Int>.channelWithObstacles(): Boolean =
+    if (sense("obstacle")) {
+        false
+    } else {
+        channel(sense("source"), sense("target"), channelWidth = 0.5)
+    }
+
+context(DistanceSensor)
+fun Aggregate<Int>.channel(source: Boolean, target: Boolean, channelWidth: Double): Boolean {
+    val sourceDist = gradient(source)
+    val targetDist = gradient(target)
+    val distBetween = distanceBetween(source, target)
+    return !((sourceDist + targetDist).isInfinite() && distBetween.isInfinite()) &&
+            sourceDist + targetDist <= distBetween + channelWidth
+}
+\end{lstlisting}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/channel1}
+    \caption{}
+    \label{fig:channel1}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/channel2}
+    \caption{}
+    \label{fig:channel2}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/channel3}
+    \caption{}
+    \label{fig:channel3}
+\end{figure}
+
 \section{Performance / Comparison}
 \label{sec:performance-/-comparison}
 To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the other
