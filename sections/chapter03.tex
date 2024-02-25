@@ -81,6 +81,9 @@ intervention and reducing the time between code changes and their availability t
 Another validation process regards the effective functioning of \emph{Collektive Incarnation} for the \emph{Alchemist} simulator.
 To see if the new incarnation is working as expected, examples of simulations have been implemented and run.
 
+Using the Alchemist Simulator for validation showcases the capability of Collektive: implementing algorithms to specify
+system behavior is straightforward, and execution is both swift and dependable.
+
 \paragraph{Neighbour Counter}
 The first example is a simple aggregate program in which the devices count the number of neighbours they have (\Cref{lst:neighbour-counter-example}).
 The result is a map of the space in which each node has a value that represents the number of neighbours it has.
@@ -107,7 +110,7 @@ in real-time, as shown in \Cref{fig:neighbor-counter-moved}.
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/neighborCounterMoved}
-    \caption{Neighbour Counter Simulation after movement.}
+    \caption{Neighbour Counter Simulation after moving some nodes.}
     \label{fig:neighbor-counter-moved}
 \end{figure}
 
@@ -115,7 +118,7 @@ in real-time, as shown in \Cref{fig:neighbor-counter-moved}.
 The second example is a simple gradient program in which the devices calculate the distance from a source node and
 communicate it to the other nodes (\Cref{lst:gradient-example}).
 The result is a map of the space in which each node has a value that represents the distance from the source node,
-changing the colour of the nodes based on the distance from the source (seen as a rectangle as in \Cref{fig:gradient}).
+changing the colour of the nodes based on the distance from the source (seen as a square in \Cref{fig:gradient}).
 
 \begin{lstlisting}[language=kt, caption={Gradient code example}, label={lst:gradient-example}]
 context(LocalSensing,DistanceSensor)
@@ -140,17 +143,25 @@ fun Aggregate<Int>.gradient(source: Boolean): Double =
 \end{figure}
 
 Also in this case, the simulator gives the opportunity to move the nodes around the environment, and the distance from
-the source is updated in real-time, as shown in \Cref{fig:gradient-moved}.
+the source is updated in real-time (\Cref{fig:gradient-moved}).
+
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/gradient-moved}
-    \caption{Gradient Simulation after movement.}
+    \caption{Gradient Simulation after moving the root and some nodes.}
     \label{fig:gradient-moved}
 \end{figure}
 
 \paragraph{Channel with Obstacles}
-The third example is a program a bit more complex, in which devices communicating with each other should create a channel
-from a source node to a target node, and the communication should be influenced by obstacles in the space (\Cref{lst:channel-with-obstacles-example}).
+The third example is a program a bit more complex, recreating a communication pathway (channel) within a distributed
+system where data transmission is impeded or affected by various obstacles.
+These obstacles could include network congestion, latency, limited bandwidth, or even physical barriers in certain
+distributed computing environments.
+In the context of aggregate computing, where computations are performed collectively by a network of interconnected
+devices or nodes, such obstacles can significantly impact the efficiency and effectiveness of communication and data exchange among the nodes.
+
+From a source node to a target node, the goal is to find a minimum path that avoids obstacles and is the most efficient
+in terms of communication letting the information flow through the network (\Cref{lst:channel-with-obstacles-example}).
 
 \begin{lstlisting}[language=kt, caption={Channel with Obstacles code example}, label={lst:channel-with-obstacles-example}]
 context(LocalSensing, DistanceSensor)
@@ -171,30 +182,19 @@ fun Aggregate<Int>.channel(source: Boolean, target: Boolean, channelWidth: Doubl
 }
 \end{lstlisting}
 
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/channel1}
-    \caption{}
-    \label{fig:channel1}
-\end{figure}
+As shown in \Cref{fig:channel}, the channel (in green) is gradually created from the source (in yellow) towards the
+target (in blue), and the obstacles (red) influence the trajectory of the channel, as expected.
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/channel2}
-    \caption{}
-    \label{fig:channel2}
-\end{figure}
-
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/channel3}
-    \caption{}
-    \label{fig:channel3}
+    \includegraphics[width=0.6\textwidth]{figures/channel}
+    \caption{The resultant simulation of the channel with obstacles.}
+    \label{fig:channel}
 \end{figure}
 
 \section{Performance / Comparison}
 \label{sec:performance-/-comparison}
-To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the other
+To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the
 \emph{ScaFi} and \emph{Protelis}' incarnations.
 The comparison is made by running the same simulations on each incarnation and comparing the results.
 The simulations are run on the same machine to ensure that the comparison is fair and that the differences are due to the
