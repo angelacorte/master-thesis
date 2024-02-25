@@ -1,10 +1,6 @@
 \documentclass[12pt,a4paper,openright,twoside]{book}
 \usepackage[utf8]{inputenc}
-\usepackage{disi-thesis}
-\usepackage{code-lstlistings}
-\usepackage{notes}
-\usepackage{shortcuts}
-\usepackage{acronym}
+\usepackage{thesis-style}
 
 \newcommand{\fonte}[1]{{\color{gray} \small \hypersetup{citecolor=gray} Source: #1}}
 
@@ -19,50 +15,7 @@
 \session{Quarta}
 \academicyear{2022-2023}
 
-% Definition of acronyms
-\acrodef{iot}[IoT]{Internet of Thing}
-\acrodef{vm}[VM]{Virtual Machine}
-\acrodef{ac}[AC]{Aggregate Computing}
-\acrodef{fc}[FC]{Field Calculus}
-\acrodef{cps}[CPS]{Cyber-Physical Systems}
-\acrodef{cas}[CAS]{Collective Adaptive Systems}
-\acrodef{jvm}[JVM]{Java Virtual Machine}
-\acrodef{dsl}[DSL]{Domain Specific Language}
-\acrodef{ast}[AST]{Abstract Syntax Tree}
-\acrodef{ir}[IR]{Intermediate Representation}
-\acrodef{ci}[CI]{Continuous Integration}
-\acrodef{cd}[CD]{Continuous Deployment}
-\acrodef{js}[JS]{JavaScript}
-\acrodef{cicd}[CI/CD]{\ac{ci} and \ac{cd}}
-\acrodef{kmp}[KMP]{Kotlin Multiplatform}
-\definecolor{darkgreen}{rgb}{0,0.5,0}
-\lstdefinelanguage{kt}{
-    frame=single,
-    basewidth=0.5em,
-    language={kotlin},
-    keywordstyle=\color{blue}\textbf,
-    commentstyle=\color{darkgreen},
-    keywordstyle=[2]\color{cyan},
-    keywords=[2]{Aggregate, Field,InboundMessage, OutboundMessage, SingleOutboundMessage,Message,Path,YieldingScope,Network,State,
-    AggregateContext,AggregateResult,YieldingContext,YieldingResult},
-    keywordstyle=[3]\color{orange},
-    keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
-    keywordstyle=[4]\color{teal}\textbf,
-    keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X,Init,Ret,Int,Double,Boolean},
-    keywordstyle=[5]\color{olive},
-    keywords=[5]{read,mapTo,stateAt,messagesAt,newField,excludeSelf,currentPath,mapToConstantField,getPosition,map,distanceTo,hood},
-    keywordstyle=[6]\color{blue},
-    keywords=[6]{also,it,run,let,context},
-    keywordstyle=[7]\color{purple},
-    keywords=[7]{neighborCounter,gradient,gradientEntrypoint,distances,distanceBetween,LocalSensing,DistanceSensor,sense,channel,channelWithObstacles},
-    keywordstyle=[8]\color{violet},
-    keywords=[8]{POSITIVE_INFINITY}
-}
-
-\newcommand{\xc}[1]{\textbf{XC}}
-\newcommand{\q}[1]{\texttt{#1}}
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
-
 \begin{document}
 
 \frontmatter\frontispiece
