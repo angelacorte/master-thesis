@@ -1,6 +1,10 @@
 \documentclass[12pt,a4paper,openright,twoside]{book}
 \usepackage[utf8]{inputenc}
-\usepackage{thesis-style}
+\usepackage{disi-thesis}
+\usepackage{code-lstlistings}
+\usepackage{notes}
+\usepackage{shortcuts}
+\usepackage{acronym}
 
 \newcommand{\fonte}[1]{{\color{gray} \small \hypersetup{citecolor=gray} Source: #1}}
 
@@ -14,6 +18,24 @@
 \cosupervisor{Dott. Farabegoli Nicolas}
 \session{Quarta}
 \academicyear{2022-2023}
+
+\input{kotlin-def}
+\acrodef{iot}[IoT]{Internet of Thing}
+\acrodef{dsl}[DSL]{Domain Specific Language}
+\acrodef{vm}[VM]{Virtual Machine}
+\acrodef{ac}[AC]{Aggregate Computing}
+\acrodef{fc}[FC]{Field Calculus}
+\acrodef{cps}[CPS]{Cyber-Physical Systems}
+\acrodef{cas}[CAS]{Collective Adaptive Systems}
+\acrodef{jvm}[JVM]{Java Virtual Machine}
+\acrodef{dsl}[DSL]{Domain Specific Language}
+\acrodef{ast}[AST]{Abstract Syntax Tree}
+\acrodef{ir}[IR]{Intermediate Representation}
+\acrodef{ci}[CI]{Continuous Integration}
+\acrodef{cd}[CD]{Continuous Deployment}
+\acrodef{js}[JS]{JavaScript}
+\acrodef{cicd}[CI/CD]{\ac{ci} and \ac{cd}}
+\acrodef{kmp}[KMP]{Kotlin Multiplatform}
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 \begin{document}
