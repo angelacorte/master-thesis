@@ -210,8 +210,8 @@ The performance of the new language has been evaluated through the implementatio
     \item Simple \textbf{branching} operations, as it has been noticed that branching could be one of the most expensive operations in terms of execution time.
 \end{enumerate}
 
-Each test has been run with the same parameters in the three different incarnations with three different simulated times
-inside the \emph{Alchemist} simulator, and the results have been analysed and will be further discussed in this section.
+Each test has been run with the same parameters in the three different incarnations within the \emph{Alchemist} simulator,
+and the results have been analysed and will be further discussed in this section.
 
 \paragraph{Machine Specifications}
 The results that will be presented have been obtained by running the simulations on a machine with the following specifications:
@@ -224,20 +224,14 @@ The results that will be presented have been obtained by running the simulations
 Other runs have been made on a different machine to ensure that the results are consistent across different hardware,
 the machine used is the same as the tests one.
 
-\paragraph{Foreword}
-During the evolution of this thesis, it has been noticed that the current implementation of the alignment in \emph{Collektive}
-may not be the optimal, as explained in \ref{sec:alignment}, and therefore the results could be influenced by this.
-A way to implement a faster check on the alignment has been found, and it will be implemented in the future to have a more accurate comparison.
-
 \paragraph{Field Evolution}
 The first test has been implemented using the \texttt{repeat} construct.
 It doesn't need any particular setup, as it is a simple state change of the device.
 
-From the results, it is possible to see that the \emph{Protelis} implementation is faster than the \emph{Collektive} one,
-which in turn is faster than the \emph{ScaFi} implementation.
 %todo
 
 \paragraph{Neighbour Counter}
+The neighbour counter has been implemented using the \texttt{neighbouringViaExchange} construct.
 
 \paragraph{Gradient}
 

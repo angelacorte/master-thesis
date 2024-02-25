@@ -224,7 +224,8 @@ to ensure that unintended recipients do not receive the message.
 Therefore, the old model of messages has been modified.
 
 \paragraph{OutboundMessage and SingleOutboundMessage}
-It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}), which is a data class that keeps track of the sender of the
+%todo modify
+It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}), which is a class that keeps track of the sender of the
 message (its ID), and a map of messages, where the key is the \emph{Path} of the computation and the value is another data
 class: the \emph{SingleOutboundMessage} (\Cref{lst:single}).
 In this way, a device sends to the network just one \emph{OutboundMessage} that contains all the messages to send to the neighbours,
