@@ -225,18 +225,27 @@ Therefore, the old model of messages has been modified.
 
 \paragraph{OutboundMessage and SingleOutboundMessage}
 %todo modify
-It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}), which is a class that keeps track of the sender of the
-message (its ID), and a map of messages, where the key is the \emph{Path} of the computation and the value is another data
-class: the \emph{SingleOutboundMessage} (\Cref{lst:single}).
+It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}).
+Its goal is to associate to the sender of the message, the messages to send to the neighbours.
+With this implementation, it is possible to manage the messages for \emph{isotropic} and \emph{anisotropic} communication.
 In this way, a device sends to the network just one \emph{OutboundMessage} that contains all the messages to send to the neighbours,
 and also unburdens the payload of the network.
 
 \begin{lstlisting}[language=kt,label={lst:outbound}, caption={Outbound message data class.}]
 data class OutboundMessage<ID : Any>(
+    expectedSize: Int,
     val senderId: ID,
-    val messages: Map<Path, SingleOutboundMessage<ID, *>>,
 ) : Message
 \end{lstlisting}
+
+For what it concerns the \emph{anisotropic} communication, it is necessary to keep track of the identifier of the recipient
+and the value associated with it, in order for the network to deliver the message to the correct neighbour.
+This has been implemented with a map of \emph{overrides}, which associates to the recipient's identifier a specific value.
+
+For the \emph{isotropic} communication, it is just necessary to keep track of the default value to send to all the neighbours
+at a certain path of the computation.
+This is used when there are no overrides for the recipient that is reading the messages received.
+The network will be in charge to deliver the message to all the neighbours, so it is not necessary to keep track of the recipient's identifier.
 
 \begin{lstlisting}[language=kt,label={lst:single}, caption={Single outbound message data class.}]
 data class SingleOutboundMessage<ID : Any, Payload>(
@@ -245,17 +254,10 @@ data class SingleOutboundMessage<ID : Any, Payload>(
 )
 \end{lstlisting}
 
-The main difference for the type of the communication lies in the \emph{SingleOutboundMessage} data class.
-For what it concerns the \emph{anisotropic} communication, it is necessary to keep track of the identifier of the recipient
-and the value associated with it, in order for the network to deliver the message to the correct neighbour.
-This has been implemented with a map of \emph{overrides}, which associates to the recipient's identifier a specific value.
-
-For the \emph{isotropic} communication, the \emph{SingleOutboundMessage} has a \emph{default} value, which is used
-when there are no overrides for the recipient that is reading the messages received.
-
 In summary, when a program is executed and a device has computed its function, it has to generate the messages to send to
-the neighbours (so it's done inside the \texttt{exchange} function), it populates a \emph{SingleOutboundMessage},
-that will be added to a list of \emph{OutboundMessage} and sent to the network.
+the neighbours (so it's done inside the \texttt{exchange} function), it populates a \emph{SingleOutboundMessage} (\Cref{lst:single}),
+that will be used to populate the \texttt{overrides} and the \texttt{default} maps of the \emph{OutboundMessage}.
+At the end it is added to a list of \emph{OutboundMessage} and sent to the network.
 
 \paragraph{InboundMessage}
 The \emph{InboundMessage} is a data class (\Cref{lst:inbound}) modelled for the messages read from the network.
@@ -274,10 +276,10 @@ data class InboundMessage<ID : Any>(
 \subsection{Network}
 \label{subsec:network}
 The \emph{Network} has the task of managing only the reading and writing of messages in the network for a single device.
-The actual implementation of the network is not managed by \emph{Collektive}, but it is the user's responsibility to manage
-the network according to their needs.
+The actual implementation of the network is not managed by the \emph{Collektive} \ac{dsl}, but it is implemented in the
+\emph{alchemist-incarnation-collektive} (\Cref{sec:incarnation}) module, which is used to run the aggregate programs created with \emph{Collektive} on the simulator.
 
-In the \ac{dsl}, it is used at the beginning of an iteration of the aggregate program to read the messages received from
+Inside the \ac{dsl}, it is used at the beginning of an iteration of the aggregate program to read the messages received from
 other devices present in the network, and at the end of the iteration to write the messages to send to the other devices.
 The network actually supports only the specific types of messages introduced in \Cref{subsec:messages}, due to the
 concepts introduced by the study of \xc{} and field calculus.
