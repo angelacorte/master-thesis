@@ -196,6 +196,12 @@ target (in blue), and the obstacles (red) influence the trajectory of the channe
 \label{sec:performance-/-comparison}
 To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the
 \emph{ScaFi} and \emph{Protelis}' incarnations.
+
+It is important to note that the performance discussed evaluates the execution speed of the language together with
+the relative incarnation.
+It is therefore possible that the competitors may have more performant results with a better implementation of the incarnation.
+In more complex experiments, the real effort falls on the language and the management of the fields, and not only on the incarnation.
+
 The comparison is made by running the same simulations on each incarnation and comparing the results.
 The simulations are run on the same machine to ensure that the comparison is fair and that the differences are due to the
 implementation and not to the hardware.
@@ -211,7 +217,8 @@ The performance of the new language has been evaluated through the implementatio
 \end{enumerate}
 
 Each test has been run with the same parameters in the three different incarnations within the \emph{Alchemist} simulator,
-and the results have been analysed and will be further discussed in this section.
+for ten times each, setting the termination condition of the simulation to 1000 simulated seconds.
+The results have been analysed and will be further discussed in this section.
 
 \paragraph{Machine Specifications}
 The results that will be presented have been obtained by running the simulations on a machine with the following specifications:
@@ -221,32 +228,103 @@ The results that will be presented have been obtained by running the simulations
     \item \textbf{OS}: Linux Manjaro;
 \end{itemize}
 
-Other runs have been made on a different machine to ensure that the results are consistent across different hardware.
+Other test runs have been made on a different machine to ensure that the results are consistent across different hardware.
 
 \paragraph{Field Evolution}
-The first test has been implemented using the \texttt{repeat} construct.
-It doesn't need any particular setup, as it is a simple state change of the device, in which it sums a value to its state
-at each iteration.
-%todo
+The first test has been implemented using the \texttt{repeat} construct, the results of the comparison are shown in \Cref{fig:field-evolution}.
+
+This construct entails a straightforward iteration over its respective field, incrementing the field value with each
+iteration for every node within the network.
+Notably, in \emph{Collektive}, this construct operates independently of neighbouring nodes, thereby ensuring enhanced
+performance by avoiding information exchange with neighbours.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/field-evolution-results}
+    \caption{Graph of the results for the field evolution benchmark, showing that \emph{Collektive} is $4.51$ times faster
+        than \emph{Protelis} and $20.30$ times faster than \emph{ScaFi}.}
+    \label{fig:field-evolution}
+\end{figure}
+
+The results show that the \emph{Collektive} incarnation is the fastest, with a notable difference between \emph{ScaFi},
+this can be due to the implementation of the \emph{Scafi Incarnation}.
 
 \paragraph{Neighbour Counter}
 The neighbour counter has been implemented using the \texttt{neighbouringViaExchange} construct.
-As the previous one, no specific setup is required, it simply counts the number of neighbours of each node and
-keeps the value in its state.
+This means that the nodes communicate with their neighbours to exchange information, and for each neighbour they have, they
+increment their value.
+From the results (\Cref{fig:neghbour-counter}), it can be noticed that the difference with \emph{Protelis} is minimal,
+while with \emph{ScaFi} it is significant.
+This happens because \emph{Protelis}, being an interpreted language, has advantages in the execution of less complex programs.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/neighboring-results}
+    \caption{Graph of the results for the neighbour-counter benchmark, showing that \emph{Collektive} is $1.04$ times faster
+    than \emph{Protelis} and $3.25$ times faster than \emph{ScaFi}.}
+    \label{fig:neghbour-counter}
+\end{figure}
 
 \paragraph{Branching}
 ``Branching'' happens when a node has to make different evaluations based on a condition (as explained in \Cref{par:conditionals}).
+Comparison for this type of test is essential due to the observation that branching operations can be among the most
+resource-intensive tasks in terms of execution time, given that they create multiple execution paths.
+In \emph{ScaFi}, branching is handled in a distinct manner, where exceptions are thrown to perform checks on the function to call,
+while in \emph{Protelis} and \emph{Collektive}, they follow a more conventional approach, aligning when a function is called.
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/branching-results}
+    \caption{Graph of the results for the branching benchmark, showing that \emph{Collektive} is $3.08$ times faster
+    than \emph{Protelis} and $12.45$ times faster than \emph{ScaFi}.}
+    \label{fig:branching}
+\end{figure}
+
+The results depicted in \Cref{fig:branching} illustrate the disparity in performance for this type of operation,
+underscoring the benefits of adopting a more traditional alignment approach.
 
 \paragraph{Gradient}
-The gradient uses the \texttt{share} construct (based on the \texttt{exchange} construct) to calculate the distance from a
-source node and communicate it to the other nodes.
+The gradient in \emph{Collektive} uses the \texttt{share} construct (based on the \texttt{exchange} construct) to
+calculate the distance from a source node and communicate it to the other nodes.
+
+%In questo tipo di esperimento è presente piu comunicazione tra i nodi, che devono calcolare la distanza dal nodo sorgente
+%e comunicarla agli altri nodi.
+%Questo tipo di esperimento è stato scelto per valutare la velocità di esecuzione in un caso leggermente più complesso,
+%ma comunque basilare, in cui i nod devono comunicare tra loro e calcolare la distanza dal nodo sorgente.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/gradient-results}
+    \caption{Graph of the results for the gradient benchmark, showing that \emph{Collektive} is $1.51$ times faster
+    than \emph{Protelis} and $2.80$ times faster than \emph{ScaFi}.}
+    \label{fig:gradient-resutls}
+\end{figure}
 
 
 \paragraph{Channel with Obstacles}
 Between all those tests, the channel with obstacles is the most important one, as it is the most complex and the one that
 requires the most computation.
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/channel-results}
+    \caption{Graph of the results for the channel with obstacles benchmark, showing that \emph{Collektive} is $4.43$ times faster
+    than \emph{Protelis} and $2.26$ times faster than \emph{ScaFi}.}
+    \label{fig:channel-with-obstacles}
+\end{figure}
 
-\section{Discussion}
-\label{sec:discussion}
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        Test Type              & Protelis vs Collektive & ScaFi vs Collektive \\ \hline
+        Neighbour Counter       & 1.04                   & 3.25                \\ \hline
+        Field evolution        & 4.52                   & 20.30               \\ \hline
+        Branching              & 3.08                   & 12.45               \\ \hline
+        Gradient               & 1.51                   & 2.80                \\ \hline
+        Channel with obstacles & 4.43                   & 2.26                \\ \hline
+    \end{tabular}
+    \caption{Performance comparison between the three incarnations.}
+    \label{tab:performance-comparison}
+\end{table}
