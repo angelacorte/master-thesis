@@ -692,12 +692,14 @@ In this way, in the effective implementation of the \texttt{read} function of th
 to discard the messages that arrived before a certain time, and thus are no longer valid.
 
 \begin{lstlisting}[language=kt,label={lst:read},caption={The implementation of the \texttt{read} function of the \texttt{Network}.}]
-override fun read(): Set<InboundMessage<Int>> =
-    when (retainMessagesFor) {
-        null -> validMessages.mapTo(mutableSetOf()) { it.payload }.also { validMessages.clear() }
+override fun read(): Collection<InboundMessage<Int>> =
+    when {
+        validMessages.isEmpty() -> emptySet()
+        retainMessagesFor == null ->
+            validMessages.map { it.payload }.also { validMessages.clear() }
         else -> {
             validMessages.retainAll { it.receivedAt + retainMessagesFor >= currentTime }
-            validMessages.mapTo(mutableSetOf()) { it.payload }
+            validMessages.map { it.payload }
         }
     }
 \end{lstlisting}
@@ -707,11 +709,11 @@ It checks if the \emph{retainMessagesFor} property is null, meaning that it is n
 and in this case it returns the valid messages and clears the set, otherwise it retains only the messages that arrived
 after a certain time and returns them converted to a set of \emph{InboundMessage}.
 
-The \texttt{write} function is a bit more complex, having to manage the messages taken as input from the \emph{aggregate context}.
+The \texttt{write} function is the one that effectively sends the messages to the network, it has to manage the messages
+taken as input from the \emph{aggregate context}.
 It gets the neighbours of the device, and for each of them it creates an \texttt{InboundMessage} that the neighbour will read.
-Due to the structure of the messages, the complicated part has been the managing ot the overrides from the \emph{OutboundMessage}:
-not all messages may have an override with messages for specific recipients, so it first checks if the \texttt{ovverrides} are empty,
-if so the new message will be populated with the default value, otherwise it will be populated with the value associated with the recipient.
+It has been noticed that the implementation of the network's functions affects the performance of the aggregate programs,
+so it has been necessary to optimise the code to improve the performance.
 
 If present, sensors and actuators are implemented within the \emph{CollektiveDevice} class.
 For instance, in this particular implementation, the \emph{CollektiveDevice} incorporates a \emph{DistanceSensor} responsible for
