@@ -279,14 +279,12 @@ The aim of this experimental language is to push the abstraction boundaries fart
 Many issues can arise in distributed systems, like concurrency, remote communication, asynchronous execution, message
 loss, and device failures.
 These kinds of problems must be taken into account when designing a programming language for such systems.
-Some of the possible applications of this approach may be crowd management, gossip-based data aggregation, task allocation
-in robot swarms and coordination of enterprise servers. %todo add cites that are in the xc paper
+Some of the possible applications of this approach may be crowd management by handled devices~\cite{7274429},
+gossip-based data aggregation~\cite{10.1145/1082469.1082470}, task allocation in robot swarms \cite{swarms1,420661},
+and coordination of enterprise servers \cite{7306601}.
 
 The homogeneity in large-scale systems also arises when each device executes a program from a predefined set, reflecting
 a homogeneous configuration featuring a single program with an initial branch.
-
-%This design eliminates the need to handle the aforementioned problems explicitly.
-%Additionally, distributed programs with independent devices retain composability through a mechanism called \emph{alignment}.
 
 \paragraph{System model}
 Devices that can send or receive messages are called \emph{neighbours}, and they can change dynamically to model network
@@ -351,6 +349,7 @@ in the next round.
 To accomplish this, it verifies whether it's in the same position of the Abstract Syntax Tree (AST) and of the stack frame.
 
 \paragraph{Conditionals}
+\label{par:conditionals}
 \xc{} supports conditional expressions, like $if\ (cond)\ \{e_1\}\ else\ \{e_2\}$.
 An exchange aligns only across the devices that take the same branch; thus, it evaluates only aligned sub-expressions.
 This means that a network can be split by a conditional expression into two non-communicating subnetworks, each
@@ -375,11 +374,11 @@ From an engineering perspective, the construction of \ac{iot} applications diffe
 software, especially when a particular service, to be realised, requires the coordination of devices of different nature.
 
 \paragraph{Challenges and innovations}
-Over the course of time, different approaches have been proposed to program these systems, such as TOTA, SAPERE, Aggregate
-Computing, Linda, MARS and others. %todo cite them
+Over the course of time, different approaches have been proposed to program these systems, such as TOTA, SAPERE \cite{ZAMBONELLI2011197},
+Aggregate Computing \cite{Beal2016}, Linda \cite{10.1145/2363.2433}, MARS \cite{865084} and others.
 
 The most successful solution at the moment involves the use of Cloud Computing (see ~\Cref{fig:cloud-edge-continuum}),
-which provides virtualised resources on a large scale, but presents limitations in terms of latency (due to the physical
+which provides virtualized resources on a large scale, but presents limitations in terms of latency (due to the physical
 distance between machines) and scalability (due to centralisation).
 
 For this reason, Edge Computing and Fog Computing have recently emerged, aiming to bring resources closer to the outer
@@ -420,16 +419,6 @@ them in the form of capabilities.
 
 \subsection{Goal}
 \label{subsec:goal}
-
-%lo scopo di questa tesi è quello di estendere il DSL gia esistente 'Collektive', applicando i concetti di XC
-%ai costrutti di programmazione aggregata, cercando così di migliorarne le performance in modo tale da
-%rendere questo dsl competitivo nei confronti degli approcci gia esistenti
-
-%inoltre si vuole creare un incarnazione di questo DSL in maniera tale da poter eseguire simulazioni attraverso
-%il simulatore Alchemist.
-
-%todo speak about performances increase
-
 The goal of this thesis is to extend the existing \ac{dsl} \emph{Collektive} by applying the concepts of \xc{} to
 aggregate programming constructs, thus seeking to improve its performance in order to make this \ac{dsl} competitive
 against existing approaches.
@@ -450,7 +439,8 @@ development of distributed systems, especially in the \ac{iot} and \ac{cps} doma
 The new language will allow developers to write programs that can be executed on any device, regardless of its nature,
 and will be able to communicate with other devices in the network, thus simplifying the development of complex systems.
 
-%todo add more??
+In addition, the new language is expected to have an impact on the performance of distributed systems, as the constructs
+of \xc{} have been designed to ensure greater efficiency in the execution of distributed programs.
 
 \section{State of Art}
 \label{sec:state-of-art}
