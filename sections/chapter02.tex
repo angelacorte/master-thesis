@@ -673,7 +673,8 @@ The \emph{Alchemist} simulator is based on a system of actions and reactions, so
 to define an action that represents the behaviour of the nodes.
 In this case, it is \texttt{RunCollektiveProgram} (\Cref{par:run-collektive-program}).
 
-The incarnation is therefore provided to manage the behavior of the molecules or nodes, so overriding the methods provided by the \texttt{Alchemist} library.
+The incarnation is therefore provided to manage the behaviour of the molecules or nodes, so overriding the methods
+provided by the \texttt{Alchemist} library.
 %todo add structure image of the incarnation
 
 \paragraph{CollektiveDevice}
@@ -682,7 +683,7 @@ Its purpose is to manage specific sensors and actuators and implement the networ
 manage messages sent and received from neighbours.
 
 A device must have the \emph{environment} in which it is located, the \emph{node} property to be represented in the environment,
-a specific \emph{ID} that is the same of the node, a \emph{retention time} for messages which can be null if is necessary
+a specific \emph{ID} that is the same of the node, a \emph{retention time} for messages which can be null if it is necessary
 to keep all messages.
 It must extend the eventual sensors and the network to manage the communication with the neighbours.
 
