@@ -221,23 +221,32 @@ The results that will be presented have been obtained by running the simulations
     \item \textbf{OS}: Linux Manjaro;
 \end{itemize}
 
-Other runs have been made on a different machine to ensure that the results are consistent across different hardware,
-the machine used is the same as the tests one.
+Other runs have been made on a different machine to ensure that the results are consistent across different hardware.
 
 \paragraph{Field Evolution}
 The first test has been implemented using the \texttt{repeat} construct.
-It doesn't need any particular setup, as it is a simple state change of the device.
-
+It doesn't need any particular setup, as it is a simple state change of the device, in which it sums a value to its state
+at each iteration.
 %todo
 
 \paragraph{Neighbour Counter}
 The neighbour counter has been implemented using the \texttt{neighbouringViaExchange} construct.
-
-\paragraph{Gradient}
-
-\paragraph{Channel with Obstacles}
+As the previous one, no specific setup is required, it simply counts the number of neighbours of each node and
+keeps the value in its state.
 
 \paragraph{Branching}
+``Branching'' happens when a node has to make different evaluations based on a condition (as explained in \Cref{par:conditionals}).
+
+
+\paragraph{Gradient}
+The gradient uses the \texttt{share} construct (based on the \texttt{exchange} construct) to calculate the distance from a
+source node and communicate it to the other nodes.
+
+
+\paragraph{Channel with Obstacles}
+Between all those tests, the channel with obstacles is the most important one, as it is the most complex and the one that
+requires the most computation.
+
 
 \section{Discussion}
-
+\label{sec:discussion}
