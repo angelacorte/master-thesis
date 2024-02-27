@@ -5,5 +5,34 @@
 \chapter{Conclusions}
 \label{ch:conclusions}
 
+The primary objective of this thesis was to enhance the current \ac{dsl} for aggregate computing \emph{Collektive},
+leveraging the principles of ~\xc~ to enhance the performance of the \ac{dsl}.
+The other main goal was to develop a multi-platform implementation of the \ac{dsl} with \ac{kmp}, to allow the execution
+of the aggregate programs on different platforms.
+
+This enhancement was pursued to ensure its competitiveness against existing solutions and to enhance its usability.
+Additionally, there was as a goal to develop a corresponding incarnation for conducting simulations within the \emph{Alchemist} environment.
+
+A key aspect in the development of the \ac{dsl} was to ensure a good and functional alignment, to guarantee
+the correct functioning of the language and its features, maintaining a good result in terms of performance.
+The communication between the nodes, intended as the exchange of messages, was also a fundamental aspect to guarantee
+the correct functioning of the language and its execution speed.
+All this was possible thanks to the implementation of an expressive and flexible language, which made it easy to define complex systems.
+
 \section{Future Works}
 \label{sec:future-works}
+In the near future, the development of the \ac{dsl} will continue, as it has been possible to win a research grant from the GARR organization.
+It will therefore be possible to further deepen the research and develop new features for the language.
+
+As future works have been identified the followings:
+\begin{itemize}
+    \item \textbf{Further optimisations of the \ac{dsl}}: the \ac{dsl} will be further optimised to improve its performance;
+    \item \textbf{Alignment optimisation}: to improve performances and security looking forward to the execution of the aggregate
+        program on different platforms and environments;
+    \item \textbf{Development of a standard library}: to provide modules and functionalities to simplify the writing of the aggregate program.
+        such as self-stabilizing functions that could encompass a range of strategies commonly employed to attain adaptable
+        and resilient decentralised behaviours.
+        These functions aim to conceal complexities by leveraging constructs from field calculus;
+    \item \textbf{Creation of demonstrations}: to illustrate the possibility of running the same aggregate program on
+        different platforms simultaneously, including server JVM, Android devices, iOS, and web browsers.
+\end{itemize}
