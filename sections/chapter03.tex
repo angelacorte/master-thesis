@@ -210,10 +210,10 @@ The performance of the new language has been evaluated through the implementatio
 \begin{enumerate}
     \item Simple \textbf{state change} of the device, to represent the variation over time of the field;
     \item A \textbf{counter of the neighbours}, to represent the variation of the space;
+    \item Simple \textbf{branching} operations, as it has been noticed that branching could be one of the most expensive operations in terms of execution time.
     \item A \textbf{gradient}, which is a particular case of space-time variation, in which the value of a node is a
         function of the distance from a node considered as a source;
     \item A \textbf{channel with obstacles}, to represent the presence of obstacles in space that influence the communication between nodes;
-    \item Simple \textbf{branching} operations, as it has been noticed that branching could be one of the most expensive operations in terms of execution time.
 \end{enumerate}
 
 Each test has been run with the same parameters in the three different incarnations within the \emph{Alchemist} simulator,
@@ -284,13 +284,8 @@ The results depicted in \Cref{fig:branching} illustrate the disparity in perform
 underscoring the benefits of adopting a more traditional alignment approach.
 
 \paragraph{Gradient}
-The gradient in \emph{Collektive} uses the \texttt{share} construct (based on the \texttt{exchange} construct) to
-calculate the distance from a source node and communicate it to the other nodes.
-
-%In questo tipo di esperimento è presente piu comunicazione tra i nodi, che devono calcolare la distanza dal nodo sorgente
-%e comunicarla agli altri nodi.
-%Questo tipo di esperimento è stato scelto per valutare la velocità di esecuzione in un caso leggermente più complesso,
-%ma comunque basilare, in cui i nod devono comunicare tra loro e calcolare la distanza dal nodo sorgente.
+The gradient implemented with \emph{Collektive} uses the \texttt{share} construct (based on the \texttt{exchange} construct) to
+calculate the distance from a source node and communicate it to the other nodes, increasing the amount of communication between them.
 
 \begin{figure}[ht!]
     \centering
@@ -300,19 +295,35 @@ calculate the distance from a source node and communicate it to the other nodes.
     \label{fig:gradient-resutls}
 \end{figure}
 
+The results in \Cref{fig:gradient-resutls} show that even with an increase in the amount of communication between nodes,
+\emph{Collektive} does not lose performance compared to the other languages.
+This demonstrates how the management of the fields is a strength of \emph{Collektive}.
 
 \paragraph{Channel with Obstacles}
-Between all those tests, the channel with obstacles is the most important one, as it is the most complex and the one that
-requires the most computation.
+Among all the tests, the channel with obstacles is the most complex and the closest to a real-world scenario.
 
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/channel-results}
-    \caption{Graph of the results for the channel with obstacles benchmark, showing that \emph{Collektive} is $4.43$ times faster
-    than \emph{Protelis} and $2.26$ times faster than \emph{ScaFi}.}
+    \caption{Graph of the results for the channel with obstacles benchmark, showing that \emph{Collektive} is $6.91$ times faster
+    than \emph{Protelis} and $3.73$ times faster than \emph{ScaFi}.}
     \label{fig:channel-with-obstacles}
 \end{figure}
 
+The results in \Cref{fig:channel-with-obstacles} show that in complex programs, \emph{Protelis} has a significant
+disadvantage compared to \emph{Collektive}, while in the other examples they were closer.
+This is due to the fact that \emph{Protelis} is an interpreted language and its execution of programs that need to go
+deeper in the execution tree is slower.
+
+\paragraph{Conclusions}
+Keeping in mind that the performance of the language is influenced by the implementation of the incarnation, the results
+show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} in all the tests, with a significant
+difference in the most complex ones.
+
+For the easier tests, the difference is minimal between \emph{Collektive} and \emph{Protelis}, while it is significant
+between \emph{Collektive} and \emph{ScaFi}.
+With the growth in complexity of the tests, the difference between \emph{Collektive} and the other incarnations becomes
+higher, showing the strength of the combination of the language and the incarnation.
 
 \begin{table}[ht!]
     \centering
@@ -323,8 +334,11 @@ requires the most computation.
         Field evolution        & 4.52                   & 20.30               \\ \hline
         Branching              & 3.08                   & 12.45               \\ \hline
         Gradient               & 1.51                   & 2.80                \\ \hline
-        Channel with obstacles & 4.43                   & 2.26                \\ \hline
+        Channel with obstacles & 6.91                   & 3.73                \\ \hline
     \end{tabular}
     \caption{Performance comparison between the three incarnations.}
     \label{tab:performance-comparison}
 \end{table}
+
+In the \Cref{tab:performance-comparison}, the results of the comparison are summarised, highlighting the times
+that \emph{Collektive} is faster than the other incarnations.
