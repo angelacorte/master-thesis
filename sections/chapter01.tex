@@ -301,12 +301,17 @@ messages producing others to send to neighbours, that in turn will process their
 \begin{figure}
     \centering
     \includegraphics[width=.5\linewidth]{figures/xc-system-model}
-    \caption{The system model of \xc{} \cite{7274429}.}
+    \caption{The system model of \xc{}.}
     \label{fig:xc-system-model}
 \end{figure}
 
-It can occur that a device executes multiple rounds before a neighbour executes its own, in that case the neighbour will
-only see the last received message from the first device; newly received messages will overwrite the older ones.
+For example, in the \Cref{fig:xc-system-model}, the device $\delta_2$ executes two computation rounds $\epsilon_1$ and
+$\epsilon_2$.
+After the computation, $\delta_2$ sends a message to $\delta_1$ and $\delta_3$.
+It can occur that a device $\delta_1$ executes multiple rounds before $\delta_2$ executes its own, in that case $\delta_2$ will
+only see the last-received message from the device $\delta_1$; newly received messages will overwrite the older ones.
+Grey arrows are messages lost never received.
+
 Messages can persist across rounds; they are not removed from the buffer after they have been read unless they expire.
 The devices for which a message is available in a certain round are considered the \emph{neighbours} for that round.
 
