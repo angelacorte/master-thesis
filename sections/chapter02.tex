@@ -62,7 +62,6 @@ Consequently, general-purpose languages like Java typically exhibit greater comp
 
 \paragraph{Structure}
 %todo add class diagrams
-%For what it concerns the structure of the core of the project,
 The \emph{Collektive}'s \ac{dsl} is composed of the following components:
 \begin{itemize}
     \item \textbf{Path}: represents a specific point in the \ac{ast} of an aggregate program;
@@ -303,7 +302,6 @@ Lastly, users are shielded from the intricacies of alignment concerns, as the co
 \paragraph{Alignment}
 \label{par:alignment}
 
-%In ScaFi (\Cref{subsec:scafi}), the alignment of an aggregate program is made by catching the exception thrown by
 The alignment in \emph{Collektive} was initially implemented inspecting and annotating the body of the (ex)\texttt{aggregate} functions;
 none of the other functions were aligned.
 
@@ -350,11 +348,6 @@ to the comparison of fixed-length Longs.
 Furthermore, the hashing approach would also be better from a privacy point of view.
 Note that the paths' hashing should be implemented at plugin-level, this is because during the experiments it has been noticed
 its implementation in the \ac{dsl} could lead to a significant increase in the execution time of the aggregate programs.
-
-%The \texttt{alignedOn} function is used to push in the stack the pivot, which is the identifier on which the alignment is based.
-%Executes a body and returns the result of the computation, then resets the stack to the previous state.
-%The compiler plugin uses the \ac{ir} to retrieve the \texttt{alignedOn} function declaration and the \emph{aggregate context}.
-%After that, it visits through the visitor pattern all the functions call looking for the \texttt{Aggregate} super type.
 
 \section{Technologies}
 \label{sec:technologies}
