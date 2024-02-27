@@ -6,7 +6,6 @@
 
 \section{Collektive}
 \label{sec:collektive}
-%todo add alchemist citation somewhere
 \emph{Collektive} is a framework designed to simplify the definition of \ac{ac} systems.
 
 The main objective of this technology is to facilitate the development of aggregate programs that can be executed on a
@@ -135,7 +134,6 @@ The construct \texttt{exchange} provides
 As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
 
-%todo check that I say that the return is a field
 %todo diagrams?
 
 The \texttt{exchange} takes an \emph{initial} value to use as a default, and a \emph{body} that defines an aggregate
@@ -190,8 +188,6 @@ fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
 ): Field<ID, Scalar>
 \end{lstlisting}
 
-%todo add something else???
-
 \paragraph{Repeat}
 The \texttt{repeat} function is the equivalent of the \texttt{rep} construct in \emph{field calculus}.
 It models the state evolution over time, the value of \emph{initial} evolves at each execution depending on the \emph{transform} function,
@@ -209,8 +205,6 @@ it is better not to send messages to neighbours, also for security and privacy r
 
 \subsection{Messages}
 \label{subsec:messages}
-%todo message modelling (in scafi there is an action that computes the messages and then creates a reaction that
-%sends the message) we do it in a different way
 
 The accurate modelling of message functionality is crucial for device communication.
 Due to the different nature of messages supported, that is \emph{anisotropic} and \emph{isotropic} communication,
@@ -223,7 +217,6 @@ to ensure that unintended recipients do not receive the message.
 Therefore, the old model of messages has been modified.
 
 \paragraph{OutboundMessage and SingleOutboundMessage}
-%todo modify
 It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}).
 Its goal is to associate to the sender of the message, the messages to send to the neighbours.
 With this implementation, it is possible to manage the messages for \emph{isotropic} and \emph{anisotropic} communication.
@@ -307,8 +300,6 @@ different project targets and devices running on the same platform.
 Modifications to the plugin are applied during compile time, minimising any notable impact on execution time.
 Lastly, users are shielded from the intricacies of alignment concerns, as the code generation process remains transparent to them.
 
-%todo why in scafi alignment is problematic (catching exception thrown)
-
 \paragraph{Alignment}
 \label{par:alignment}
 
@@ -367,9 +358,6 @@ its implementation in the \ac{dsl} could lead to a significant increase in the e
 
 \section{Technologies}
 \label{sec:technologies}
-%multiplatform
-%todo
-%todo write something somewhere about the readability of the code
 
 \paragraph{Kotlin Multiplatform}
 \label{par:kotlin-multiplatform}
@@ -397,7 +385,6 @@ These utilities make it easy to write expressive and accurate assertions without
 Some test examples will be shown in \Cref{sec:tests}.
 
 \paragraph{Gradle}
-%todo cite gradle
 Gradle is a powerful build automation tool and dependency management system used primarily for Java, Kotlin, and Groovy projects.
 It is designed to be highly flexible, scalable, and efficient, making it a popular choice among developers and
 organisations for building and managing software projects.
@@ -577,7 +564,6 @@ override fun <Init, Ret> exchanging(
     }.toReturn
 }
 \end{lstlisting}
-%todo explain that is a bit different from how it has been implementated in scafi, for the thing that there it loose a round of communication
 
 \paragraph{Repeat}
 \label{par:repeating}
@@ -761,7 +747,7 @@ This was necessary due to performance issues.
 
 \paragraph{Running the simulations}
 To execute the simulations outlined in the subsequent chapter (\Cref{sec:alchemist-simulations}), the creation of a
-configuration file in YAML format, adhering to \emph{Alchemist}'s YAML specifications, becomes imperative. %todo cite https://alchemistsimulator.github.io/reference/yaml/index.html
+configuration file in YAML format, adhering to \emph{Alchemist}'s YAML specifications, becomes imperative.
 Within the YAML configuration file, parameters defining the simulation are delineated, encompassing variables such as
 the node count, environmental characteristics, network model, and the pathway of the aggregate program slated for execution.
 Following the creation of the configuration file, simulation execution becomes feasible through Gradle tasks.
