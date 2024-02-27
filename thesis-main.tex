@@ -5,6 +5,7 @@
 \usepackage{notes}
 \usepackage{shortcuts}
 \usepackage{acronym}
+\usepackage[inkscapeformat=png]{svg}
 
 \newcommand{\fonte}[1]{{\color{gray} \small \hypersetup{citecolor=gray} Source: #1}}
 
@@ -43,7 +44,27 @@
 \frontmatter\frontispiece
 
 \begin{abstract}
-Max 2000 characters, strict.
+    The integration of technology in everyday activities is increasing, with objects being increasingly equipped with
+    computational capabilities and interconnected to form the Internet of Things.
+    Within these systems, different software components, and not necessarily only one per device, interact with each other
+    to build innovative cyber-physical services (i.e., capable of creating a bridge between the real and virtual world).
+
+    The solution that has the most success at the moment involves the use of Cloud Computing.
+    This, although it provides virtualized resources on a large scale, has limits in terms of latency (due to the physical
+    distance between machines) and scalability (due to centralization): for this reason, there is the aim to bring resources
+    closer to the outer edge of the network, where, however, problems of interoperability between devices and complexity
+    in the management of distributed resources increase.
+    The design of applications capable of operating indistinctly on the cloud, on the edge, or even on a mesh network
+    (in fact, on a computational continuum that goes from the edge to the cloud) can benefit from unconventional approaches,
+    such as Aggregate Computing.
+
+    In this context, the \emph{Collektive} project is proposed as a Domain-Specific Language for programming aggregate computing
+    systems, based on Kotlin, a modern and multi-platform programming language.
+    The main goal of this thesis is to enhance the \emph{Collektive} DSL, leveraging the principles of XC to improve the performance of the DSL,
+    developing a multi-platform implementation of the DSL with kotlin-multiplatform, to allow the execution of the aggregate programs on different platforms.
+    This enhancement was pursued to ensure its competitiveness against existing solutions and to enhance its usability.
+
+
 \end{abstract}
 
 \begin{dedication} % this is optional

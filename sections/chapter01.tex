@@ -297,7 +297,13 @@ assumption of when an execution round will occur, meaning that they are entirely
 
 Messages are handled queueing up in a buffer; when a device executes its \xc{} program, it processes the received
 messages producing others to send to neighbours, that in turn will process their messages.
-%todo insert graph of the system model
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\linewidth]{figures/xc-system-model}
+    \caption{The system model of \xc{} \cite{7274429}.}
+    \label{fig:xc-system-model}
+\end{figure}
 
 It can occur that a device executes multiple rounds before a neighbour executes its own, in that case the neighbour will
 only see the last received message from the first device; newly received messages will overwrite the older ones.
