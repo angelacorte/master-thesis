@@ -97,21 +97,21 @@ The resultant simulation appears at first empty, because the nodes are coloured 
 blue based on the number of neighbours they have.
 Once the simulation starts and the nodes communicate with each other, the space is filled with colours, and the number of
 neighbours and connections is visible, as shown in \Cref{fig:neighbour-counter}.
-
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/neighborCounter}
-    \caption{Neighbour Counter Simulation.}
-    \label{fig:neighbour-counter}
-\end{figure}
-
 The simulator also gives the opportunity to move the nodes around the environment, and the number of neighbours is updated
-in real-time, as shown in \Cref{fig:neighbor-counter-moved}.
+in real-time.
+
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/neighborCounterMoved}
-    \caption{Neighbour Counter Simulation after moving some nodes.}
-    \label{fig:neighbor-counter-moved}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/neighborCounter}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/neighborCounterMoved}
+    \end{subfigure}
+    \caption{Neighbour counter simulation after some time ad after moving some nodes including the root.}
+    \label{fig:neighbour-counter}
 \end{figure}
 
 \paragraph{Gradient}
@@ -119,6 +119,8 @@ The second example is a simple gradient program in which the devices calculate t
 communicate it to the other nodes (\Cref{lst:gradient-example}).
 The result is a map of the space in which each node has a value that represents the distance from the source node,
 changing the colour of the nodes based on the distance from the source (seen as a square in \Cref{fig:gradient}).
+Also in this case, the simulator gives the opportunity to move the nodes around the environment, and the distance from
+the source is updated in real-time.
 
 \begin{lstlisting}[language=kt, caption={Gradient code example}, label={lst:gradient-example}]
 context(LocalSensing,DistanceSensor)
@@ -137,19 +139,16 @@ fun Aggregate<Int>.gradient(source: Boolean): Double =
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/gradient}
-    \caption{Gradient Simulation.}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gradient}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gradient-moved}
+    \end{subfigure}
+    \caption{Gradient simulation after some time ad after moving some nodes including the root.}
     \label{fig:gradient}
-\end{figure}
-
-Also in this case, the simulator gives the opportunity to move the nodes around the environment, and the distance from
-the source is updated in real-time (\Cref{fig:gradient-moved}).
-
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=0.8\textwidth]{figures/gradient-moved}
-    \caption{Gradient Simulation after moving the root and some nodes.}
-    \label{fig:gradient-moved}
 \end{figure}
 
 \paragraph{Channel with Obstacles}
@@ -192,7 +191,7 @@ target (in blue), and the obstacles (red) influence the trajectory of the channe
     \label{fig:channel}
 \end{figure}
 
-\section{Performance / Comparison}
+\section{Comparison of Performances}
 \label{sec:performance-/-comparison}
 To have a clear understanding of the performances of the new implementation, it is necessary to compare it with the
 \emph{ScaFi} and \emph{Protelis}' incarnations.
@@ -241,7 +240,7 @@ performance by avoiding information exchange with neighbours.
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/field-evolution-results}
-    \caption{Graph of the results for the field evolution benchmark, showing that \emph{Collektive} is $4.51$ times faster
+    \caption{Graph of the results for the field evolution benchmark, showing that on average \emph{Collektive} is $4.51$ times faster
         than \emph{Protelis} and $20.30$ times faster than \emph{ScaFi}.}
     \label{fig:field-evolution}
 \end{figure}
@@ -260,7 +259,7 @@ This happens because \emph{Protelis}, being an interpreted language, has advanta
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/neighboring-results}
-    \caption{Graph of the results for the neighbour-counter benchmark, showing that \emph{Collektive} is $1.04$ times faster
+    \caption{Graph of the results for the neighbour-counter benchmark, showing that on average \emph{Collektive} is $1.04$ times faster
     than \emph{Protelis} and $3.25$ times faster than \emph{ScaFi}.}
     \label{fig:neghbour-counter}
 \end{figure}
@@ -275,7 +274,7 @@ while in \emph{Protelis} and \emph{Collektive}, they follow a more conventional 
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/branching-results}
-    \caption{Graph of the results for the branching benchmark, showing that \emph{Collektive} is $3.08$ times faster
+    \caption{Graph of the results for the branching benchmark, showing that on average \emph{Collektive} is $3.08$ times faster
     than \emph{Protelis} and $12.45$ times faster than \emph{ScaFi}.}
     \label{fig:branching}
 \end{figure}
@@ -290,7 +289,7 @@ calculate the distance from a source node and communicate it to the other nodes,
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/gradient-results}
-    \caption{Graph of the results for the gradient benchmark, showing that \emph{Collektive} is $1.51$ times faster
+    \caption{Graph of the results for the gradient benchmark, showing that on average \emph{Collektive} is $1.51$ times faster
     than \emph{Protelis} and $2.80$ times faster than \emph{ScaFi}.}
     \label{fig:gradient-resutls}
 \end{figure}
@@ -305,7 +304,7 @@ Among all the tests, the channel with obstacles is the most complex and the clos
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/channel-results}
-    \caption{Graph of the results for the channel with obstacles benchmark, showing that \emph{Collektive} is $6.91$ times faster
+    \caption{Graph of the results for the channel with obstacles benchmark, showing that on average \emph{Collektive} is $6.91$ times faster
     than \emph{Protelis} and $3.73$ times faster than \emph{ScaFi}.}
     \label{fig:channel-with-obstacles}
 \end{figure}
@@ -318,42 +317,51 @@ deeper in the execution tree is slower.
 \paragraph{Changing the neighbourhood}
 Performances may be related to the amount of communication between nodes, meaning that the more communication
 between nodes, the more time is spent in the execution of the program.
-For this reason, the experiments have been repeated with a different number of neighbours between nodes, to see if the
-performance changes with the amount of communication.
-To change the number of neighbours, the simulations have been run with a different linking radius, which is the distance
-between nodes that allows them to communicate with each other.
+For this reason, the experiments have been repeated with different network densities to see if the performance changes with
+the amount of communication, as the density increases, the number of neighbours a node has increases.
+Tests have been performed with low, medium, and high densities.
 
-%nei test precedenti, la densità della rete era bassa-media per garantire che i nodi non fossero troppo vicini tra loro
-%e in maniera tale da poter esequire i test piu volte
-%In the previous tests, the network had a low-medium density to
+In the \Cref{fig:speedup}, the speedup of the different incarnations with different network densities on the different tests is shown.
+The speedup is calculated as the ratio between the execution time of the other incarnations and the execution time of
+\emph{Collektive}.
+The results show that \emph{Collektive}, even with an increase in the amount of communication between nodes, is faster than
+\emph{Protelis} and \emph{ScaFi}, with a significant difference in the most complex tests.
+This is a significant result, as it shows that the language is implemented in such way that can easily handle the increasing
+of the fields' size.
 
-
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/neighbor-speedup}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/field-speedup}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/branching-speedup}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gradient-speedup}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/channel-speedup}
+    \end{subfigure}
+    \caption{The speedup of the different incarnations with different network densities on the different tests.}
+    \label{fig:speedup}
+\end{figure}
 
 \paragraph{Conclusions}
 Keeping in mind that the performance of the language is influenced by the implementation of the incarnation, the results
-show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} in all the tests, with a significant
+show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} overall, with a significant
 difference in the most complex ones.
 
 For the easier tests, the difference is minimal between \emph{Collektive} and \emph{Protelis}, while it is significant
 between \emph{Collektive} and \emph{ScaFi}.
-With the growth in complexity of the tests, the difference between \emph{Collektive} and the other incarnations becomes
-higher, showing the strength of the combination of the language and the incarnation.
-
-\begin{table}[ht!]
-    \centering
-    \begin{tabular}{|l|c|c|}
-        \hline
-        Test Type              & Protelis vs Collektive & ScaFi vs Collektive \\ \hline
-        Neighbour Counter       & 1.04                   & 3.25                \\ \hline
-        Field evolution        & 4.52                   & 20.30               \\ \hline
-        Branching              & 3.08                   & 12.45               \\ \hline
-        Gradient               & 1.51                   & 2.80                \\ \hline
-        Channel with obstacles & 6.91                   & 3.73                \\ \hline
-    \end{tabular}
-    \caption{Performance comparison between the three incarnations.}
-    \label{tab:performance-comparison}
-\end{table}
-
-In the \Cref{tab:performance-comparison}, the results of the comparison are summarised, highlighting the times
-that \emph{Collektive} is faster than the other incarnations.
+With the growth in complexity of the tests, and in the density of the network, the difference between \emph{Collektive}
+and the other languages becomes higher, showing the strength of the combination of \emph{Collektive}'s \ac{dsl} and its incarnation.
 
