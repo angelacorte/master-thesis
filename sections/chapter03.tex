@@ -21,7 +21,7 @@ different platforms and the results across platforms must be consistent.
 
 To achieve this, Kotlin offers \emph{Multiplatform Extensions}, which allows the testing of the same codebase across
 different platforms, such as \emph{JVM}, \emph{JS}, and \emph{Native}, just by adding needed extensions in the \texttt{build.gradle} file.
-%sono i seguenti
+
 The targets chosen for the testing are the following:
 \begin{itemize}
     \item Linux x64 and ARM64;
@@ -315,6 +315,20 @@ disadvantage compared to \emph{Collektive}, while in the other examples they wer
 This is due to the fact that \emph{Protelis} is an interpreted language and its execution of programs that need to go
 deeper in the execution tree is slower.
 
+\paragraph{Changing the neighbourhood}
+Performances may be related to the amount of communication between nodes, meaning that the more communication
+between nodes, the more time is spent in the execution of the program.
+For this reason, the experiments have been repeated with a different number of neighbours between nodes, to see if the
+performance changes with the amount of communication.
+To change the number of neighbours, the simulations have been run with a different linking radius, which is the distance
+between nodes that allows them to communicate with each other.
+
+%nei test precedenti, la densità della rete era bassa-media per garantire che i nodi non fossero troppo vicini tra loro
+%e in maniera tale da poter esequire i test piu volte
+%In the previous tests, the network had a low-medium density to
+
+
+
 \paragraph{Conclusions}
 Keeping in mind that the performance of the language is influenced by the implementation of the incarnation, the results
 show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} in all the tests, with a significant
@@ -342,3 +356,4 @@ higher, showing the strength of the combination of the language and the incarnat
 
 In the \Cref{tab:performance-comparison}, the results of the comparison are summarised, highlighting the times
 that \emph{Collektive} is faster than the other incarnations.
+
