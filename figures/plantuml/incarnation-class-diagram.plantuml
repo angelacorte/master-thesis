@@ -42,12 +42,12 @@ CollektiveDevice ..|> Network: implements
 CollektiveDevice ..|> LocalSensing: implements
 CollektiveDevice ..|> DistanceSensor: implements
 
-RunCollektiveProgram *-- CollektiveDevice: uses
+RunCollektiveProgram --> CollektiveDevice: uses
 
 CollektiveIncarnation ..|> Incarnation: implements
 
-CollektiveIncarnation *-- RunCollektiveProgram: uses
+CollektiveIncarnation --> RunCollektiveProgram: uses
 RunCollektiveProgram ..|> AbstractAction: implements
 
-CollektiveIncarnation *-- CollektiveDevice: uses
+CollektiveIncarnation --> CollektiveDevice: uses
 @enduml

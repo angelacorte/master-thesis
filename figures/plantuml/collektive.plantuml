@@ -24,8 +24,8 @@ class Aggregate{
     <<aggregate constructs>>
 }
 
-Collektive -- AggregateResult: uses
-Collektive -- Network: uses
-Collektive -- Aggregate: uses
+Collektive --> AggregateResult: uses
+Collektive --> Network: uses
+Collektive --> Aggregate: uses
 
 @enduml

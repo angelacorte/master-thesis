@@ -25,7 +25,7 @@ class SingleOutboundMessage<ID : Any, Payload> {
 InboundMessage --|> Message: extends
 OutboundMessage --|> Message: extends
 OutboundMessage *-- SingleOutboundMessage
-Network -- OutboundMessage
-Network -- InboundMessage
+Network --> OutboundMessage
+Network --> InboundMessage
 
 @enduml
