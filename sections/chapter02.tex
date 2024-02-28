@@ -34,7 +34,6 @@ The project is subdivided into different submodules (as in \Cref{fig:pacakges}),
             \item \emph{gradle-plugin}: used by gradle project in order to use the \emph{compiler-plugin}.
             \item \emph{compiler-plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
         \end{enumerate}
-    \item \textbf{buildSrc}: contains the main configuration for running the multiplatform project.
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -51,7 +50,7 @@ aggregate programs to show how to use the \emph{Collektive} framework.
 \label{sec:dsl}
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
-The resultant \ac{dsl} is available at a public GitHub repository\footnote{\url{https://github.com/Collektive/collektive/tree/master/dsl}}
+The resultant \ac{dsl} is available at a public GitHub repository\footnote{\url{https://github.com/Collektive/collektive}}
 
 A \ac{dsl} is a specialised programming language or language framework tailored to address the
 requirements of a specific domain or problem area.
@@ -663,7 +662,7 @@ evaluated to the neighbours and return the values received from them as a field.
 \section{Alchemist Incarnation}
 \label{sec:incarnation}
 An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simulator} to comprehend and accurately execute a language.
-Specifically designed for \emph{Collektive} ~\footnote{\url{https://github.com/Collektive/collektive/tree/master/alchemist-incarnation-collektive}},
+Specifically designed for \emph{Collektive} ~\footnote{\url{https://github.com/Collektive/collektive}},
 this incarnation employs reflections to locate the aggregate entry point and dictates the methodology for each iteration of the aggregate program.
 Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-\\incarnation-protelis},
 it has been implemented to launch simulations through Gradle tasks.
