@@ -1,0 +1,31 @@
+@startuml
+interface Network<ID : Any> {
+    + write(message: OutboundMessage<ID>)
+    + read(): Collection<InboundMessage<ID>>
+}
+
+interface Message
+
+class InboundMessage<ID : Any> {
+    + senderId: ID
+    + messages: Map<Path, *>
+}
+
+class OutboundMessage<ID : Any> {
+    + senderId: ID,
+    + defaults: MutableMap<Path, Any?>
+    + messagesFor(id: ID): Map<Path, *>
+    + addMessage(path: Path, message: SingleOutboundMessage<ID, *>)
+}
+
+class SingleOutboundMessage<ID : Any, Payload> {
+    + default: Payload
+    + overrides: Map<ID, Payload>
+}
+InboundMessage --|> Message: extends
+OutboundMessage --|> Message: extends
+OutboundMessage *-- SingleOutboundMessage
+Network -- OutboundMessage
+Network -- InboundMessage
+
+@enduml

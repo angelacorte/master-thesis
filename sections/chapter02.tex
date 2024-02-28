@@ -61,7 +61,6 @@ Consequently, general-purpose languages like Java typically exhibit greater comp
 
 
 \paragraph{Structure}
-%todo add class diagrams
 The \emph{Collektive}'s \ac{dsl} is composed of the following components:
 \begin{itemize}
     \item \textbf{Path}: represents a specific point in the \ac{ast} of an aggregate program;
@@ -87,6 +86,27 @@ The \emph{Collektive}'s \ac{dsl} is composed of the following components:
     \item \textbf{AggregateResult}: is the result of one evaluation of the aggregate program, it contains the \emph{localId}
         of the node, the effective \emph{result} of the computation, the \emph{messages to send} to other devices and the \emph{new state} of the device;
 \end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/entrypoint-class-diagram}
+    \caption{Partial class diagram of the \ac{dsl}, highlighting the entrypoint.}
+    \label{fig:entrypoint-class-diagram}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/aggregate-class-diagram}
+    \caption{Partial class diagram of the \ac{dsl} structure, highlighting the \emph{Aggregate} section.}
+    \label{fig:aggregate-class-diagram}
+\end{figure}
+
+In the class diagrams shown in \Cref{fig:aggregate-class-diagram} and \Cref{fig:entrypoint-class-diagram}, it is possible to see the main classes of the \ac{dsl}
+introduced above and their relationships.
+The Interface \emph{Aggregate} is implemented by the \emph{AggregateContext} class, which is used to handle the logic and the
+computation of the main constructs of the \ac{dsl}.
+This interface is then extended within \emph{AggregateOperators} to handle the logic of the functions created using the
+\texttt{exchange-exchanging} functions.
 
 \subsection{XC in Collektive}
 \label{subsec:exchange-in-collektive}
@@ -132,8 +152,6 @@ The construct \texttt{exchange} provides
 
 As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
-
-%todo diagrams?
 
 The \texttt{exchange} takes an \emph{initial} value to use as a default, and a \emph{body} that defines an aggregate
 function to be computed, as seen in the code snippet \ref{lst:exchange}, returning a \emph{field}.
@@ -215,6 +233,17 @@ Since the main feature of \texttt{exchange} is to send messages to specific neig
 to ensure that unintended recipients do not receive the message.
 Therefore, the old model of messages has been modified.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/messages-diagram}
+    \caption{Class diagram of the network and messages stucture.}
+    \label{fig:message-diagram}
+\end{figure}
+
+The \Cref{fig:message-diagram} shows the class diagram of the messages used in the \ac{dsl}, highlighting their relationships
+and the inheritance of the \emph{Message} interface.
+The concept and implementation of the messages will be explained in the following paragraphs.
+
 \paragraph{OutboundMessage and SingleOutboundMessage}
 It has been introduced the concept of \emph{OutboundMessage} (\Cref{lst:outbound}).
 Its goal is to associate to the sender of the message, the messages to send to the neighbours.
@@ -268,9 +297,10 @@ data class InboundMessage<ID : Any>(
 \label{subsec:network}
 The \emph{Network} has the task of managing only the reading and writing of messages in the network for a single device.
 The actual implementation of the network is not managed by the \emph{Collektive} \ac{dsl}, but it is implemented in the
-\emph{alchemist-incarnation-collektive} (\Cref{sec:incarnation}) module, which is used to run the aggregate programs created with \emph{Collektive} on the simulator.
+\emph{alchemist-incarnation-collektive} (\Cref{sec:incarnation}) module, which is used to run the aggregate programs
+created with \emph{Collektive} on the simulator.
 
-Inside the \ac{dsl}, it is used at the beginning of an iteration of the aggregate program to read the messages received from
+Inside the \ac{dsl}, it is used at the beginning of each iteration of the aggregate program to read the messages received from
 other devices present in the network, and at the end of the iteration to write the messages to send to the other devices.
 The network actually supports only the specific types of messages introduced in \Cref{subsec:messages}, due to the
 concepts introduced by the study of \xc{} and field calculus.
@@ -653,7 +683,17 @@ In this case, it is \texttt{RunCollektiveProgram} (\Cref{par:run-collektive-prog
 
 The incarnation is therefore provided to manage the behaviour of the molecules or nodes, so overriding the methods
 provided by the \texttt{Alchemist} library.
-%todo add structure image of the incarnation
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/incarnation-class-diagram}
+    \caption{Class diagram of the \emph{Alchemist Incarnation} module.}
+    \label{fig:incarnation-class-diagram}
+\end{figure}
+
+In the \Cref{fig:incarnation-class-diagram} is shown the structure of the \emph{Alchemist Incarnation} module.
+It highlights the fact that the \emph{CollektiveDevice} has to manage the specific sensors and actuators and implement
+the network from the device's perspective to manage messages sent and received from neighbours.
 
 \paragraph{CollektiveDevice}
 The \emph{CollektiveDevice} is a representation of the device in the \emph{Alchemist Simulator}.

@@ -1,0 +1,77 @@
+@startuml
+interface Aggregate<ID : Any> {
+    {abstract}
+    + exchange(initial: I, body: (Field<ID, I>) -> Field<ID, I>): Field<ID, I>
+    + exchanging(initial: I, body: YieldingScope<Field<ID, I>, Field<ID, R>>): Field<ID, R>
+    + repeat(initial: I, transform: (I) -> I): I
+    + repeating(initial: I, transform: YieldingScope<I, R>): R
+}
+
+interface YieldingContext<I, R> {
+    {abstract}
+    + yielding(transform: (Field<ID, I>) -> R): YieldingResult<I, R>
+}
+
+interface Network<ID : Any> {
+    + write(message: OutboundMessage<ID>)
+    + read(): Collection<InboundMessage<ID>>
+}
+
+interface Message
+
+class InboundMessage<ID : Any> {
+    + senderId: ID
+    + messages: Map<Path, *>
+}
+
+class OutboundMessage<ID : Any> {
+    + senderId: ID,
+    + defaults: MutableMap<Path, Any?>
+    + messagesFor(id: ID): Map<Path, *>
+    + addMessage(path: Path, message: SingleOutboundMessage<ID, *>)
+}
+
+class SingleOutboundMessage<ID : Any, Payload> {
+    + default: Payload
+    + overrides: Map<ID, Payload>
+}
+
+class Collektive<ID : Any, R> {
+    + localId: ID
+    - computeFunction: (Aggregate<ID>.() -> R)
+    - state: State
+    + cycle(): R
+    + cycleWhile(condition: (AggregateResult<ID, R>) -> Boolean): R
+}
+
+class AggregateContext<ID : Any> {
+    + localId: ID
+    - messages: Iterable<InboundMessage<ID>>
+    - previousState: State
+}
+
+class AggregateResult<ID : Any, R> {
+    + localId: ID
+    + result: R
+    + toSend: Iterable<OutboundMessage<ID>>
+    + newState: State
+}
+class "AggregateOperators" {
+    {static} <<Aggregate extension functions>>
+    + neighboringViaExchange(local: Scalar): Field<ID, Scalar>
+    + share(initial: I, transform: (Field<ID, I>) -> I): I
+    + sharing(initial: I, transform: YieldingContext<I, R>.(Field<ID, I>) -> YieldingResult<I, R>): R
+}
+
+Collektive -- AggregateResult: uses
+Collektive -- Network: uses
+Collektive -- Aggregate: uses
+Aggregate .. YieldingContext
+Aggregate <.. AggregateContext
+Aggregate <-- AggregateOperators: extends
+InboundMessage --|> Message: extends
+OutboundMessage --|> Message: extends
+OutboundMessage *-- SingleOutboundMessage
+Network -- OutboundMessage
+Network -- InboundMessage
+@enduml

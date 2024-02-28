@@ -1,0 +1,57 @@
+@startuml
+interface Aggregate<ID> {
+    {abstract}
+    + exchange(initial: I, body: (Field<ID, I>) -> Field<ID, I>): Field<ID, I>
+    + exchanging(initial: I, body: YieldingScope<Field<ID, I>, Field<ID, R>>): Field<ID, R>
+    + repeat(initial: I, transform: (I) -> I): I
+    + repeating(initial: I, transform: YieldingScope<I, R>): R
+}
+
+class YieldingContext<I, R> {
+    + yielding(transform: (Field<ID, I>) -> R): YieldingResult<I, R>
+}
+
+interface Network<ID> {
+    + write(message: OutboundMessage<ID>)
+    + read(): Collection<InboundMessage<ID>>
+}
+
+class Collektive<ID, R> {
+    + localId: ID
+    - computeFunction: (Aggregate<ID>.() -> R)
+    + cycle(): R
+    + cycleWhile(condition: (AggregateResult<ID, R>) -> Boolean): R
+}
+
+class AggregateContext<ID> {
+    + localId: ID
+    - messages: Iterable<InboundMessage<ID>>
+    - previousState: State
+}
+
+class AggregateResult<ID, R> {
+    + localId: ID
+    + result: R
+    + toSend: Iterable<OutboundMessage<ID>>
+    + newState: State
+}
+class "AggregateOperators" {
+    {static} <<Aggregate extension functions>>
+    + neighboringViaExchange(local: Scalar): Field<ID, Scalar>
+    + share(initial: I, transform: (Field<ID, I>) -> I): I
+    + sharing(initial: I, transform: YieldingContext<I, R>.(Field<ID, I>) -> YieldingResult<I, R>): R
+}
+
+class YieldingResult<I, R> {
+    + toSend: I
+    + toReturn: R
+}
+
+Collektive -- AggregateResult: uses
+Collektive -- Network: uses
+Collektive -- Aggregate: uses
+Aggregate <.. AggregateContext
+Aggregate .. YieldingContext
+Aggregate <-- AggregateOperators: extends
+YieldingContext .. YieldingResult
+@enduml

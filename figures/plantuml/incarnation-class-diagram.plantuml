@@ -1,0 +1,53 @@
+@startuml
+interface Network
+
+interface LocalSensing {
+    +sense<T>(name: String): T
+    +senseOrElse<T>(name: String, default: T): T
+}
+
+interface DistanceSensor {
+    +distances<ID : Any>(): Field<ID, Double>
+}
+
+class CollektiveDevice<P> {
+    -environment: Environment<Any?, P>
+    +node: Node<Any?>
+    -id: ID
+    -validMessages: MutableList<TimedMessage>
+
+    +distances<ID : Any>(): Field<ID, Double>
+    +sense<T>(name: String): T
+    +senseOrElse<T>(name: String, default: T): T
+    +read(): Collection<InboundMessage<Int>>
+    +write(message: OutboundMessage<Int>): void
+}
+
+class RunCollektiveProgram<P : Position<P>> {
+    <<Alchemist's entrypoint>>
+    -node: Node<Any?>
+    -time: TimeDistribution<Any?>
+    -additionalParameters: String
+    -localDevice: CollektiveDevice<P>
+    +execute(): void
+}
+
+class CollektiveIncarnation {
+    <<Alchemist's interpreter>>
+}
+
+interface Incarnation<T, P>
+
+CollektiveDevice ..|> Network: implements
+CollektiveDevice ..|> LocalSensing: implements
+CollektiveDevice ..|> DistanceSensor: implements
+
+RunCollektiveProgram *-- CollektiveDevice: uses
+
+CollektiveIncarnation ..|> Incarnation: implements
+
+CollektiveIncarnation *-- RunCollektiveProgram: uses
+RunCollektiveProgram ..|> AbstractAction: implements
+
+CollektiveIncarnation *-- CollektiveDevice: uses
+@enduml
