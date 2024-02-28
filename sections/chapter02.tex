@@ -49,9 +49,9 @@ aggregate programs to show how to use the \emph{Collektive} framework.
 
 \section{DSL}
 \label{sec:dsl}
-
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
+The resultant \ac{dsl} is available at a public GitHub repository\footnote{\url{https://github.com/Collektive/collektive/tree/master/dsl}}
 
 A \ac{dsl} is a specialised programming language or language framework tailored to address the
 requirements of a specific domain or problem area.
@@ -663,8 +663,8 @@ evaluated to the neighbours and return the values received from them as a field.
 \section{Alchemist Incarnation}
 \label{sec:incarnation}
 An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simulator} to comprehend and accurately execute a language.
-Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point and
-dictates the methodology for each iteration of the aggregate program.
+Specifically designed for \emph{Collektive} ~\footnote{\url{https://github.com/Collektive/collektive/tree/master/alchemist-incarnation-collektive}},
+this incarnation employs reflections to locate the aggregate entry point and dictates the methodology for each iteration of the aggregate program.
 Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-\\incarnation-protelis},
 it has been implemented to launch simulations through Gradle tasks.
 
