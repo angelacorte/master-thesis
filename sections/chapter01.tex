@@ -13,10 +13,36 @@ and the current state of the art.
 \label{sec:context}
 
 Computing devices are becoming cheaper and \emph{ubiquitous}, increasing the complexity of distributed systems.
-It is now common for individuals to own multiple computing devices of varying types,
-resulting in technology becoming more integrated into daily activities.
+It is now common for individuals to own multiple computing devices of varying types, resulting in technology becoming
+more integrated into daily activities.
+Inside those kinds of systems, different software components, and not necessarily one for each device, interact with each
+others building innovative services of cyber-physical nature, capable of creating a fast bridge between the real and
+the digital world.
+
+Managing a single device in a distributed system can be challenging for several reasons, as:
+    i) \textbf{scalability}, as the number of devices increases, managing each device individually becomes increasingly complex;
+    ii) \textbf{resource constraints}, individual devices may have limited computational power, memory, and energy resources,
+        making it challenging to perform complex tasks efficiently;
+    iii) \textbf{heterogeneity}, devices in \ac{iot} systems often vary in terms of hardware capabilities, communication
+        protocols, and software configurations, resulting in challenging management;
+    iv) \textbf{context awareness}, single devices may have limited awareness of the broader context or environment in
+        which they operate, leading to suboptimal decision-making and interactions.
+
+Transitioning from a device-centric to an aggregate-centric approach can lead to several advantages:
+    i) \textbf{distributed intelligence}, leveraging the collective capabilities of multiple devices enables distributed
+        intelligence, where the system's intelligence emerges from interactions and collaboration among devices;
+    ii) \textbf{resource pooling}, across multiple devices results in more efficient use of resources, such as computational
+        power, memory, and energy;
+    iii) \textbf{adaptability}, collective-centric approaches enable systems to adapt dynamically to changes in the
+        environment or system requirements; devices can collaborate to self-organise, self-adapt, and self-optimise
+        based on contextual information;
+    iv) \textbf{robustness}, distributing computation and decision-making across multiple devices enhances system
+        robustness and resilience to individual device failures or disruptions.
+
+From an engineering perspective, the construction of \ac{iot} applications differs substantially from that of traditional
+software, especially when a particular service, to be realised, requires the coordination of devices of different nature.
 Hence, the need to engineer and coordinate the operations in such systems, one way is to program and operate in terms of
-    \emph{aggregates} of devices, rather than manage each single device.
+\emph{aggregates} of devices, rather than manage each single device.
 In fact, the coordination of macroscopic behaviour in collective systems through a single program is a form of
 ~\emph{macroprogramming}.
 However, this approach presents some primary challenges such as ensuring resilience, efficiency and privacy.
@@ -302,7 +328,7 @@ messages producing others to send to neighbours, that in turn will process their
     \centering
     \includegraphics[width=.5\linewidth]{figures/xc-system-model}
     \caption{This image shows the devices' behaviour in \xc{}.
-        the device $\delta_2$ executes two computation rounds $\epsilon_1$ and $\epsilon_2$.
+        The device $\delta_2$ executes two computation rounds $\epsilon_1$ and $\epsilon_2$.
         After the computation, $\delta_2$ sends a message to $\delta_1$ and $\delta_3$.
         It can occur that a device $\delta_1$ executes multiple rounds before $\delta_2$ executes its own, in that case $\delta_2$ will
         only see the last-received message from the device $\delta_1$; newly received messages will overwrite the older ones.
