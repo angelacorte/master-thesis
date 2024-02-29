@@ -12,7 +12,9 @@ and the current state of the art.
 \section{Context}
 \label{sec:context}
 
-Computing devices are becoming cheaper and \emph{ubiquitous}, increasing the complexity of distributed systems.
+Computing devices are becoming cheaper and \emph{ubiquitous}, with objects being increasingly equipped with
+computational capabilities and interconnected to form the \ac{iot}, increasing the complexity of
+distributed systems.
 It is now common for individuals to own multiple computing devices of varying types, resulting in technology becoming
 more integrated into daily activities.
 Inside those kinds of systems, different software components, and not necessarily one for each device, interact with each
@@ -42,10 +44,24 @@ Transitioning from a device-centric to an aggregate-centric approach can lead to
 From an engineering perspective, the construction of \ac{iot} applications differs substantially from that of traditional
 software, especially when a particular service, to be realised, requires the coordination of devices of different nature.
 Hence, the need to engineer and coordinate the operations in such systems, one way is to program and operate in terms of
-\emph{aggregates} of devices, rather than manage each single device.
+\emph{aggregates} of devices, or \ac{cas}, rather than manage each single device.
 In fact, the coordination of macroscopic behaviour in collective systems through a single program is a form of
 ~\emph{macroprogramming}.
 However, this approach presents some primary challenges such as ensuring resilience, efficiency and privacy.
+
+\paragraph{Collective Adaptive Systems}
+\label{par:collective-adaptive-systems}
+\ac{cas} are systems composed of multiple autonomous entities, such as devices, sensors, and actuators, that interact to
+achieve a common goal \cite{10.1145/2800835.2809508}.
+These systems are known for their ability to adjust to changes in their environment, system requirements, or operational conditions.
+
+\ac{cas} are frequently used in \ac{iot} and \ac{cps} applications, where devices collaborate to achieve a common goal,
+such as monitoring and controlling a physical environment or providing a service to users.
+The coordination of devices in \ac{cas} can be challenging due to device heterogeneity, resource constraints, and the
+dynamic environment.
+
+To promote collective behaviours, macroprogramming is used, leveraging its high-level abstractions and constructs to
+facilitate global coordination, decentralised control, and adaptability in complex systems.
 
 \paragraph{Macroprogramming}
 The term \emph{macroprogramming} ~\cite{10.1145/3579353} refers to the concept of expressing the macroscopic behaviour of a system through a single
@@ -55,11 +71,10 @@ of the individual components involved.
 Macroprogramming approaches have been suggested to simplify the development of systems involving numerous interconnected
 sensors, actuators, and smart devices; they can be applied in contexts like \ac{iot} and \ac{cps}.
 
-By declaring tasks within a specific spatio-temporal region, systems can self-organise and effectively perform the task
-at hand, allowing for dynamic adaptation to the current deployment and spatial positions of the components involved.
-
 Macroprogramming abstractions can promote collective behaviour properties, such as self-organising or self-configuring in
 the context of \ac{cas}.
+By declaring tasks within a specific spatio-temporal region, systems can self-organise and effectively perform the task
+at hand, allowing for dynamic adaptation to the current deployment and spatial positions of the components involved.
 
 \paragraph{Self-Organisation}
 Coordination modes are based on the notion that interactions among multiple independent and autonomous software systems
@@ -78,7 +93,6 @@ The main problems that can be encountered in distributed systems are dealing wit
 The challenges necessitate a \emph{self-organising coordination} approach, wherein coordination abstractions solely
 manage logical interactions.
 This ensures the emergence of global and robust patterns of correct coordination behaviour.
-
 
 \subsection{Computational Fields}
 \label{subsec:computational-fields}
