@@ -20,9 +20,9 @@ Since the \ac{dsl} is designed to be multiplatform, tests are written to ensure 
 different platforms and the results across platforms must be consistent.
 
 To achieve this, Kotlin offers \emph{Multiplatform Extensions}, which allows the testing of the same codebase across
-different platforms, such as \emph{JVM}, \emph{JS}, and \emph{Native}, just by adding needed extensions in the \texttt{build.gradle} file.
+different platforms, such as \emph{JVM}, \emph{JS}, and \emph{Native}, just by adding needed extensions in the \texttt{build.gradle.kts} file.
 
-The targets chosen for the testing are the following:
+For the testing phase, all the targets suppored by \ac{kmp} have been used and are the following:
 \begin{itemize}
     \item Linux x64 and ARM64;
     \item Windows x64(MinGW);
@@ -32,7 +32,7 @@ The targets chosen for the testing are the following:
     \item TvOS x64 and (simulator) ARM64;
 \end{itemize}
 
-Those were chosen to cover the most common platforms and to ensure that the \ac{dsl} is compatible with the most common
+They cover the most common platforms and to ensure that the \ac{dsl} is compatible with the most common
 devices, such as smartphones, tablets, and wearables.
 Test have been implemented using the \emph{Kotest} framework, which is a flexible and comprehensive testing framework for Kotlin
 with multiplatform support.
@@ -111,7 +111,7 @@ in real-time.
         \centering
         \includegraphics[width=\textwidth]{figures/neighborCounterMoved}
     \end{subfigure}
-    \caption{Neighbour counter simulation after some time ad after moving some nodes including the root.}
+    \caption{Neighbour counter simulation after some time ad after moving some nodes.}
     \label{fig:neighbour-counter}
 \end{figure}
 
