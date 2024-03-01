@@ -432,11 +432,22 @@ on their number or identity.
 It is crucial to highlight that XC does not inherently offer assurances regarding fault tolerance.
 As a Turing-complete language, the capability to program non-resilient behaviour is inevitably present.
 
+\subsection{Collektive}
+\label{subsec:collektive}
+\emph{Collektive} is a minimal \ac{dsl} for aggregate programming, designed to simplify the development of distributed systems
+by providing high-level abstractions for collective coordination and communication.
+It provides the means to specify the collective behaviour of a network of devices, where devices can directly communicate
+with each other and execute the same program.
+\emph{Collektive} is based on the principles of \ac{ac}, and it is designed to be used in the context of \ac{iot} applications.
+The language is designed to be easy to use, and to provide a high-level of expressiveness, while at the same time being
+efficient and scalable.
+
 \section{Motivations}
 \label{sec:motivations}
 
-In this section, the motivations for developing a new programming language for aggregate computing will be illustrated,
-the objectives that are intended to be achieved and the benefits that are expected to be obtained.
+In this section, the motivations for extending the existing \ac{dsl} \emph{Collektive} by applying the concepts of \xc{}
+to aggregate programming constructs will be illustrated, the objectives that are intended to be achieved and the benefits
+that are expected to be obtained.
 
 From an engineering perspective, the construction of \ac{iot} applications differs substantially from that of traditional
 software, especially when a particular service, to be realised, requires the coordination of devices of different nature.
@@ -447,8 +458,13 @@ Aggregate Computing \cite{Beal2016}, Linda \cite{10.1145/2363.2433}, MARS \cite{
 
 The most successful solution at the moment involves the use of Cloud Computing (see ~\Cref{fig:cloud-edge-continuum}),
 which provides virtualized resources on a large scale, but presents limitations in terms of latency (due to the physical
-distance between machines) and scalability (due to centralisation).
+distance between machines) and scalability (due to centralisation) despite the significant improvement compared to traditional
+approaches.
+Cloud providers offer elastic scaling capabilities that allow organizations to dynamically adjust resources based on demand,
+minimizing the impact of scalability limitations and optimizing cost-efficiency.
 
+Despite the scalability advantages of cloud computing, there are still scenarios where it may not be sufficient to meet
+the requirements of certain applications and workloads.
 For this reason, Edge Computing and Fog Computing have recently emerged, aiming to bring resources closer to the outer
 edge of the network, where interoperability problems between devices and complexity in managing distributed resources increase.
 
@@ -474,14 +490,17 @@ to abstract it in some way (see, for example, the ``pulverization'' approach ~\c
 However, when the system includes devices whose nature is profoundly different (imagine, for example, a system where both
 well-equipped servers and tiny wearable or implanted devices with very moderate computing capabilities participate, as
 shown in ~\Cref{fig:smart-network-objects}), finer mechanisms are needed.
+Such mechanisms can be the combination of adaptive strategies, resource management techniques, and the use of programming
+languages that can abstract the heterogeneity of devices.
+
 A somewhat analogous problem appears in functional programming when modelling effects, and recent proposals aim to capture
 them in the form of capabilities.
 
-\begin{figure} %[!ht]
+\begin{figure} [!ht]
     \centering
     \includegraphics[width=.8\linewidth]{figures/smart-network-objects}
     \caption{Our world is increasingly populated with a wide range of computing devices, embedded in our environment
-    and with many opportunities for local and even location-indipendent interactions on fixed network infrastructures.}
+    and with many opportunities for local and even location-independent interactions on fixed network infrastructures \cite{7274429}.}
     \label{fig:smart-network-objects}
 \end{figure}
 
