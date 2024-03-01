@@ -29,7 +29,7 @@ The project is subdivided into different submodules (as in \Cref{fig:pacakges}),
         in order to run the aggregate programs created with Collektive on the simulator.
     \item \textbf{dsl}: is the core of the project, contains the actual implementation of the logic and the \ac{ac} operators
         and relative tests.
-    \item \textbf{plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
+    \item \textbf{compiler-plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -107,7 +107,7 @@ This interface is then extended within \emph{AggregateOperators} to handle the l
 \label{subsec:exchange-in-collektive}
 
 Thanks to the design of \xc{}, it is possible to implement the methods proposed by \emph{field calculus}
-(~\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (~\ref{par:communication-in-xc}).
+(\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (\ref{par:communication-in-xc}).
 The syntax of \emph{XC} allows for sending messages to specific nodes, enabling the implementation of \emph{field calculus}
 operations through message exchange.
 
@@ -184,8 +184,8 @@ fun <ID : Any, Initial> Aggregate<ID>.share(
 \end{lstlisting}
 
 As previously introduced, this construct can be expressed in terms of \texttt{exchange}.
-What \texttt{share} differs from it is that \texttt{share} does not differentiate the result of the computation based on
-the neighbour that sent the message; it sends it indiscriminately to all neighbours.
+The \texttt{share} differs from the \texttt{exchange} because  \textt{share} does not differentiate the result of the
+computation based on the neighbour that sent the message; it sends it indiscriminately to all neighbours.
 
 \paragraph{Neighboring}
 

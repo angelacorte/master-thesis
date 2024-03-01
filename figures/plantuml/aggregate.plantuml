@@ -34,7 +34,7 @@ class YieldingResult<I, R> {
 }
 
 Collektive -- Aggregate: uses
-Aggregate <.. AggregateContext
+Aggregate <. AggregateContext: implements
 Aggregate .. YieldingContext
 Aggregate <-- AggregateOperators: extends
 YieldingContext .. YieldingResult
