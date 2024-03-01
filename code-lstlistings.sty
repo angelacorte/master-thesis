@@ -28,6 +28,42 @@
 	frameround=fttt,
 }
 
+\lstdefinelanguage{fieldCalculus}{
+	frame=single,
+	basewidth=0.5em,
+	language={kotlin},
+	keywordstyle=\color{blue}\textbf,
+	commentstyle=\color{darkgreen},
+	keywordstyle=[2]\color{cyan},
+	keywords=[2]{rep, minHood, nbr, nbrRange, share},
+	keywordstyle=[3]\color{orange},
+	keywords=[3]{distanceTo, mux}
+}
+
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\lstdefinelanguage{kt}{
+	frame=single,
+	basewidth=0.5em,
+	language={kotlin},
+	keywordstyle=\color{blue}\textbf,
+	commentstyle=\color{darkgreen},
+	keywordstyle=[2]\color{cyan},
+	keywords=[2]{Aggregate, Field,InboundMessage, OutboundMessage, SingleOutboundMessage,Message,Path,YieldingScope,Network,State,
+	AggregateContext,AggregateResult,YieldingContext,YieldingResult},
+	keywordstyle=[3]\color{orange},
+	keywords=[3]{exchange,exchanging,repeat,repeating,share,sharing,neighboringViaExchange,Collektive,aggregate,yielding},
+	keywordstyle=[4]\color{teal}\textbf,
+	keywords=[4]{ID,Scalar,Initial,Return,Payload,*,R,X,Init,Ret,Int,Double,Boolean},
+	keywordstyle=[5]\color{olive},
+	keywords=[5]{read,mapTo,stateAt,messagesAt,newField,excludeSelf,currentPath,mapToConstantField,getPosition,map,distanceTo,hood},
+	keywordstyle=[6]\color{blue},
+	keywords=[6]{also,it,run,let,context},
+	keywordstyle=[7]\color{purple},
+	keywords=[7]{neighborCounter,gradient,gradientEntrypoint,distances,distanceBetween,LocalSensing,DistanceSensor,sense,channel,channelWithObstacles},
+	keywordstyle=[8]\color{violet},
+	keywords=[8]{POSITIVE_INFINITY}
+}
+
 \lstdefinelanguage{Kotlin}{
 	comment=[l]{//},
 	emph={delegate, filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, return@},

@@ -157,16 +157,46 @@ The \emph{field calculus} is based on a minimal set of operators:
         $e_2$ where  $e_0$ is \texttt{false}
 \end{itemize}
 
-It was soon proposed an apparently straight-forward combination of state evolution with \texttt{nbr} and sharing with \texttt{rep},
-but it turned out that it contained a hidden delay, identified and explained in \cite{fieldc}.
+\begin{lstlisting}[label={lst:field-calculus-program}, language=fieldCalculus, caption={The \texttt{rep} construct
+establishes an initial distance estimate \textbf{d} set to infinity, which then diminishes based on two conditions.
+If the source variable is \textbf{true}, indicating that the device is presently a \textbf{source}, its distance to
+itself is considered zero.
+Alternatively, if the device is not a \textbf{source}, the distance estimate is determined using the triangle inequality.
+This involves computing the minimum value obtained by adding the distance to each neighbour (using the \texttt{nbrRange}
+built-in function) to the neighbour field value (accessed via the $\texttt{nbr{d}}$ notation).
+The \texttt{mux} function ensures that all arguments are evaluated prior to selection.}]
+def mux(b, x, y) { if (b) {x} {y} }
+def distanceTo(source) {
+    rep(infinity){ (d) =>
+        mux(source, 0, minHood(nbr{d} + nbrRange())
+    }
+}
+\end{lstlisting}
+
+In ~\Cref{lst:field-calculus-program} is shown a simple example of a field calculus program; it calculates the distance
+from a source node in a network.
+To implement more elaborated computations, it becomes necessary to combine the \texttt{rep} and \texttt{nbr} constructs.
+Their combination allows recreating a behaviour that evolves both in time and space: with \texttt{nbr} information is
+exchanged with neighbours, while \texttt{rep} takes care of the evolution of its own field.
+However, the joint use turned out that contained a hidden delay, identified and explained in \cite{fieldc}.
+
 To overcome the problem in the interaction between the two constructs, it has been proposed a new one:
 $share(e_1)\{(x) \rightarrow e_2\}$.
-This construct differs from \texttt{rep} in the way that the variable \texttt{x} is interpreted ad each round, that is
-identified as a \emph{neighbouring field} rather than a value.
+This construct differs from \texttt{rep} and \texttt{nbr} combination in the way that the variable \texttt{x} is
+interpreted ad each round, that is identified as a \emph{neighbouring field} rather than a value.
 In this case, $e_2$ is responsible for processing the neighbouring field into a local value shared with the
 neighbours at the end of the evaluation.
 Therefore, the \texttt{share} improves the communication speed.
 
+The example proposed in ~\Cref{lst:field-calculus-program} can be rewritten using the \texttt{share} construct as in ~\Cref{lst:field-calculus-program-share}.
+\begin{lstlisting}[label={lst:field-calculus-program-share}, language=fieldCalculus, caption={The \texttt{share} construct
+is used to calculate the distance from a source node in a network.}]
+def distanceTo(source) {
+    share(infinity){ (d) =>
+        mux(source, 0, minHood(d + nbrRange())
+    }
+}
+\end{lstlisting}
 
 \paragraph{Alignment}
 The semantics of this language is defined as compositional and messages are exchanged thanks to \texttt{nbr}, with each 
@@ -225,7 +255,6 @@ These attributes are crucial both in the design phase, where intricate solutions
 and declaratively, and in the operational phase, where considerable flexibility is granted to the devops team and the
 platform regarding execution specifics and deployment strategies.
 The overall stack of the aggregate computing is shown in ~\Cref{fig:ac-stack}.
-
 
 \begin{figure}
     \centering
