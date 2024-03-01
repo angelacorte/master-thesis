@@ -509,16 +509,20 @@ them in the form of capabilities.
 The goal of this thesis is to extend the existing \ac{dsl} \emph{Collektive} by applying the concepts of \xc{} to
 aggregate programming constructs, thus seeking to improve its performance in order to make this \ac{dsl} competitive
 against existing approaches.
-Furthermore, the aim is to create an incarnation of this \ac{dsl} in such a way that it can execute simulations through
-Alchemist ~\cite{10.1007/978-3-030-78198-9_10}, which serves as a meta-simulator primarily tailored for simulating
-intricate distributed systems across a diverse range of scenarios.
-These scenarios include swarm robotics ~\cite{aguzzi2024macroswarm}, large-scale sensor networks ~\cite{9927406}, crowd
+Furthermore, the aim is to create an integration of this \ac{dsl} for the \emph{Alchemist} simulator ~\cite{10.1007/978-3-030-78198-9_10},
+which serves as a meta-simulator primarily tailored for simulating intricate distributed systems across a diverse range of scenarios.
+These scenarios can include swarm robotics ~\cite{aguzzi2024macroswarm}, large-scale sensor networks ~\cite{9927406}, crowd
 simulation~\cite{7274429}, path planning, and even the morphogenesis of multi-cellular systems.
 
-It is necessary to rely on technologies and languages that can run on any device.
+With these goals in mind, it is intended to create a programming language that can be executed on any device, regardless of its nature,
+and that can communicate with other devices in the network, thus simplifying the development of complex systems.
+To do this, it is necessary to rely on technologies and languages that can run on any device.
 \ac{kmp} will be used, which allows developers to write code that can be compiled for multiple targets,
 including JVM (ideal for server environments), Javascript (browser), Android, iOS (including watchOS and tvOS), and native versions
 (for Windows, MacOS, and Linux, both for x86 and ARM CPUs).
+
+Finally, a performance comparison will be made between the extended language and existing solutions through benchmarking
+and simulations.
 
 \paragraph{Impact}
 The creation of a new programming language for aggregate computing is expected to have a substantial impact on the
@@ -639,4 +643,4 @@ Considering their syntax, \emph{ScaFi} and \emph{Protelis} partially imitate the
 being bound by the specific syntactic constraints of their host languages.
 Whereas, \emph{Protelis}' syntax is more neat and specifically designed for field computation.
 
-However, the more complex syntax of \emph{Scafi} and \emph{FCPP} may prove easier to learn for programmers already familiar with Scala and C++.
+However, the more complex syntax of \emph{Scafi} and \emph{FCPP} may prove easier to learn for programmers already familiar with Scala and \emph{C++}.
