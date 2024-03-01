@@ -34,8 +34,8 @@ The project is subdivided into different submodules (as in \Cref{fig:pacakges}),
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/packages}
-    \caption{Packages diagram of the Collektive project.}
+    \includegraphics[width=0.8\textwidth]{figures/packages}
+    \caption{Packages diagram of the \emph{Collektive} project.}
     \label{fig:pacakges}
 \end{figure}
 
@@ -184,7 +184,7 @@ fun <ID : Any, Initial> Aggregate<ID>.share(
 \end{lstlisting}
 
 As previously introduced, this construct can be expressed in terms of \texttt{exchange}.
-The \texttt{share} differs from the \texttt{exchange} because  \textt{share} does not differentiate the result of the
+The \texttt{share} differs from the \texttt{exchange} because  \texttt{share} does not differentiate the result of the
 computation based on the neighbour that sent the message; it sends it indiscriminately to all neighbours.
 
 \paragraph{Neighboring}
@@ -313,7 +313,10 @@ requirements of the project.
 
 In \ac{kmp} project development, the compiler undertakes a covert translation of Kotlin code into platform-specific code.
 Prior to this translation, the Kotlin code undergoes conversion into an \ac{ir}.
-This IR serves as a transitional format, facilitating the seamless creation of multiplatform compiler plugins.
+The \emph{compiler-plugin} manipulates such \ac{ir}.
+
+The \ac{ir} is used
+serves as a transitional format, facilitating the seamless creation of multiplatform compiler plugins.
 Notably, this approach eliminates the necessity to develop separate plugins for each platform, thus optimising the
 development process and fostering code reuse across varied environments.
 
