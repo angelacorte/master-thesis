@@ -189,14 +189,17 @@ neighbours at the end of the evaluation.
 Therefore, the \texttt{share} improves the communication speed.
 
 The example proposed in ~\Cref{lst:field-calculus-program} can be rewritten using the \texttt{share} construct as in ~\Cref{lst:field-calculus-program-share}.
-\begin{lstlisting}[label={lst:field-calculus-program-share}, language=fieldCalculus, caption={The \texttt{share} construct
-is used to calculate the distance from a source node in a network.}]
-def distanceTo(source) {
-    share(infinity){ (d) =>
-        mux(source, 0, minHood(d + nbrRange())
+
+\begin{minipage}{\linewidth}
+    \begin{lstlisting}[label={lst:field-calculus-program-share}, language=fieldCalculus, caption={The \texttt{share} construct
+    is used to calculate the distance from a source node in a network.}]
+    def distanceTo(source) {
+        share(infinity){ (d) =>
+            mux(source, 0, minHood(d + nbrRange())
+        }
     }
-}
-\end{lstlisting}
+    \end{lstlisting}
+\end{minipage}
 
 \paragraph{Alignment}
 The semantics of this language is defined as compositional and messages are exchanged thanks to \texttt{nbr}, with each 
