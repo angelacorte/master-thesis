@@ -129,11 +129,18 @@ The behaviour is applied through a functional composition of operators that mani
 called specification, that can be interpreted locally or globally.
 A local specification can describe a computation on an individual device executed in asynchronous ``computation rounds'',
 including sending or receiving messages from neighbours, getting information from sensors and computing the local value of the field.
+Each round is divided in three phases:
+    i) \emph{context building}, where the device collects information from the environment and from the messages received
+        from neighbours, and aggregates them to build a local context;
+    ii) \emph{program execution}, each device executes a local program on the context;
+    iii) \emph{export sharing}, the device sends messages to its neighbours, containing the results of the computation.
+
 In the global view, a field calculus expression specifies a mapping associating each computation round of each device to
 the value that it assumes at that space-time event.
 
 This dual nature inherently facilitates the alignment of individual device behaviour with the overarching global behaviour
 of the entire network of devices.
+
 
 \paragraph{Syntax of field calculus}
 \label{par:syntax-of-field-calculus}
@@ -159,6 +166,18 @@ identified as a \emph{neighbouring field} rather than a value.
 In this case, $e_2$ is responsible for processing the neighbouring field into a local value shared with the
 neighbours at the end of the evaluation.
 Therefore, the \texttt{share} improves the communication speed.
+
+
+\paragraph{Alignment}
+The semantics of this language is defined as compositional and messages are exchanged thanks to \texttt{nbr}, with each 
+message from a neighbour being automatically matched to a specific \texttt{nbr} construct, determined by a process called \emph{alignment}.
+Each construct generates an ``export'', a data value intended to be sent to the neighbours, labelled with the coordinates
+of the node in the evaluation tree up to that construct.
+These exports are gathered into a message to broadcast to the neighbours that can be modelled as a value tree:
+an ordered tree of values obtained during the evaluation of each sub-expression of the program.
+
+The \emph{alignment} mechanism ensures that each construct of a device is matched with the corresponding construct of
+the neighbours, following an identical path in the evaluation tree.
 
 \subsection{Aggregate Computing}
 \label{subsec:aggregate-computing}
@@ -319,7 +338,8 @@ messages producing others to send to neighbours, that in turn will process their
 \begin{figure}
     \centering
     \includegraphics[width=.5\linewidth]{figures/xc-system-model}
-    \caption{This image shows the devices' behaviour in \xc{}.
+    \caption{This image shows the devices' behaviour in \xc{} where each $\delta_n$ is a device, $\epsilon_n$ is a computation round
+        and the arrows represent the messages sent between devices.
         The device $\delta_2$ executes two computation rounds $\epsilon_1$ and $\epsilon_2$.
         After the computation, $\delta_2$ sends a message to $\delta_1$ and $\delta_3$.
         It can occur that a device $\delta_1$ executes multiple rounds before $\delta_2$ executes its own, in that case $\delta_2$ will
@@ -368,16 +388,6 @@ $exchange(e_i, (\underline{n}) \rightarrow \texttt{retsend} \ e)$.
 The crucial aspect of the \xc{} expressivity is that \texttt{exchange} can send a different value to each neighbour,
 allowing custom interaction through them.
 
-\paragraph{Alignment}
-An aggregate program has the capability to execute multiple exchange-expressions.
-In order to guarantee the dispatching of messages to corresponding expressions throughout different rounds,
-    \xc{} introduces the concept of \emph{alignment}.
-The \emph{alignment} is a mechanism that enables developers to abstract over asynchronous execution while still retaining
-composability.
-In this way, \xc{} guarantees that the values produced by an exchange are processed by the corresponding function
-in the next round.
-To accomplish this, it verifies whether it's in the same position of the Abstract Syntax Tree (AST) and of the stack frame.
-
 \paragraph{Conditionals}
 \label{par:conditionals}
 \xc{} supports conditional expressions, like $if\ (cond)\ \{e_1\}\ else\ \{e_2\}$.
@@ -395,7 +405,6 @@ As a Turing-complete language, the capability to program non-resilient behaviour
 
 \section{Motivations}
 \label{sec:motivations}
-%vantaggi > benefits/utility
 
 In this section, the motivations for developing a new programming language for aggregate computing will be illustrated,
 the objectives that are intended to be achieved and the benefits that are expected to be obtained.
