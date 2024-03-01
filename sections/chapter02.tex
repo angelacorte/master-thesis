@@ -29,11 +29,7 @@ The project is subdivided into different submodules (as in \Cref{fig:pacakges}),
         in order to run the aggregate programs created with Collektive on the simulator.
     \item \textbf{dsl}: is the core of the project, contains the actual implementation of the logic and the \ac{ac} operators
         and relative tests.
-    \item \textbf{plugin}: subdivided into:
-        \begin{enumerate}
-            \item \emph{gradle-plugin}: used by gradle project in order to use the \emph{compiler-plugin}.
-            \item \emph{compiler-plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
-        \end{enumerate}
+    \item \textbf{plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -120,8 +116,8 @@ or characteristics in all directions (\Cref{fig:anisotropic}); therefore, messag
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.2\textwidth]{figures/anisotropic}
-    \caption{Anisotropic communication.}
+    \includegraphics[width=0.4\textwidth]{figures/anisotropic}
+    \caption{This image shows how anisotropic communication works, exchanging different information based on the neighbour.}
     \label{fig:anisotropic}
 \end{figure}
 
@@ -131,8 +127,8 @@ operation of \texttt{share} is based on \emph{isotropic} communication, meaning 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.2\textwidth]{figures/isotropic}
-    \caption{Isotropic communication.}
+    \includegraphics[width=0.4\textwidth]{figures/isotropic}
+    \caption{This image shows how isotropic communication works, exchanging the same information with all the neighbours.}
     \label{fig:isotropic}
 \end{figure}
 
