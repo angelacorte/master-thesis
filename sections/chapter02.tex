@@ -312,11 +312,8 @@ These extensions can then be applied to Kotlin projects either globally or selec
 requirements of the project.
 
 In \ac{kmp} project development, the compiler undertakes a covert translation of Kotlin code into platform-specific code.
-Prior to this translation, the Kotlin code undergoes conversion into an \ac{ir}.
-The \emph{compiler-plugin} manipulates such \ac{ir}.
-
-The \ac{ir} is used
-serves as a transitional format, facilitating the seamless creation of multiplatform compiler plugins.
+Prior to this translation, the Kotlin code undergoes conversion into an \ac{ir}, creating an \ac{ast} that is then
+transformed into platform-specific code.
 Notably, this approach eliminates the necessity to develop separate plugins for each platform, thus optimising the
 development process and fostering code reuse across varied environments.
 
@@ -330,8 +327,8 @@ Lastly, users are shielded from the intricacies of alignment concerns, as the co
 \paragraph{Alignment}
 \label{par:alignment}
 
-The alignment in \emph{Collektive} was initially implemented inspecting and annotating the body of the (ex)\texttt{aggregate} functions;
-none of the other functions were aligned.
+The alignment in \emph{Collektive} was initially implemented inspecting and annotating the body of the (ex)\texttt{aggregate}
+functions; none of the other functions were aligned.
 
 In \emph{Collektive}, the alignment of the functions is made by the compiler plugin, which keeps track of the sequence of
 functions called during the computation, using a custom stack.
@@ -358,9 +355,6 @@ Next, for each candidate function, the plugin visits all call sites in the funct
 aggregate reference or is involved in an aggregate computation; meaning that it must have the \emph{Aggregate} type as
 \texttt{extensionReceiver}, or \texttt{dispatchReceiver}, or one or more of the function's parameters.
 If so, the plugin aligns the expression call.
-While visiting the function definition, the plugin only aligns branch conditions that involve aggregate computation.
-If a branch body does not involve aggregate computation, it will not be aligned.
-This default alignment ensures that all branches follow the branch semantics of \ac{ac}.
 
 All the functions visited are so pushed into a stack.
 For each call to \emph{Aggregate} also push the name of the function in the stack, appending a value that represents the
@@ -368,14 +362,25 @@ occurrence of the function in the sequence of the computation.
 When the control flow exits that function, the function name is popped from the stack.
 The \emph{Path} generated is a string that represents the sequence of the functions called during the computation,
 with the prepended calls of the non-Aggregate functions.
+The alignment is then made by comparing the \emph{Path} of the two functions, and if they are equal, the two functions are aligned.
 
-Since, during execution, the control of the effective alignment of two functions is done simply by comparing the two resulting strings,
-the control of the whole path turns out to be less efficient than the initial one on the aggregate functions only.
-However, this can be optimised by applying hashing to the paths, in order to reduce the comparison of strings with no deterministic length
-to the comparison of fixed-length Longs.
-Furthermore, the hashing approach would also be better from a privacy point of view.
-Note that the paths' hashing should be implemented at plugin-level, this is because during the experiments it has been noticed
-its implementation in the \ac{dsl} could lead to a significant increase in the execution time of the aggregate programs.
+In an aggregate program, there may be a \emph{branching} condition that divides the program into two non-communicating subprograms,
+each evaluating a different branch without cross-communication.
+Consequently, it is important for a subprogram to be aligned only with devices that follow the same sequence of
+computations and functions.
+
+While visiting the function definition, the plugin only aligns branch conditions that involve aggregate computation.
+If a branch body does not involve aggregate computation, it will not be aligned.
+This default alignment ensures that all branches follow the branch semantics of \ac{ac}.
+The alignment is then made by comparing the \emph{Path} of the two functions, and if they are equal, the two functions are aligned.
+
+%Since, during execution, the control of the effective alignment of two functions is done simply by comparing the two resulting strings,
+%the control of the whole path turns out to be less efficient than the initial one on the aggregate functions only.
+%However, this can be optimised by applying hashing to the paths, in order to reduce the comparison of strings with no deterministic length
+%to the comparison of fixed-length Longs.
+%Furthermore, the hashing approach would also be better from a privacy point of view.
+%Note that the paths' hashing should be implemented at plugin-level, this is because during the experiments it has been noticed
+%its implementation in the \ac{dsl} could lead to a significant increase in the execution time of the aggregate programs.
 
 \section{Technologies}
 \label{sec:technologies}
