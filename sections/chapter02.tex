@@ -450,13 +450,15 @@ As seen in the code snippet \ref{lst:collektive}, the \emph{Collektive} class ta
 the \emph{network} used to manage the communication between devices, and the \emph{computeFunction} that will be executed
 when the device is ready to compute the aggregate program.
 
-\begin{lstlisting}[language=kt,label={lst:collektive}, caption={The signature of the \texttt{Collektive} class.}]
-class Collektive<ID : Any, R>(
-    val localId: ID,
-    private val network: Network<ID>,
-    private val computeFunction: Aggregate<ID>.() -> R,
-)
-\end{lstlisting}
+\begin{minipage}{\linewidth}
+    \begin{lstlisting}[language=kt,label={lst:collektive}, caption={The signature of the \texttt{Collektive} class.}]
+    class Collektive<ID : Any, R>(
+        val localId: ID,
+        private val network: Network<ID>,
+        private val computeFunction: Aggregate<ID>.() -> R,
+    )
+    \end{lstlisting}
+\end{minipage}
 
 The aim of this class is to manage the logic and the effective execution of the rounds of the aggregate program passed as a parameter.
 
@@ -602,15 +604,17 @@ final value of the computation of the same type as the initial.
 To return a different type, it has been implemented the \texttt{repeating} function, as for the \texttt{exchange} construct,
 using the \emph{yielding support} (\Cref{lst:repeating}).
 
-\begin{lstlisting}[language=kt,label={lst:repeating},caption={The implementation of the \texttt{repeating} function.}]
- override fun <Initial, Return> repeating(
-    initial: Initial,
-    transform: YieldingScope<Initial, Return>,
-): Return =
-     transform(YieldingContext(), stateAt(stack.currentPath(), initial))
-        .also { state += stack.currentPath() to it.toReturn }
-        .toReturn
-\end{lstlisting}
+\begin{minipage}{\linewidth}
+    \begin{lstlisting}[language=kt,label={lst:repeating},caption={The implementation of the \texttt{repeating} function.}]
+     override fun <Initial, Return> repeating(
+        initial: Initial,
+        transform: YieldingScope<Initial, Return>,
+    ): Return =
+         transform(YieldingContext(), stateAt(stack.currentPath(), initial))
+            .also { state += stack.currentPath() to it.toReturn }
+            .toReturn
+    \end{lstlisting}
+\end{minipage}
 
 The \texttt{transform} function is applied to the state of the device, checking whether there are already values to use
 on the stack, or using the initial value passed as a parameter.

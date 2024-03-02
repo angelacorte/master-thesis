@@ -157,21 +157,23 @@ The \emph{field calculus} is based on a minimal set of operators:
         $e_2$ where  $e_0$ is \texttt{false}
 \end{itemize}
 
-\begin{lstlisting}[label={lst:field-calculus-program}, language=fieldCalculus, caption={The \texttt{rep} construct
-establishes an initial distance estimate \textbf{d} set to infinity, which then diminishes based on two conditions.
-If the source variable is \textbf{true}, indicating that the device is presently a \textbf{source}, its distance to
-itself is considered zero.
-Alternatively, if the device is not a \textbf{source}, the distance estimate is determined using the triangle inequality.
-This involves computing the minimum value obtained by adding the distance to each neighbour (using the \texttt{nbrRange}
-built-in function) to the neighbour field value (accessed via the $\texttt{nbr{d}}$ notation).
-The \texttt{mux} function ensures that all arguments are evaluated prior to selection.}]
-def mux(b, x, y) { if (b) {x} {y} }
-def distanceTo(source) {
-    rep(infinity){ (d) =>
-        mux(source, 0, minHood(nbr{d} + nbrRange())
+\begin{minipage}{\linewidth}
+    \begin{lstlisting}[label={lst:field-calculus-program}, language=fieldCalculus, caption={The \texttt{rep} construct
+    establishes an initial distance estimate \textbf{d} set to infinity, which then diminishes based on two conditions.
+    If the source variable is \textbf{true}, indicating that the device is presently a \textbf{source}, its distance to
+    itself is considered zero.
+    Alternatively, if the device is not a \textbf{source}, the distance estimate is determined using the triangle inequality.
+    This involves computing the minimum value obtained by adding the distance to each neighbour (using the \texttt{nbrRange}
+    built-in function) to the neighbour field value (accessed via the $\texttt{nbr{d}}$ notation).
+    The \texttt{mux} function ensures that all arguments are evaluated prior to selection.}]
+    def mux(b, x, y) { if (b) {x} {y} }
+    def distanceTo(source) {
+        rep(infinity){ (d) =>
+            mux(source, 0, minHood(nbr{d} + nbrRange())
+        }
     }
-}
-\end{lstlisting}
+    \end{lstlisting}
+\end{minipage}
 
 In ~\Cref{lst:field-calculus-program} is shown a simple example of a field calculus program; it calculates the distance
 from a source node in a network.
