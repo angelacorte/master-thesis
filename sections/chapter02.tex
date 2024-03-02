@@ -665,13 +665,24 @@ evaluated to the neighbours and return the values received from them as a field.
 
 \section{Alchemist Incarnation}
 \label{sec:incarnation}
+\emph{Alchemist} is a meta-simulator for pervasive computing and distributed systems, it is based on general abstractions
+that can be mapped to specific use cases.
+The meta-model consists of a set of entities (the \emph{nodes}) that exist in an \emph{environment} and interact with each other
+with relationship rules.
+The nodes contain a set of \emph{molecules}, representing the variables, and \emph{reactions} that represent the events
+that occur based on a set of conditions, then producing an effect described as an \emph{action}.
+Thanks to this abstraction, the simulator is adaptable and flexible to different use cases and quantity of nodes,
+maintaining a consistent structure.
+
 An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simulator} to comprehend and accurately execute a language.
-Specifically designed for \emph{Collektive} ~\footnote{\url{https://github.com/Collektive/collektive}},
-this incarnation employs reflections to locate the aggregate entry point and dictates the methodology for each iteration of the aggregate program.
+The \emph{incarnation} models molecules and actions.
+Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point
+and dictates the methodology for each iteration of the aggregate program.
 Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-\\incarnation-protelis},
 it has been implemented to launch simulations through Gradle tasks.
 
-The goal is to ensure that the new implementation is still compatible with the simulator and that it can be used to run simulations without any issues.
+The goal is to ensure that the new implementation is still compatible with the simulator and that it can be used to run
+simulations without any issues.
 
 To achieve this, it was necessary to modify the \emph{Collektive Device} previously implemented, to make it compatible
 with the new implementation of the network and the related message exchange.
@@ -756,6 +767,7 @@ override fun <ID : Any> Aggregate<ID>.distances(): Field<ID, Double> =
 \paragraph{RunCollektiveProgram}
 \label{par:run-collektive-program}
 The \emph{RunCollektiveProgram} is an action for the \emph{Alchemist Simulator} that runs a \emph{Collektive} program.
+An action in \emph{Alchemist} models a change in the environment.
 It takes the \emph{node} on which executes the action, the time distribution of the events and the \emph{additional parameters}
 which is the path where the aggregate program to execute is located.
 
@@ -777,7 +789,7 @@ the aggregate program written in the \ac{dsl}.
 The incarnation is therefore provided to manage the behaviour of the molecules or nodes, so overriding the methods
 provided by the \texttt{Alchemist} library.
 It can evaluate runtime properties passed through the simulator, which are lambda functions.
-A cache system has been put in place to prevent the need for re-evaluating molecule's properties and concentration each time,
+A cache system has been put in place to prevent the need for re-evaluating molecule's properties each time,
 activating only during system updates.
 This was necessary due to performance issues.
 
