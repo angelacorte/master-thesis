@@ -90,7 +90,7 @@ The first example is a simple aggregate program in which the devices count the n
 The result is a map of the space in which each node has a value that represents the number of neighbours it has.
 
 \begin{lstlisting}[language=kt, caption={Neighbour counter code example}, label={lst:neighbour-counter-example}]
-fun Aggregate<Int>.neighborCounter(): Int = neighboringViaExchange(1)
+fun Aggregate<Int>.neighborCounter(): Int = neighboringViaExchange(0)
     .hood(0) { acc, _ -> acc + 1 }
 \end{lstlisting}
 
@@ -152,6 +152,7 @@ fun Aggregate<Int>.gradient(source: Boolean): Double =
     \label{fig:gradient}
 \end{figure}
 
+\clearpage
 \paragraph{Channel with Obstacles}
 The third example is a program a bit more complex, recreating a communication pathway (channel) within a distributed
 system where data transmission is impeded or affected by various obstacles.
@@ -163,34 +164,59 @@ devices or nodes, such obstacles can significantly impact the efficiency and eff
 From a source node to a target node, the goal is to find a minimum path that avoids obstacles and is the most efficient
 in terms of communication letting the information flow through the network (\Cref{lst:channel-with-obstacles-example}).
 
-\begin{lstlisting}[language=kt, caption={Channel with Obstacles code example}, label={lst:channel-with-obstacles-example}]
-context(LocalSensing, DistanceSensor)
-fun Aggregate<Int>.channelWithObstacles(): Boolean =
-    if (sense("obstacle")) {
-        false
-    } else {
-        channel(sense("source"), sense("target"), channelWidth = 0.5)
-    }
-
-context(DistanceSensor)
-fun Aggregate<Int>.channel(source: Boolean, target: Boolean, channelWidth: Double): Boolean {
-    val sourceDist = gradient(source)
-    val targetDist = gradient(target)
-    val distBetween = distanceBetween(source, target)
-    return !((sourceDist + targetDist).isInfinite() && distBetween.isInfinite()) &&
-            sourceDist + targetDist <= distBetween + channelWidth
-}
-\end{lstlisting}
-
 As shown in \Cref{fig:channel}, the channel (in green) is gradually created from the source (in yellow) towards the
 target (in blue), and the obstacles (red) influence the trajectory of the channel, as expected.
 
-\begin{figure}[ht!]
+\begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{figures/channel}
     \caption{The resultant simulation of the channel with obstacles.}
     \label{fig:channel}
 \end{figure}
+
+\begin{minipage}{\linewidth}
+    \begin{lstlisting}[language=kt, caption={Channel with Obstacles code example}, label={lst:channel-with-obstacles-example}]
+    context(LocalSensing, DistanceSensor)
+    fun Aggregate<Int>.channelWithObstacles(): Boolean =
+        if (sense("obstacle")) {
+            false
+        } else {
+            channel(sense("source"), sense("target"), channelWidth = 0.5)
+        }
+
+    context(DistanceSensor)
+    fun Aggregate<Int>.channel(source: Boolean, target: Boolean, channelWidth: Double): Boolean {
+        val sourceDist = gradient(source)
+        val targetDist = gradient(target)
+        val distBetween = distanceBetween(source, target)
+        return !((sourceDist + targetDist).isInfinite() && distBetween.isInfinite()) &&
+                sourceDist + targetDist <= distBetween + channelWidth
+    }
+
+    context(DistanceSensor)
+    fun Aggregate<Int>.distanceBetween(source: Boolean, target: Boolean): Double = broadcast(source, gradient(target))
+
+    context(DistanceSensor)
+    fun Aggregate<Int>.broadcast(source: Boolean, value: Double): Double = gradientCast(source, value) { it }
+
+    context(DistanceSensor)
+    fun Aggregate<Int>.gradientCast(source: Boolean, initial: Double, accumulate: (Double) -> Double): Double =
+        share(POSITIVE_INFINITY to initial) { field ->
+            val dist = distances()
+            when {
+                source -> 0.0 to initial
+                else -> {
+                    val resultField = dist.alignedMap(field) { distField, (currentDist, value) ->
+                        distField + currentDist to accumulate(value)
+                    }
+                    resultField.fold(POSITIVE_INFINITY to POSITIVE_INFINITY) { acc, value ->
+                        if (value.first < acc.first) value else acc
+                    }
+                }
+            }
+        }.second
+    \end{lstlisting}
+\end{minipage}
 
 \section{Performance evaluation}
 \label{sec:performance-evaluation}
@@ -206,18 +232,57 @@ The comparison is made by running the same simulations on each incarnation and c
 The simulations~\footnote{\url{https://github.com/angelacorte/collektive-benchmark}} are run on the same machine to
 ensure that the comparison is fair, and that the differences are due to the implementation and not to the hardware.
 
-The performance of the new language has been evaluated through the implementation of 5 types of tests:
+The choice of scenarios for evaluating the performance of the new language in aggregate computing was based on several
+factors, each addressing different aspects of the language's capabilities and potential use cases.
+Here's a breakdown of the scenarios and the reasons for their selection::
 \begin{enumerate}
-    \item Simple \textbf{state change} of the device, to represent the variation over time of the field;
-    \item A \textbf{counter of the neighbours}, to represent the variation of the space;
-    \item Simple \textbf{branching} operations, as it has been noticed that branching could be one of the most expensive operations in terms of execution time.
-    \item A \textbf{gradient}, which is a particular case of space-time variation, in which the value of a node is a
-        function of the distance from a node considered as a source;
-    \item A \textbf{channel with obstacles}, to represent the presence of obstacles in space that influence the communication between nodes;
+    \item Simple \textbf{state change}, involves simulating the dynamic evolution of device states over time intervals
+        using the \texttt{repeat} construct.
+        It was chosen to evaluate the language's efficiency in handling basic state changes, which are fundamental
+        operations in aggregate computing systems;
+    \item A \textbf{counter of the neighbours}, implemented using the \texttt{neighbouring} construct, it allows for the
+        effective calculation of spatial structures.
+        This scenario was chosen to evaluate the language's ability to handle computations influenced by the density
+        of the network, which affects the number of values present in a field and consequently the amount of computations
+        that a device has to perform.
+        Assessing the language's performance in handling computations based on network density provides valuable insights into
+        its efficiency in dynamically changing environments.
+    \item Simple \textbf{branching} operations, included to evaluate the language's performance in handling conditional execution paths.
+        Since branching can be resource-intensive, this scenario helps assess the efficiency of the language in managing
+        multiple execution paths.
+    \item A \textbf{gradient}, which is a particular case of space-time variation implemented using the \texttt{share}
+        construct, to associate each device in the system with its shortest distance to the nearest source.
+        This algorithm is important because it is a fundamental building block for many other algorithms;
+    \item A \textbf{channel with obstacles}, involving computing a path between two points in a network, in this case a
+        \textbf{source} and a \textbf{target}, avoiding obstacles and adapting to changes in network topology.
+        It was chosen to evaluate the language's ability to handle dynamic network conditions and robustly adapt to
+        changes, reflecting real-world scenarios where resilience and adaptability are crucial.
 \end{enumerate}
 
-Each test has been run with the same parameters in the three different incarnations within the \emph{Alchemist} simulator,
-for ten times each, setting the termination condition of the simulation to 1000 simulated seconds.
+Overall, these scenarios collectively provide a comprehensive assessment of the new language's performance in various aspects
+relevant to aggregate computing, including state management, spatial computations, conditional branching, algorithmic
+building blocks, and adaptability to dynamic environments.
+
+The first type of test is not influenced by the network density, as each node performs the operation on itself,
+independently of the number of neighbours, and there is no exchange of information between the nodes.
+In the other types of tests, the density of the network influences the computation, as the number of neighbours of a node
+affects the number of values present in a field and consequently the amount of computations that a device has to perform.
+Assessing the language's performance in handling computations based on network density provides valuable insights into
+its efficiency in dynamically changing environments.
+
+\paragraph{Benchmark set up}
+To evaluate the performance of the new language, a set of benchmarks has been designed to compare the performance of the
+new language with the existing ones.
+The tests have been run with the same parameters in the three different incarnations \emph{Collektive}, \emph{Protelis}, and \emph{ScaFi},
+within the \emph{Alchemist} simulator.
+Each pair test-incarnation has been run ten times.
+The simulations have been performed on a network of medium density (around 30--40 neighbours per node), with a number of
+nodes equal to 200 and a communication radius of 7 for the first four types of tests, while for the channel test,
+the number of nodes has been increased to 800 and the communication radius to 10, lowering the density of the network to ~10 neighbours per node.
+The termination condition of the simulation has been set to 1000 simulated seconds.
+
+The results collected evaluate the execution time of the simulations in milliseconds, and the average execution time of
+the ten runs has been calculated.
 The results have been analysed and will be further discussed in this section.
 
 \paragraph{Machine Specifications}
@@ -228,15 +293,21 @@ The results that will be presented have been obtained by running the simulations
     \item \textbf{OS}: Linux Manjaro;
 \end{itemize}
 
-Other test runs have been made on a different machine to ensure that the results are consistent across different hardware.
+Additionally, other test runs have been made on a different machine to ensure that the results are consistent across different hardware.
 
 \paragraph{Field Evolution}
 The first test has been implemented using the \texttt{repeat} construct, the results of the comparison are shown in \Cref{fig:field-evolution}.
 
 This construct entails a straightforward iteration over its respective field, incrementing the field value with each
 iteration for every node within the network.
+The \texttt{repeat} construct is used to manage the state of a system by performing state updates or transformations iteratively.
+This can be particularly useful in simulations, numerical computations, and real-time systems where state changes occur over time.
 Notably, in \emph{Collektive}, this construct operates independently of neighbouring nodes, thereby ensuring enhanced
 performance by avoiding information exchange with neighbours.
+
+The program simply increments the value of the field at each iteration; therefore, the results highlight that the difference
+of performance may be in the implementation of the field management inside the construct, showing that \emph{Collektive}
+is faster than the other languages.
 
 \begin{figure}[ht!]
     \centering
@@ -246,13 +317,17 @@ performance by avoiding information exchange with neighbours.
     \label{fig:field-evolution}
 \end{figure}
 
-The results show that the \emph{Collektive} incarnation is the fastest, with a notable difference between \emph{ScaFi},
-this can be due to the implementation of the \emph{Scafi Incarnation}.
-
 \paragraph{Neighbour Counter}
-The neighbour counter has been implemented using the \texttt{neighbouringViaExchange} construct.
-This means that the nodes communicate with their neighbours to exchange information, and for each neighbour they have, they
-increment their value.
+The neighbour counter has been implemented using the \texttt{neighbouringViaExchange} construct, which is used to
+manage spatial structures and perform computations based on the information exchanged between the neighbours.
+The program is made in such a way to count the number of neighbours each node has, communicating with their neighbours
+to exchange information and increment the local value for each neighbour they have.
+
+The network density influences this kind of operation, as the number node's neighbours affects the number of
+values present in a field and consequently the number of computations that a device has to perform.
+This means that the performances evaluated in this test are affected by the way the language manages the fields and the
+messages received from the neighbours.
+
 From the results (\Cref{fig:neghbour-counter}), it can be noticed that the difference with \emph{Protelis} is minimal,
 while with \emph{ScaFi} it is significant.
 This happens because \emph{Protelis}, being an interpreted language, has advantages in the execution of less complex programs.
@@ -272,6 +347,18 @@ resource-intensive tasks in terms of execution time, given that they create mult
 In \emph{ScaFi}, branching is handled in a distinct manner, where exceptions are thrown to perform checks on the function to call,
 while in \emph{Protelis} and \emph{Collektive}, they follow a more conventional approach, aligning when a function is called.
 
+\begin{lstlisting}[language=kt, caption={Branching code example}, label={lst:branching-example}]
+fun Aggregate<Int>.branching() =
+    if (sense("source")) {
+        neighboringViaExchange(0).hood(0) { acc, _ -> acc + 1 }
+    } else {
+        0
+    }
+\end{lstlisting}
+
+As shown in \Cref{lst:branching-example}, the program is made in such a way that if a condition is met, the node
+performs a simple neighbouring computation, that is the same as the one in the neighbour counter-test, otherwise it returns a value.
+
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/branching-results}
@@ -281,11 +368,19 @@ while in \emph{Protelis} and \emph{Collektive}, they follow a more conventional 
 \end{figure}
 
 The results depicted in \Cref{fig:branching} illustrate the disparity in performance for this type of operation,
-underscoring the benefits of adopting a more traditional alignment approach.
+underscoring the benefits of adopting a more traditional alignment approach, rather than the exception-based approach
+employed by \emph{ScaFi}.
+Note that, being the same implementation as the neighbour counter, the results are influenced in the same way.
 
 \paragraph{Gradient}
 The gradient implemented with \emph{Collektive} uses the \texttt{share} construct (based on the \texttt{exchange} construct) to
-calculate the distance from a source node and communicate it to the other nodes, increasing the amount of communication between them.
+calculate the distance from a source node and communicate it to the other nodes.
+For \emph{Collektive} and \emph{Protelis}, the apparent implementation is the same, while for \emph{ScaFi} is different.
+This is because in \emph{ScaFi} the \texttt{gradient} it is not implemented through the \texttt{share} construct, but
+it combines \texttt{rep} and \texttt{nbr} to achieve the same result.
+Apparently the implementation for \emph{Collektive} and \emph{Protelis} can be the same, but the execution is different, as
+\emph{Collektive} leverage on the \texttt{exchange} construct, which manages the fields and the message exchange
+in a more efficient way.
 
 \begin{figure}[ht!]
     \centering
@@ -297,10 +392,15 @@ calculate the distance from a source node and communicate it to the other nodes,
 
 The results in \Cref{fig:gradient-resutls} show that even with an increase in the amount of communication between nodes,
 \emph{Collektive} does not lose performance compared to the other languages.
-This demonstrates how the management of the fields is a strength of \emph{Collektive}.
+This demonstrates how the management of the fields and the message exchange are the strength of \emph{Collektive}.
 
 \paragraph{Channel with Obstacles}
-Among all the tests, the channel with obstacles is the most complex and the closest to a real-world scenario.
+Among all the tests, the channel with obstacles is the most complex and the closest to a real-world scenario,
+because it simulates challenges encountered in actual deployments.
+It involves computing paths while considering obstacles, dynamically adapting to network changes, managing resources
+efficiently, and ensuring reliability despite obstacles.
+This scenario closely mirrors the complexities of real-world networks, making it a valuable test for evaluating aggregate
+computing systems in practical situations.
 
 \begin{figure}[ht!]
     \centering
@@ -310,10 +410,16 @@ Among all the tests, the channel with obstacles is the most complex and the clos
     \label{fig:channel-with-obstacles}
 \end{figure}
 
+The program is implemented as in \Cref{lst:channel-with-obstacles-example}, so it calculates many times the distances
+between nodes, using a bit more complex gradient implementation.
+This means that the performance of this test is influenced by the same factors that influence the gradient test.
+
 The results in \Cref{fig:channel-with-obstacles} show that in complex programs, \emph{Protelis} has a significant
 disadvantage compared to \emph{Collektive}, while in the other examples they were closer.
 This is due to the fact that \emph{Protelis} is an interpreted language and its execution of programs that need to go
 deeper in the execution tree is slower.
+This test emphasises the strength of \emph{Collektive} in managing fields and message exchange, as the difference in
+performance is significant.
 
 \paragraph{Changing the neighbourhood}
 Performances may be related to the amount of communication between nodes, meaning that the more communication
@@ -323,12 +429,14 @@ the amount of communication, as the density increases, the number of neighbours 
 Tests have been performed with low, medium, and high densities.
 
 In the \Cref{fig:speedup}, the speedup of the different incarnations with different network densities on the different tests is shown.
-The speedup is calculated as the ratio between the execution time of the other incarnations and the execution time of
+The speedup is calculated as the ratio between the average execution time of the other incarnations and the average execution time of
 \emph{Collektive}.
-The results show that \emph{Collektive}, even with an increase in the amount of communication between nodes, is faster than
-\emph{Protelis} and \emph{ScaFi}, with a significant difference in the most complex tests.
+The results show that \emph{Collektive}, even with an increase in the amount of communication between nodes, is still
+faster than \emph{Protelis} and \emph{ScaFi}, with a significant difference in the most complex tests.
 This is a significant result, as it shows that the language is implemented in such way that can easily handle the increasing
 of the fields' size.
+This is a fundamental aspect, as the language is designed to be used in real-world scenarios, where the network density
+can change over time and can be high.
 
 \begin{figure}[ht!]
     \centering
@@ -336,10 +444,10 @@ of the fields' size.
         \centering
         \includegraphics[width=\textwidth]{figures/neighbor-speedup}
     \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figures/field-speedup}
-    \end{subfigure}
+%    \begin{subfigure}[b]{0.49\textwidth}
+%        \centering
+%        \includegraphics[width=\textwidth]{figures/field-speedup}
+%    \end{subfigure}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/branching-speedup}
@@ -348,18 +456,21 @@ of the fields' size.
         \centering
         \includegraphics[width=\textwidth]{figures/gradient-speedup}
     \end{subfigure}
-    \begin{subfigure}[b]{0.6\textwidth}
+    \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/channel-speedup}
     \end{subfigure}
-    \caption{The speedup of the different incarnations with different network densities on the different tests.}
+    \caption{The speedup of the different incarnations with different network densities on the different tests.
+        The speedup is calculated as the ratio between the average execution time of the other incarnations and the average
+        execution time of \emph{Collektive}.}
     \label{fig:speedup}
 \end{figure}
 
 \paragraph{Conclusions}
-Keeping in mind that the performance of the language is influenced by the implementation of the incarnation, the results
+Keeping in mind that the performance of the language may be influenced by the implementation of the incarnation, the results
 show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} overall, with a significant
-difference in the most complex ones.
+difference in the most complex ones, emphasizing the strength of \emph{Collektive} in managing fields and message exchanges,
+also due to the language's implementation using \xc{}.
 
 For the easier tests, the difference is minimal between \emph{Collektive} and \emph{Protelis}, while it is significant
 between \emph{Collektive} and \emph{ScaFi}.
