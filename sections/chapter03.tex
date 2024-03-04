@@ -343,7 +343,8 @@ This happens because \emph{Protelis}, being an interpreted language, has advanta
 \paragraph{Branching}
 ``Branching'' happens when a node has to make different evaluations based on a condition (as explained in \Cref{par:conditionals}).
 Comparison for this type of test is essential due to the observation that branching operations can be among the most
-resource-intensive tasks in terms of execution time, given that they create multiple execution paths.
+resource-intensive tasks in terms of execution time, given that they create multiple subprograms and consequently
+multiple execution paths to be checked and managed.
 In \emph{ScaFi}, branching is handled in a distinct manner, where exceptions are thrown to perform checks on the function to call,
 while in \emph{Protelis} and \emph{Collektive}, they follow a more conventional approach, aligning when a function is called.
 
@@ -469,8 +470,7 @@ can change over time and can be high.
 \paragraph{Conclusions}
 Keeping in mind that the performance of the language may be influenced by the implementation of the incarnation, the results
 show that \emph{Collektive} actually is faster than \emph{ScaFi} and \emph{Protelis} overall, with a significant
-difference in the most complex ones, emphasizing the strength of \emph{Collektive} in managing fields and message exchanges,
-also due to the language's implementation using \xc{}.
+difference in the most complex programs, emphasizing the strength of \emph{Collektive} in managing fields and message exchanges.
 
 For the easier tests, the difference is minimal between \emph{Collektive} and \emph{Protelis}, while it is significant
 between \emph{Collektive} and \emph{ScaFi}.
