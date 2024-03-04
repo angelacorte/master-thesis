@@ -5,19 +5,27 @@
 \chapter{Conclusions}
 \label{ch:conclusions}
 
-The primary objective of this thesis was to enhance the current \ac{dsl} for aggregate computing \emph{Collektive},
-leveraging the principles of ~\xc~ to enhance the performance of the \ac{dsl}.
-The other main goal was to develop a multiplatform implementation of the \ac{dsl} with \ac{kmp}, to allow the execution
-of the aggregate programs on different platforms.
+The primary objective of this thesis was to extend \emph{Collektive} -- a \ac{dsl} for aggregate computing --
+by applying the principles of \xc{} to enhance usability and offer a more expressive and flexible
+language for defining complex systems.
+For this purpose, it was necessary to explore and deepen the concepts of aggregate computing and \xc{},
+in such a way as to identify a solution able to guarantee the correctness of the language and its features,
+maintaining a good result in terms of performance.
 
-This enhancement was pursued to ensure its competitiveness against existing solutions and to enhance its usability.
-Additionally, there was as a goal to develop a corresponding incarnation for conducting simulations within the \emph{Alchemist} environment.
+First, an expanded version of the \ac{dsl} was implemented, changing the syntax and the semantics of the language
+applying the principles of \xc{}.
+By changing the semantics, it has been necessary to expand the alignment mechanism, to ensure the correct functioning
+of the language and its features.
+This was done maintaining the goal of having a multiplatform implementation with \ac{kmp}, allowing the execution of the
+aggregate programs on different platforms.
 
-A key aspect in the development of the \ac{dsl} was to ensure a good and functional alignment, to guarantee
-the correct functioning of the language and its features, maintaining a good result in terms of performance.
-The communication between the nodes, intended as the exchange of messages, was also a fundamental aspect to guarantee
-the correct functioning of the language and its execution speed.
-All this was possible thanks to the implementation of an expressive and flexible language, which made it easy to define complex systems.
+Furthermore, an implementation of an incarnation for the \emph{Alchemist} simulator has been provided,
+enabling the execution of aggregate programs, using the \emph{Collektive} \ac{dsl}, within its environment.
+
+Finally, benchmarks have been implemented to compare the actual state of the art for aggregate computing
+-- \emph{ScaFi} and \emph{Protelis} -- and \emph{Collektive}.
+The results showed that the combination of the \ac{dsl} and incarnation developed in this thesis has an overall good
+performance.
 
 \section{Future Works}
 \label{sec:future-works}
@@ -30,7 +38,7 @@ As future works have been identified the followings:
     \item \textbf{Alignment optimisation}: to improve performances and security looking forward to the execution of the aggregate
         program on different platforms and environments;
     \item \textbf{Development of a standard library}: to provide modules and functionalities to simplify the writing of the aggregate program.
-        such as self-stabilizing functions that could encompass a range of strategies commonly employed to attain adaptable
+        Such as self-stabilizing functions that could encompass a range of strategies commonly employed to attain adaptable
         and resilient decentralised behaviours.
         These functions aim to conceal complexities by leveraging constructs from field calculus;
     \item \textbf{Creation of demonstrations}: to illustrate the possibility of running the same aggregate program on
