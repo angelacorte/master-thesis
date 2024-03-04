@@ -63,7 +63,7 @@ The \emph{Collektive}'s \ac{dsl} is composed of the following components:
         keep track of the computational state of the device in order to provide the correct alignment of the nodes;
     \item \textbf{Field}: represents the \emph{computational field} used by aggregate constructs.
         It is a map of messages where the key is the identifier (ID) of the node, and the value is the associated message;
-    \item \textbf{Message}: is an interface that represents the message exchanged between nodes, its concept will be explained in \ref{subsec:messages};
+    \item \textbf{Message}: is an interface that represents the message exchanged between nodes, its concept will be explained in \Cref{subsec:messages};
     \item \textbf{Network}: is the interface that represents the network used to manage the communication between devices;
     \item \textbf{Aggregate}: the actual core of the \ac{dsl}.
         It is also used to handle all the data needed for the computation; for example, the \emph{localId} and the \emph{state} of the device.
@@ -107,7 +107,7 @@ This interface is then extended within \emph{AggregateOperators} to handle the l
 \label{subsec:exchange-in-collektive}
 
 Thanks to the design of \xc{}, it is possible to implement the methods proposed by \emph{field calculus}
-(\ref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (\ref{par:communication-in-xc}).
+(\Cref{par:syntax-of-field-calculus}) in terms of \emph{exchange} (\Cref{par:communication-in-xc}).
 The syntax of \emph{XC} allows for sending messages to specific nodes, enabling the implementation of \emph{field calculus}
 operations through message exchange.
 
@@ -145,11 +145,11 @@ The construct \texttt{exchange} provides
     \emph{(iii)} communication with neighbours, and
     \emph{(iv)} compositional behaviour.
 
-As seen in \ref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
+As seen in \Cref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
 
 The \texttt{exchange} takes an \emph{initial} value to use as a default, and a \emph{body} that defines an aggregate
-function to be computed, as seen in the code snippet \ref{lst:exchange}, returning a \emph{field}.
+function to be computed, as seen in the code snippet \Cref{lst:exchange}, returning a \emph{field}.
 When executing the aggregate program, it checks which messages have been received from the neighbours and applies the function,
 generating a custom value for each neighbour.
 
@@ -174,7 +174,7 @@ fun <Initial> exchange(
 \paragraph{Share}
 The \texttt{share} construct captures the space-time nature of field computation through observation of neighbours' values,
 starting from an \emph{initial} value, it reduces to a single local value given a \emph{transform} function and updating and sharing to
-neighbours of a local variable, then returns the punctual value evaluated from the transformation (\ref{lst:share}).
+neighbours of a local variable, then returns the punctual value evaluated from the transformation (\Cref{lst:share}).
 
 \begin{lstlisting}[language=kt,label={lst:share}, caption={The signature of the \texttt{share} function.}]
 fun <ID : Any, Initial> Aggregate<ID>.share(
@@ -192,7 +192,7 @@ computation based on the neighbour that sent the message; it sends it indiscrimi
 The \emph{field calculus} construct \texttt{nbr} is implemented as \texttt{neighboring}, more precisely as \texttt{neighboringViaExchange}
 due to its effective implementation based on the \texttt{exchanging} function.
 The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
-It takes as parameter \emph{local} (\ref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same input type.
+It takes as parameter \emph{local} (\Cref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same input type.
 
 \begin{lstlisting}[language=kt,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
 fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
@@ -203,7 +203,7 @@ fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
 \paragraph{Repeat}
 The \texttt{repeat} function is the equivalent of the \texttt{rep} construct in \emph{field calculus}.
 It models the state evolution over time, the value of \emph{initial} evolves at each execution depending on the \emph{transform} function,
-and it returns the final value of the computation (\ref{lst:repeat}).
+and it returns the final value of the computation (\Cref{lst:repeat}).
 
 \begin{lstlisting}[language=kt,label={lst:repeat}, caption={The signature of the \texttt{repeat} function.}]
 fun <Initial> repeat(
@@ -213,7 +213,7 @@ fun <Initial> repeat(
 \end{lstlisting}
 
 As previously mentioned, this function is not implemented in terms of \texttt{exchange}, because iterating over oneself
-it is better not to send messages to neighbours, also for security and privacy reasons, its implementation will be explained in \ref{par:repeating}.
+it is better not to send messages to neighbours, also for security and privacy reasons, its implementation will be explained in \Cref{par:repeating}.
 
 \subsection{Messages}
 \label{subsec:messages}
@@ -446,7 +446,7 @@ whilst the \emph{Field} keeps track of the value to send for each neighbour as a
 The public entrypoint of the \ac{dsl} is the \emph{Collektive} class, which can be interpreted as a device that can
 execute an aggregate program.
 
-As seen in the code snippet \ref{lst:collektive}, the \emph{Collektive} class takes as parameters the \emph{localId} of the device,
+As seen in the code snippet \Cref{lst:collektive}, the \emph{Collektive} class takes as parameters the \emph{localId} of the device,
 the \emph{network} used to manage the communication between devices, and the \emph{computeFunction} that will be executed
 when the device is ready to compute the aggregate program.
 
@@ -488,7 +488,7 @@ fun <ID : Any, R> aggregate(
     }
 \end{lstlisting}
 
-The code seen in \ref{lst:aggregate} is the implementation of the \texttt{aggregate} function that relies on the \emph{Network}.
+The code seen in \Cref{lst:aggregate} is the implementation of the \texttt{aggregate} function that relies on the \emph{Network}.
 Taking the \emph{AggregateContext} as context with the messages read from the network and the previous state of the
 device, it applies the \emph{compute} function.
 The result of the computation is then returned as an \emph{AggregateResult} (\Cref{lst:aggregateresult}), which contains the \emph{localId} of the device,
@@ -513,7 +513,7 @@ The operations of yielding are used to operate on an initial value, which is usu
 but possibly return a different value to the caller.
 This operation is executable on the \texttt{exchanging}, \texttt{sharing} and \texttt{repeating} methods, or it can be omitted
 in case the value obtained from the operation is to be returned.
-Those constructs will be explained in detail in the sections \ref{subsec:aggregate-context} and \ref{subsec:aggregate-operators}.
+Those constructs will be explained in detail in the sections \Cref{subsec:aggregate-context} and \Cref{subsec:aggregate-operators}.
 
 \begin{lstlisting}[language=kt,label={lst:yieldingcontext}, caption={The signature of the \texttt{yielding context} class.}]
 class YieldingContext<Initial, Return> {
@@ -532,7 +532,7 @@ Internally, it keeps track of the {stack}, the state, and the messages that need
 There are two versions of this construct: one that has the same type of value of the field in output as the one in input (\Cref{lst:exchangeImpl}),
 and one in which they differ (\Cref{lst:exchanging}).
 The \texttt{exchange} construct is the one that represents the communication in which $e_r$ (the value to return)
-and $e_s$ (the value to send) coincide, as illustrated in \ref{par:communication-in-xc}.
+and $e_s$ (the value to send) coincide, as illustrated in \Cref{par:communication-in-xc}.
 
 \begin{lstlisting}[language=kt,label={lst:exchangeImpl},caption={The implementation of the \texttt{exchange} function.}]
 override fun <X> exchange(initial: X, body: (Field<ID, X>) -> Field<ID, X>): Field<ID, X> =
@@ -628,7 +628,7 @@ The functions implemented using the \texttt{exchange} mechanism are situated in 
 \paragraph{Share}
 The \texttt{share} is also implemented with the \emph{yielding support} mechanism, using the same base concept as in the
 \texttt{exchange} and \texttt{repeat} functions.
-This means that it is possible to operate on an initial value, but possibly return a different value, as seen in the code snippet \ref{lst:sharing}.
+This means that it is possible to operate on an initial value, but possibly return a different value, as seen in the code snippet \Cref{lst:sharing}.
 
 \begin{lstlisting}[language=kt,label={lst:sharing},caption={The implementation of the \texttt{sharing} function.}]
 fun <ID : Any, Initial, Return> Aggregate<ID>.sharing(
@@ -652,7 +652,7 @@ from the computation, if the \texttt{share} function is used.
 
 \paragraph{NeighboringViaExchange}
 The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
-It takes as parameter \emph{local}, which can be an expression or a value, and returns a \emph{field} of the same type (\ref{lst:neighboringViaExchange}).
+It takes as parameter \emph{local}, which can be an expression or a value, and returns a \emph{field} of the same type (\Cref{lst:neighboringViaExchange}).
 
 \begin{lstlisting}[language=kt,label={lst:neighboringViaExchange},caption={The implementation of the \texttt{neighboringViaExchange} function.}]
 fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(local: Scalar): Field<ID, Scalar> =
@@ -758,7 +758,7 @@ measuring the distance between the device and its neighbouring entities and a \e
 value of the molecule of interest.
 The method of the \emph{DistanceSensor} is realised as an aggregate extension function, utilised for gauging the spatial
 separation between the device and its neighbours via the \texttt{neighboringViaExchange} construct.
-This method acquires the positions of neighbouring devices and computes the distances between them, as exemplified in code snippet \ref{lst:distance}.
+This method acquires the positions of neighbouring devices and computes the distances between them, as exemplified in code snippet \Cref{lst:distance}.
 The utility of this function extends to other aggregate programs by virtue of employing the \texttt{DistanceSensor} interface as a contextual receiver.
 
 \begin{lstlisting}[language=kt,label={lst:distance},caption={The implementation of the \texttt{distance} function.}]
