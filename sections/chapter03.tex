@@ -234,7 +234,7 @@ ensure that the comparison is fair, and that the differences are due to the impl
 
 The choice of scenarios for evaluating the performance of the new language in aggregate computing was based on several
 factors, each addressing different aspects of the language's capabilities and potential use cases.
-Here's a breakdown of the scenarios and the reasons for their selection::
+Here's a breakdown of the scenarios and the reasons for their selection:
 \begin{enumerate}
     \item Simple \textbf{state change}, involves simulating the dynamic evolution of device states over time intervals
         using the \texttt{repeat} construct.
@@ -243,7 +243,7 @@ Here's a breakdown of the scenarios and the reasons for their selection::
     \item A \textbf{counter of the neighbours}, implemented using the \texttt{neighbouring} construct, it allows for the
         effective calculation of spatial structures.
         This scenario was chosen to evaluate the language's ability to handle computations influenced by the density
-        of the network, which affects the number of values present in a field and consequently the amount of computations
+        of the network, which affects the number of values present in a field and consequently the number of computations
         that a device has to perform.
         Assessing the language's performance in handling computations based on network density provides valuable insights into
         its efficiency in dynamically changing environments.
@@ -445,17 +445,13 @@ can change over time and can be high.
         \centering
         \includegraphics[width=\textwidth]{figures/neighbor-speedup}
     \end{subfigure}
-%    \begin{subfigure}[b]{0.49\textwidth}
-%        \centering
-%        \includegraphics[width=\textwidth]{figures/field-speedup}
-%    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figures/branching-speedup}
-    \end{subfigure}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/gradient-speedup}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/branching-speedup}
     \end{subfigure}
     \begin{subfigure}[b]{0.49\textwidth}
         \centering

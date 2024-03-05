@@ -29,7 +29,7 @@ The project is subdivided into different submodules (as in \Cref{fig:pacakges}),
         in order to run the aggregate programs created with Collektive on the simulator.
     \item \textbf{dsl}: is the core of the project, contains the actual implementation of the logic and the \ac{ac} operators
         and relative tests.
-    \item \textbf{compiler-plugin}: used to keep tracks of the stack at runtime, foreach aggregate program.
+    \item \textbf{compiler-plugin}: used to keep track of the stack at runtime, foreach aggregate program.
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -46,7 +46,7 @@ aggregate programs to show how to use the \emph{Collektive} framework.
 \label{sec:dsl}
 In this thesis, the original implementation of the \ac{dsl} of \emph{Collektive} will be modified to allow the use of \xc{}
 and to improve its performance.
-The resultant \ac{dsl} is available at a public GitHub repository\footnote{\url{https://github.com/Collektive/collektive}}
+The resultant \ac{dsl} is available at a public GitHub repository\footnote{\url{https://github.com/Collektive/collektive}}.
 
 A \ac{dsl} is a specialised programming language or language framework tailored to address the
 requirements of a specific domain or problem area.
@@ -111,7 +111,7 @@ Thanks to the design of \xc{}, it is possible to implement the methods proposed 
 The syntax of \emph{XC} allows for sending messages to specific nodes, enabling the implementation of \emph{field calculus}
 operations through message exchange.
 
-The \emph{exchange} communication is based on \emph{anisotropic} communications, meaning that it has not the same properties
+The \emph{exchange} communication is based on \emph{anisotropic} communications, meaning that it does not send the same properties
 or characteristics in all directions (\Cref{fig:anisotropic}); therefore, messages have custom values sent to different neighbours.
 
 \begin{figure}[h!]
@@ -122,7 +122,7 @@ or characteristics in all directions (\Cref{fig:anisotropic}); therefore, messag
 \end{figure}
 
 This concept can be extended to the \texttt{share} function of field calculus, with the difference that the
-operation of \texttt{share} is based on \emph{isotropic} communication, meaning that properties are uniform in all directions
+operation of \texttt{share} is based on \emph{isotropic} communication, meaning that the information sent is uniform in all directions
 (\Cref{fig:isotropic}); therefore, messages have the same value sent to all neighbours.
 
 \begin{figure}[h!]
@@ -140,10 +140,10 @@ As the original implementation, it supports the evaluation of \emph{fields}.
 
 \paragraph{Exchange}
 The construct \texttt{exchange} provides
-    \emph{(i)} access to neighbours' values,
-    \emph{(ii)} persistence of information for subsequent executions,
-    \emph{(iii)} communication with neighbours, and
-    \emph{(iv)} compositional behaviour.
+    i) access to neighbours' values,
+    ii) persistence of information for subsequent executions,
+    iii) communication with neighbours, and
+    iv) compositional behaviour.
 
 As seen in \Cref{par:communication-in-xc}, the \texttt{exchange} function can send and return the same result, or it
 can send a message and return a different result; both cases have been implemented.
@@ -154,8 +154,8 @@ When executing the aggregate program, it checks which messages have been receive
 generating a custom value for each neighbour.
 
 In the early stages of the design of this function, potential problems that could arise during execution were evaluated,
-such as the management of initialisation, i.e.\ the first round of message exchange.
-Consider a network consisting of $n$ devices, in which all are considered as neighbours to each other.
+such as the management of initialisation, i.e., the first round of message exchange.
+Consider a network consisting of $n$ devices, all of which are neighbours to each other.
 The first device ($d_1$) to start within the network will certainly have a moment when it performs its first iteration ever.
 
 The problem arises when the device $d_1$ has not yet received any messages, so it will not have neighbour values to perform
@@ -192,7 +192,7 @@ computation based on the neighbour that sent the message; it sends it indiscrimi
 The \emph{field calculus} construct \texttt{nbr} is implemented as \texttt{neighboring}, more precisely as \texttt{neighboringViaExchange}
 due to its effective implementation based on the \texttt{exchanging} function.
 The \texttt{neighboringViaExchange} construct is used to access the values of the neighbours.
-It takes as parameter \emph{local} (\Cref{lst:neighboring}), which can be an expression or a value, and returns a \emph{field} of the same input type.
+It takes as parameter \emph{local}, which can be an expression or a value, and returns a \emph{field} of the same input type (\Cref{lst:neighboring}).
 
 \begin{lstlisting}[language=kt,label={lst:neighboring}, caption={The signature of the \texttt{neighboringViaExchange} function.}]
 fun <ID : Any, Scalar> Aggregate<ID>.neighboringViaExchange(
@@ -220,7 +220,7 @@ it is better not to send messages to neighbours, also for security and privacy r
 
 The accurate modelling of message functionality is crucial for device communication.
 Due to the different nature of messages supported, that is \emph{anisotropic} and \emph{isotropic} communication,
-it has been necessary to create specific data classes for the handling of relative messages.
+it has been necessary to create specific classes for the handling of relative messages.
 
 Previously, messages were sent to the network without considering the recipient, and the network was responsible for
 delivering the message to all the neighbours that were interconnected.
@@ -293,7 +293,7 @@ data class InboundMessage<ID : Any>(
 The \emph{Network} has the task of managing only the reading and writing of messages in the network for a single device.
 The actual implementation of the network is not managed by the \emph{Collektive} \ac{dsl}, but it is implemented in the
 \emph{alchemist-incarnation-collektive} (\Cref{sec:incarnation}) module, which is used to run the aggregate programs
-created with \emph{Collektive} on the simulator.
+created with \emph{Collektive} on the \emph{Alchemist} simulator.
 
 Inside the \ac{dsl}, it is used at the beginning of each iteration of the aggregate program to read the messages received from
 other devices present in the network, and at the end of the iteration to write the messages to send to the other devices.
@@ -340,7 +340,7 @@ By changing the main architecture of the \ac{dsl} to use \xc{}, it has been nece
 
 The alignment has been implemented in such a way that it also takes into account the functions from which an aggregate program is called.
 For example (\Cref{lst:not-aligned}), we could have two different functions called \texttt{foo()} and \texttt{bar()} that both call the same aggregate program,
-but in fact they are two different functions and therefore must be aligned differently.
+but in fact they are two different functions and therefore must be aligned as two different programs.
 
 \begin{lstlisting}[language=kt,label={lst:not-aligned}, caption={Example of two unaligned functions.}]
 val x = 0
@@ -391,7 +391,7 @@ The alignment is then made by comparing the \emph{Path} of the two functions, an
 \emph{Kotlin} is a cross-platform, statically typed, general-purpose programming language with type inference.
 It is designed to interoperate fully with Java, and the JVM version of its standard library depends on the Java Class Library.
 However, \emph{Kotlin} is also used to target JavaScript, and native code (via LLVM).
-The purpose of \ac{kmp} is to streamline the development process of cross-platform projects by minimizing
+The purpose of \ac{kmp} is to streamline the development process of cross-platform projects by minimising
 the effort required to write and upkeep identical code for various platforms, such as Android, iOS, full-stack web applications,
 multiplatform libraries and its platform-specific implementations for \ac{jvm}, \ac{js}, and native code.
 
@@ -513,7 +513,7 @@ The operations of yielding are used to operate on an initial value, which is usu
 but possibly return a different value to the caller.
 This operation is executable on the \texttt{exchanging}, \texttt{sharing} and \texttt{repeating} methods, or it can be omitted
 in case the value obtained from the operation is to be returned.
-Those constructs will be explained in detail in the sections \Cref{subsec:aggregate-context} and \Cref{subsec:aggregate-operators}.
+Those constructs will be explained in detail in the \Cref{subsec:aggregate-context} and \Cref{subsec:aggregate-operators}.
 
 \begin{lstlisting}[language=kt,label={lst:yieldingcontext}, caption={The signature of the \texttt{yielding context} class.}]
 class YieldingContext<Initial, Return> {
@@ -682,7 +682,7 @@ An ``incarnation'' serves as the interpreter enabling the \emph{Alchemist Simula
 The \emph{incarnation} models molecules and actions.
 Specifically designed for \emph{Collektive}, this incarnation employs reflections to locate the aggregate entry point
 and dictates the methodology for each iteration of the aggregate program.
-Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-\\incarnation-protelis},
+Similar to other Alchemist incarnations like \texttt{alchemist-incarnation-scafi} and \texttt{alchemist-incarnation-protelis},
 it has been implemented to launch simulations through Gradle tasks.
 
 The goal is to ensure that the new implementation is still compatible with the simulator and that it can be used to run
@@ -810,5 +810,5 @@ Once the configuration file has been created, it is possible to run the simulati
 
 There are two types of Gradle tasks for each simulation: one is for testing purposes (\texttt{runTaskNameBatch}), and the other
 one is to run the simulation with the \emph{Alchemist} GUI (\texttt{runTaskNameGraphic}).
-Tasks are configured in the \texttt{build.gradle} file, and the parameters in which the two types of tasks differ are
+Tasks are configured in the \texttt{build.gradle.kts} file, and the parameters in which the two types of tasks differ are
 passed as arguments to the task.

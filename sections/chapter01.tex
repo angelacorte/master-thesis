@@ -6,22 +6,19 @@
 \chapter{Introduction}
 \label{ch:introduction}
 %----------------------------------------------------------------------------------------
-This chapter introduces the background of this thesis, including our position, main objectives,
-and the current state of the art.
-
 \section{Context}
 \label{sec:context}
 
 Computing devices are becoming cheaper and \emph{ubiquitous}, with objects being increasingly equipped with
 computational capabilities and interconnected to form the \ac{iot}, increasing the complexity of
 distributed systems.
-It is now common for individuals to own multiple computing devices of varying types, resulting in technology becoming
+It is now common for individuals to own multiple computing devices of different types, resulting in technology becoming
 more integrated into daily activities.
 Inside those kinds of systems, different software components, and not necessarily one for each device, interact with each
 others building innovative services of cyber-physical nature, capable of creating a fast bridge between the real and
 the digital world.
 
-Managing a single device in a distributed system can be challenging for several reasons, as:
+Managing a single device in a distributed system can be challenging for several reasons, including:
     i) \textbf{scalability}, as the number of devices increases, managing each device individually becomes increasingly complex;
     ii) \textbf{resource constraints}, individual devices may have limited computational power, memory, and energy resources,
         making it challenging to perform complex tasks efficiently;
@@ -60,7 +57,7 @@ such as monitoring and controlling a physical environment or providing a service
 The coordination of devices in \ac{cas} can be challenging due to device heterogeneity, resource constraints, and the
 dynamic environment.
 
-To promote collective behaviours, macroprogramming is used, leveraging its high-level abstractions and constructs to
+Macroprogramming is used to promote collective behaviours, leveraging high-level abstractions and constructs to
 facilitate global coordination, decentralised control, and adaptability in complex systems.
 
 \paragraph{Macroprogramming}
@@ -77,7 +74,7 @@ By declaring tasks within a specific spatio-temporal region, systems can self-or
 at hand, allowing for dynamic adaptation to the current deployment and spatial positions of the components involved.
 
 \paragraph{Self-Organisation}
-Coordination modes are based on the notion that interactions among multiple independent and autonomous software systems
+Coordination models are based on the notion that interactions among multiple independent and autonomous software systems
 can be designed as a space orthogonal to pure computation.
 This idea can be reified into a concept of shared data space, enabling so-called \emph{generative communication}.
 
@@ -153,8 +150,8 @@ The \emph{field calculus} is based on a minimal set of operators:
     \item \emph{Neighbour interaction}: the expression $nbr\{e\}$ builds a neighbouring field, a view of the field
         values in the surroundings of each device where neighbours are mapped to their evaluations of \texttt{e};
     \item \emph{Domain partitioning}: the expression $if(e_0)\ \{e_1\}\ \{e_2\}$ splits the computational field into
-        two non-communicating zones hosting isolated computations: $e_1$ where  $e_0$ is \texttt{true} and
-        $e_2$ where  $e_0$ is \texttt{false}
+        two non-communicating zones hosting isolated computations: $e_1$ where the condition $e_0$ is \texttt{true} and
+        $e_2$ where the condition $e_0$ is \texttt{false}.
 \end{itemize}
 
 \begin{minipage}{\linewidth}
@@ -164,7 +161,7 @@ The \emph{field calculus} is based on a minimal set of operators:
     itself is considered zero.
     Alternatively, if the device is not a \textbf{source}, the distance estimate is determined using the triangle inequality.
     This involves computing the minimum value obtained by adding the distance to each neighbour (using the \texttt{nbrRange}
-    built-in function) to the neighbour field value (accessed via the $\texttt{nbr{d}}$ notation).
+    built-in function) to the neighbour field value (accessed via the $\texttt{nbr\{d\}}$ notation).
     The \texttt{mux} function ensures that all arguments are evaluated prior to selection.}]
     def mux(b, x, y) { if (b) {x} {y} }
     def distanceTo(source) {
@@ -175,7 +172,7 @@ The \emph{field calculus} is based on a minimal set of operators:
     \end{lstlisting}
 \end{minipage}
 
-In ~\Cref{lst:field-calculus-program} is shown a simple example of a field calculus program; it calculates the distance
+In \Cref{lst:field-calculus-program} is shown a simple example of a field calculus program; it calculates the distance
 from a source node in a network.
 To implement more elaborated computations, it becomes necessary to combine the \texttt{rep} and \texttt{nbr} constructs.
 Their combination allows recreating a behaviour that evolves both in time and space: with \texttt{nbr} information is
@@ -190,7 +187,7 @@ In this case, $e_2$ is responsible for processing the neighbouring field into a 
 neighbours at the end of the evaluation.
 Therefore, the \texttt{share} improves the communication speed.
 
-The example proposed in ~\Cref{lst:field-calculus-program} can be rewritten using the \texttt{share} construct as in ~\Cref{lst:field-calculus-program-share}.
+The example proposed in \Cref{lst:field-calculus-program} can be rewritten using the \texttt{share} construct as in \Cref{lst:field-calculus-program-share}.
 
 \begin{minipage}{\linewidth}
     \begin{lstlisting}[label={lst:field-calculus-program-share}, language=fieldCalculus, caption={The \texttt{share} construct
@@ -250,16 +247,16 @@ Therefore, its structure supports the specification, analysis, simulation and ru
 or \emph{aggregate} services, independently of the specific~\ac{iot} architecture.
 
 This paradigm has three key traits that characterise it:
-    \emph{(i)} \emph{Global stance with global-to-local mapping}, where the target of system design is the entire distributed
+    \emph{(i)} \emph{global stance with global-to-local mapping}, where the target of system design is the entire distributed
         \ac{iot} ecosystem,
-    \emph{(ii)} \emph{Behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
+    \emph{(ii)} \emph{behaviour compositionality}, whereby a rich collective service can be described in terms of the functional
         composition of simpler collective services, and
-    \emph{(iii)} \emph{Abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
+    \emph{(iii)} \emph{abstraction}, by which aggregate services enable adaptivity at different levels by abstracting from low-level
         issues and details.
 These attributes are crucial both in the design phase, where intricate solutions can frequently be articulated concisely
-and declaratively, and in the operational phase, where considerable flexibility is granted to the devops team and the
+and declaratively, and in the operational phase, where considerable flexibility is granted to the developers team and the
 platform regarding execution specifics and deployment strategies.
-The overall stack of the aggregate computing is shown in ~\Cref{fig:ac-stack}.
+The overall stack of the aggregate computing is shown in \Cref{fig:ac-stack}.
 
 \begin{figure}
     \centering
@@ -274,15 +271,15 @@ mobility and a lack of stable infrastructure.
 There are various strategies by which an~\ac{ac} system can run, contingent upon the selected and implemented
 communication methodologies.
 
-Programs can be executed within a fully distributed peer-to-peer environment, where end devices communicate directly
+Programs can be executed within a fully distributed peer-to-peer environment, where end-devices communicate directly
 with peer neighbours, and each independently runs its fragment of aggregate logic.
 
-On the opposite side, there are entirely centralised solutions, where end devices function solely as manager for sensors
+On the opposite side, there are entirely centralised solutions, where end-devices function solely as manager for sensors
 and actuators, forwarding perceptions upstream to one or more servers.
 These servers perform computations on behalf of the devices and subsequently transmit actuation data downstream.
-Thanks to this flexibility of its applications,~\ac{ac} has the potential to facilitate the creation of a more systematic
+Thanks to the flexibility of its applications,~\ac{ac} has the potential to facilitate the creation of a more systematic
 spectrum for transitioning between cloud and distributed systems.
-This approach also embraces the emerging domains of Edge ~\cite{8795355} and Fog Computing ~\cite{bdcc2020010}.
+This approach also embraces the emerging domains of Edge Computing~\cite{8795355} and Fog Computing ~\cite{bdcc2020010}.
 
 \paragraph{Aggregate computing in adaptive \ac{iot} Services}
 Thanks to its features, \emph{aggregate computing} is well suited for the development of \emph{Opportunistic \ac{iot}
@@ -290,7 +287,7 @@ Services}, supporting the properties:
 \begin{itemize}
     \item \emph{Dynamicity}: the direct support for opportunistic service activation and evolution is achieved through
         code mobility and constructs that define dynamic domains of computations dependent on space and time;
-    \item \emph{Context-awareness}: aggregate programs utilize sensors, communication driven by neighborhood interactions,
+    \item \emph{Context-awareness}: aggregate programs utilise sensors, communication driven by neighborhood interactions,
         and iterative execution to consistently evolve the set of local contexts.
         This evolution forms the basis for the unfolding of computation and coordination logic;
     \item \emph{Co-location}: as a natural method to define the concept of neighbourhood, relies on a physical space basis.
@@ -324,7 +321,7 @@ The round is performed by taking into account the computational context created 
 messages from neighbouring devices.
 After the execution of the round, result data are made available to neighbours and eventually instructed actuations are
 locally executed.
-The system can continuously react to changes by repeatedly executing rounds, allowing for self-adaptation to contextual changes.
+The system can continuously react to changes by repeatedly executing rounds, allowing self-adaptation to contextual changes.
 
 \paragraph{Models alignment}
 Due to the high-level and platform-independent metamodels of \ac{iot} and \ac{ac} systems, each with different goals or
@@ -345,7 +342,7 @@ There are some main differences between the two metamodels:
 \label{subsec:xc}
 \xc{} is an experimental programming language design to develop \emph{homogeneous} distributed systems.
 Those kinds of systems consist of similar devices that communicate to neighbours and execute the same program.
-The aim of this experimental language is to push the abstraction boundaries farther than actual existing approaches.
+The aim of this experimental language is to push the abstraction boundaries further than actual existing approaches.
 
 Many issues can arise in distributed systems, like concurrency, remote communication, asynchronous execution, message
 loss, and device failures.
@@ -405,10 +402,10 @@ A \emph{local value} can be also converted to a \emph{nvalue} using the default 
 \label{par:communication-in-xc}
 
 \xc{} is based on a key communication primitive:\\ $exchange(e_i,\ (\underline{n}) \rightarrow \ \texttt{return} \ e_r \ \texttt{send} \ e_s)$
-which is evaluated as follows.
-    \emph{(i)} the device computes the local value from the initial value $e_i$.
+which is evaluated as follows:
+    \emph{(i)} the device computes the local value from the initial value $e_i$;
     \emph{(ii)} the variable $\underline{n}$ gets substituted with the computed nvalues $\underline{w}$ of the received messages, eventually
-        using the local value as default, the exchange returns the computed value $v_r$ from $e_r$.
+        using the local value as default, the exchange returns the computed value $v_r$ from $e_r$;
     \emph{(iii)} $e_s$ evaluates to a nvalue $\underline{w}_s$ consisting of local values to be sent to neighbours,
         that will take their corresponding value from $\underline{w}_s$ and use it for the execution of their next round.
 
@@ -461,7 +458,7 @@ software, especially when a particular service, to be realised, requires the coo
 Over the course of time, different approaches have been proposed to program these systems, such as TOTA, SAPERE \cite{ZAMBONELLI2011197},
 Aggregate Computing \cite{Beal2016}, Linda \cite{10.1145/2363.2433}, MARS \cite{865084} and others.
 
-The most successful solution at the moment involves the use of Cloud Computing (see ~\Cref{fig:cloud-edge-continuum}),
+The most successful solution at the moment involves the use of Cloud Computing (\Cref{fig:cloud-edge-continuum}),
 which provides virtualized resources on a large scale, but presents limitations in terms of latency (due to the physical
 distance between machines) and scalability (due to centralisation) despite the significant improvement compared to traditional
 approaches.
@@ -494,7 +491,7 @@ to abstract it in some way (see, for example, the ``pulverization'' approach ~\c
 
 However, when the system includes devices whose nature is profoundly different (imagine, for example, a system where both
 well-equipped servers and tiny wearable or implanted devices with very moderate computing capabilities participate, as
-shown in ~\Cref{fig:smart-network-objects}), finer mechanisms are needed.
+shown in \Cref{fig:smart-network-objects}), finer mechanisms are needed.
 Such mechanisms can be the combination of adaptive strategies, resource management techniques, and the use of programming
 languages that can abstract the heterogeneity of devices.
 
@@ -514,6 +511,7 @@ them in the form of capabilities.
 The goal of this thesis is to extend the existing \ac{dsl} \emph{Collektive} by applying the concepts of \xc{} to
 aggregate programming constructs, thus seeking to improve its performance in order to make this \ac{dsl} competitive
 against existing approaches.
+
 Furthermore, the aim is to create an integration of this \ac{dsl} for the \emph{Alchemist} simulator ~\cite{10.1007/978-3-030-78198-9_10},
 which serves as a meta-simulator primarily tailored for simulating intricate distributed systems across a diverse range of scenarios.
 These scenarios can include swarm robotics ~\cite{aguzzi2024macroswarm}, large-scale sensor networks ~\cite{9927406}, crowd
@@ -535,9 +533,6 @@ development of distributed systems, especially in the \ac{iot} and \ac{cps} doma
 The new language will allow developers to write programs that can be executed on any device, regardless of its nature,
 and will be able to communicate with other devices in the network, thus simplifying the development of complex systems.
 
-In addition, the new language is expected to have an impact on the performance of distributed systems, as the constructs
-of \xc{} have been designed to ensure greater efficiency in the execution of distributed programs.
-
 \section{State of Art}
 \label{sec:state-of-art}
 
@@ -553,7 +548,7 @@ semantics of aggregate programming derived from field calculus, but they are not
 \emph{ScaFi (Scala Field)} is a Scala-based framework for aggregate programming\\ ~\cite{CASADEI2022101248}.
 It provides a \ac{dsl}, libraries, a simulation environment with a GUI, integrated with the
 Alchemist simulator, and an actor-based runtime for the development of aggregate computing-based systems.
-\emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{F ScaFi} ~\cite{10.1007/978-3-030-61470-6_21},
+\emph{ScaFi}'s core is based on a variant of the \emph{field calculus} called \emph{FScaFi} ~\cite{10.1007/978-3-030-61470-6_21},
 which peculiarity is to handle standard values to provide a simplified setting for \ac{dsl} embedding.
 
 This is achieved by introducing a notion of ``computation against neighbours'', meaning that is a computation whose
@@ -566,7 +561,7 @@ output depends on the most recent values received from neighbours.
     \label{fig:scafi-structure}
 \end{figure}
 
-The architecture of \emph{ScaFi} consists of various modules, as seen in ~\Cref{fig:scafi-structure}.
+The architecture of \emph{ScaFi} consists of various modules, as seen in \Cref{fig:scafi-structure}.
 The \ac{dsl} and standard library of reusable functions are implemented in the \texttt{scafi-
 core} module; meanwhile, the modules \texttt{scafi-simulator} and \texttt{scafi-simulator-
 gui} provide a simulation
@@ -589,7 +584,7 @@ devices that can be used in the system.
 \label{subsec:protelis}
 \emph{Protelis} ~\cite{protelis} is a functional programming language that implements a higher-order version of the \emph{field calculus},
 exposed through a C-like syntax, enabling the construction of widely reusable components of aggregate systems.
-It also provides various domain-specific APIs that are interoperable with Java.
+It also provides various domain-specific APIs that are interoperable with Java, the \emph{Protelis-Lang} \cite{8064092}.
 \emph{Protelis} has been developed since no foundational API for resilient, situated and distributed systems can be found
 in the Java ecosystem.
 It offers an implementation for the interoperability with the \emph{Alchemist} simulator, where it can be seen its
@@ -602,7 +597,7 @@ practical use in the development of aggregate systems.
     \label{fig:protelis-structure}
 \end{figure}
 
-As seen in the \emph{Protelis} architecture (~\Cref{fig:protelis-structure}), an interpreter executes a pre-parsed program at regular intervals,
+As seen in the \emph{Protelis} architecture (\Cref{fig:protelis-structure}), an interpreter executes a pre-parsed program at regular intervals,
 that communicates with other devices and draws contextual information from the environment.
 This is instantiated by specifying when the executions occur, how the devices communicate and how the environment is
 represented.
@@ -619,7 +614,7 @@ that can be used in the system.
 \subsection{FCPP}
 \label{subsec:fcpp}
 \emph{FCPP} ~\cite{9196401} is an implementation of the \emph{Field Calculus} as a C++ library, with tools for simulations of distributed systems.
-This library is built as a component-based system ~\Cref{fig:fcpp-structure}, with the aim of being easily extensible and reusable in different contexts.
+This library is built as a component-based system \Cref{fig:fcpp-structure}, with the aim of being easily extensible and reusable in different contexts.
 
 It has a performance-oriented implementation based on compile-time optimisations, and it is designed to support
 simulated systems executed in parallel or self-organising cloud application.
@@ -634,7 +629,7 @@ simulated systems executed in parallel or self-organising cloud application.
 Being implemented in C++, allows \emph{FCPP} to be used in a wide range of devices, including embedded systems and
 microcontrollers, for which a C++ compiler is available.
 Although \emph{FCPP} is designed as a flexible and easily extensible platform, its currently supported range of features
-is more limited than \emph{Alchemist}'s.
+is more limited than \emph{Protelis}' and \emph{ScaFi}'s.
 
 It allows running aggregate programs on low computational capacity devices.
 However, its syntax is less ergonomic compared to other languages, making it unlikely to reach a mainstream developer audience.
@@ -648,4 +643,4 @@ Considering their syntax, \emph{ScaFi} and \emph{Protelis} partially imitate the
 being bound by the specific syntactic constraints of their host languages.
 Whereas, \emph{Protelis}' syntax is more neat and specifically designed for field computation.
 
-However, the more complex syntax of \emph{Scafi} and \emph{FCPP} may prove easier to learn for programmers already familiar with Scala and \emph{C++}.
+However, the more complex syntax of \emph{ScaFi} and \emph{FCPP} may prove easier to learn for programmers already familiar with Scala and \emph{C++}.
